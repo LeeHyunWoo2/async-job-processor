@@ -1,0 +1,35 @@
+{
+  "name": "async-job-processor",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "typecheck": "tsc --noEmit",
+    "db:check": "node --env-file=.env src/db/check-connection.ts",
+    "dev:api": "node --env-file=.env --watch src/api/server.ts",
+    "start:api": "node --env-file=.env src/api/server.ts",
+    "start:worker": "node --env-file=.env src/worker/main.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LeeHyunWoo2/async-job-processor.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/LeeHyunWoo2/async-job-processor/issues"
+  },
+  "homepage": "https://github.com/LeeHyunWoo2/async-job-processor#readme",
+  "devDependencies": {
+    "@types/node": "^26.6.3",
+    "typescript": "^7.0.2"
+  },
+  "dependencies": {
+    "@mikro-orm/core": "^7.2.3",
+    "@mikro-orm/postgresql": "^7.2.3",
+    "fastify": "^5.12.5"
+  }
+}
