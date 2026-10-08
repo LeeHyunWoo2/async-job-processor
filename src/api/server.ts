@@ -16,7 +16,7 @@ async function start() {
 }
 
 async function shutdown(signal: NodeJS.Signals) {
-    app.log.info({ signal }, 'shutting down');
+    app.log.info({ signal }, '서버 종료 중');
     await app.close();
 }
 

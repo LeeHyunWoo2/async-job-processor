@@ -4,9 +4,12 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "echo \"오류: 테스트 명령이 지정되지 않았습니다\" && exit 1",
     "typecheck": "tsc --noEmit",
+    "test:db": "node --env-file=.env --test tests/job-model.test.ts",
     "db:check": "node --env-file=.env src/db/check-connection.ts",
+    "db:migration:create": "node --env-file=.env src/db/migrate.ts create",
+    "db:migration:up": "node --env-file=.env src/db/migrate.ts up",
     "dev:api": "node --env-file=.env --watch src/api/server.ts",
     "start:api": "node --env-file=.env src/api/server.ts",
     "start:worker": "node --env-file=.env src/worker/main.ts"
@@ -29,6 +32,7 @@
   },
   "dependencies": {
     "@mikro-orm/core": "^7.2.3",
+    "@mikro-orm/migrations": "^7.2.3",
     "@mikro-orm/postgresql": "^7.2.3",
     "fastify": "^5.12.5"
   }
