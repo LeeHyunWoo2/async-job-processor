@@ -21,11 +21,17 @@ If a significant unresolved decision is required to continue, stop and report it
 
 ## Output Language
 
-Use Korean for user-facing responses.
+Use Korean for user-facing responses and project documentation, including `progress.md`.
 
-Write `progress.md` in Korean.
+Write human-readable text in Korean by default, including:
 
-Keep code, identifiers, commands, logs, and technical terms in their natural form when appropriate.
+- error messages
+- log messages
+- test names and descriptions
+
+Keep code identifiers, API fields, error codes, commands, and technical terms in English when appropriate.
+
+Do not translate existing messages or test names unless the requested task requires modifying them.
 
 ---
 
@@ -172,33 +178,24 @@ PR descriptions should state:
 
 ## Documentation
 
-### `progress.md`
+#### `progress.md` Guidelines
 
-```text
-./progress.md
-```
-
-Update `progress.md` only when your work materially changes the actual implementation state.
+`progress.md` is a **current repository status summary**, not a changelog or detailed work log.
 
 Write it in Korean.
 
-It may contain:
+Follow these rules when updating it:
 
-- completed work
-- current work
-- already-established next work
-- blockers
-- unresolved issues
-
-Do not use `progress.md` to introduce new technical decisions, project goals, or scope.
-
-Code review, investigation, or discussion alone does not require updating it unless the implementation state changed.
-
-### Other project documents
-
-Treat project context, goals, decisions, interview notes, and `AGENTS.md` as read-only unless explicitly instructed to modify them.
-
-Do not rewrite project direction based on your own assessment.
+- Do not continuously append detailed sub-items whenever a task is completed.
+- When a new completed state subsumes several earlier tasks, consolidate them into a higher-level milestone.
+- Keep only implementation states and milestones that are still useful for understanding the current repository.
+- Avoid recording low-level details such as package versions, migration filenames, individual commands, or temporary test data handling.
+- Summarize verification only to the level necessary to understand what has been confirmed.
+- Do not include a `Current Work` section by default.
+- Add a `Current Work` section only when implementation is actively in progress and the intermediate state needs to be visible. Remove it once that work is completed.
+- `Next` must contain only work that has already been agreed upon by the user. Do not introduce new scope or technical decisions there.
+- `Blocked / Unresolved` should contain only issues that currently affect progress or require user judgment. Remove resolved items.
+- Prefer a short and accurate representation of the current repository state over preserving the full history of past work.
 
 ---
 

@@ -2,7 +2,7 @@ function requiredEnv(name: string): string {
     const value = process.env[name];
 
     if (!value) {
-        throw new Error(`Missing required environment variable: ${name}`);
+        throw new Error(`필수 환경 변수가 없습니다: ${name}`);
     }
 
     return value;
