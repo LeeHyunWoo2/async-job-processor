@@ -168,11 +168,30 @@ Do not perform the following unless explicitly requested:
 
 When explicitly asked to create a commit or PR, keep it focused on one logical change.
 
-PR descriptions should state:
+When creating a Pull Request, use the following structure:
 
-- what changed
-- why it changed
-- how it was verified
+```markdown
+<One or two sentences summarizing the purpose of the PR>
+
+### 변경
+
+- Key changes made
+
+### 이유
+
+Briefly explain why these changes are necessary and what problems this work aims to solve.
+
+### 검증
+
+Document the validations actually performed and the behaviors verified.
+
+- Key behaviors verified
+- Test / typecheck / other validation commands executed
+```
+
+Keep the description concise and focused on the current PR.
+
+Do not include unrelated implementation history or project background unless it is necessary to understand the change.
 
 ---
 
