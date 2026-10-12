@@ -3,11 +3,8 @@ import { randomUUID } from 'node:crypto';
 import { defineEntity, type InferEntity, p } from '@mikro-orm/core';
 
 export const jobTypes = [
-    'cpu-heavy',
-    'io-bound',
     'slow',
-    'always-fail',
-    'fail-then-succeed',
+    'fail',
 ] as const;
 
 export type JobType = typeof jobTypes[number];
