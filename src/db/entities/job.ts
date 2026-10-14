@@ -5,6 +5,7 @@ import { defineEntity, type InferEntity, p } from '@mikro-orm/core';
 export const jobTypes = [
     'slow',
     'fail',
+    'flaky',
 ] as const;
 
 export type JobType = typeof jobTypes[number];

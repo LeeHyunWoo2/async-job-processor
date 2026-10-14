@@ -1,6 +1,7 @@
 import { setTimeout } from 'node:timers/promises';
 
 import { jobTypes, type JobType, type JsonValue } from '../db/entities/job.ts';
+import { RetryableJobError } from './retry.ts';
 
 interface JobInput {
     type: JobType;
@@ -13,7 +14,7 @@ function isObject(value: unknown): value is Record<string, unknown> {
 
 const handlers: Record<JobType, {
     validate: (payload: unknown) => boolean;
-    execute: (payload: JsonValue) => Promise<JsonValue>;
+    execute: (payload: JsonValue, attempt: number) => Promise<JsonValue>;
 }> = {
     slow: {
         validate: (payload) => isObject(payload)
@@ -34,6 +35,15 @@ const handlers: Record<JobType, {
             throw new Error('의도적인 Job 실패');
         },
     },
+    flaky: {
+        validate: (payload) => isObject(payload) && Object.keys(payload).length === 0,
+        execute: async (_payload, attempt) => {
+            if (attempt < 3) {
+                throw new RetryableJobError('일시적인 Job 실패');
+            }
+            return { attempt };
+        },
+    },
 };
 
 export function isJobInput(value: unknown): value is JobInput {
@@ -46,11 +56,11 @@ export function isJobInput(value: unknown): value is JobInput {
     return handlers[value.type as JobType].validate(value.payload);
 }
 
-export async function executeHandler(job: { type: string; payload: JsonValue }): Promise<JsonValue> {
+export async function executeHandler(job: { type: string; payload: JsonValue; attempt: number }): Promise<JsonValue> {
     const input = { type: job.type, payload: job.payload };
     if (!isJobInput(input)) {
         throw new Error('지원하지 않는 Job type 또는 잘못된 payload입니다');
     }
 
-    return handlers[input.type].execute(input.payload);
+    return handlers[input.type].execute(input.payload, job.attempt);
 }

@@ -1,12 +1,13 @@
 import type { MikroORM } from '@mikro-orm/postgresql';
 
 import { Job, JobStatus, type JobType, type JsonValue } from '../db/entities/job.ts';
+import { getRetryDelayMs } from './retry.ts';
 
 export async function enqueueJob(orm: MikroORM, type: JobType, payload: JsonValue): Promise<{ id: string; status: JobStatus }> {
-    // Retry가 없는 기본 실행에서는 maxAttempts만 지정하고 초기 상태와 시각은 DB 기본값을 사용한다.
+    // 최초 실행을 포함한 최대 Claim 횟수만 지정하고 초기 상태와 시각은 DB 기본값을 사용한다.
     const [job] = await orm.em.fork().execute<{ id: string; status: JobStatus }[]>(`
         insert into jobs (type, payload, max_attempts)
-        values (?, ?::jsonb, 1)
+        values (?, ?::jsonb, 3)
         returning id, status
     `, [type, JSON.stringify(payload)]);
 
@@ -26,6 +27,7 @@ export interface ClaimedJob {
     type: string;
     payload: JsonValue;
     attempt: number;
+    maxAttempts: number;
     workerId: string;
     processingStartedAt: Date;
 }
@@ -56,6 +58,7 @@ export async function claimJob(orm: MikroORM, workerId: string): Promise<Claimed
             from candidate
             where job.id = candidate.id
             returning job.id, job.type, job.payload, job.attempt,
+                      job.max_attempts as "maxAttempts",
                       job.worker_id as "workerId",
                       job.processing_started_at as "processingStartedAt"
         `, [workerId]);
@@ -63,6 +66,21 @@ export async function claimJob(orm: MikroORM, workerId: string): Promise<Claimed
         // raw SQL의 timestamptz는 문자열이며 Entity의 Date 타입으로 변환한다.
         return job ? { ...job, processingStartedAt: new Date(job.processingStartedAt) } : null;
     });
+}
+
+export async function scheduleRetry(orm: MikroORM, job: ClaimedJob, lastError: JsonValue): Promise<boolean> {
+    const rows = await orm.em.fork().execute<{ id: string }[]>(`
+        update jobs
+        set status = 'queued',
+            available_at = now() + (? * interval '1 millisecond'),
+            last_error = ?::jsonb,
+            result = null,
+            updated_at = now()
+        where id = ? and status = 'processing' and worker_id = ? and attempt = ?
+        returning id
+    `, [getRetryDelayMs(job.attempt), JSON.stringify(lastError), job.id, job.workerId, job.attempt]);
+
+    return rows.length === 1;
 }
 
 export async function saveJobOutcome(orm: MikroORM, job: ClaimedJob, outcome: JobOutcome): Promise<boolean> {
