@@ -153,7 +153,15 @@ Depending on the task, this may include:
 
 Do not consider a change correct solely because it compiles or a newly written test passes.
 
-Do not create excessive tests solely to increase coverage or test count.
+When writing or modifying tests:
+
+- Identify the specific behavior, invariant, or failure scenario each test must prove, then use the assertions needed to demonstrate it.
+- Keep the test's setup, action, and expected outcome easy to follow. Avoid burying the main verification in repetitive implementation-detail assertions.
+- Do not duplicate detailed assertions already covered by other tests unless the additional check establishes a distinct behavior or protects against a meaningful regression.
+- Extract shared setup and cleanup into helpers when reuse or readability justifies it. Do not add abstraction merely to reduce file length.
+- Preserve rigorous checks for concurrency, transaction atomicity, execution ownership, and important failure paths. Never remove essential assertions just to make tests shorter.
+
+Do not create excessive tests solely to increase coverage or test count. Test count and line count are not quality goals.
 
 ---
 
