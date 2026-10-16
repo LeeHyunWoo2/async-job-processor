@@ -20,7 +20,7 @@ interface JobTestDatabase {
 }
 
 export async function withJobTestDatabase(
-    prefix: 'job' | 'retry',
+    prefix: 'job' | 'retry' | 'recovery',
     connectionCount: 2 | 3,
     run: (database: JobTestDatabase) => Promise<void>,
 ): Promise<void> {

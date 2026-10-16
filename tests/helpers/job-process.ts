@@ -21,8 +21,14 @@ export async function waitFor<T>(
     throw new Error('검증할 상태를 제한 시간 안에 확인하지 못했습니다');
 }
 
-function startJobProcess(entry: 'api/server.ts' | 'worker/main.ts', schema: string, signal: AbortSignal) {
+type JobProcessEntry = 'api/server.ts' | 'worker/main.ts' | 'crash-worker';
+type CrashPhase = 'after-claim' | 'in-handler';
+
+function startJobProcess(entry: JobProcessEntry, schema: string, signal: AbortSignal, crashPhase?: CrashPhase) {
     signal.throwIfAborted();
+    const entryUrl = entry === 'crash-worker'
+        ? new URL('./crash-worker.ts', import.meta.url)
+        : new URL(`../../src/${entry}`, import.meta.url);
     const bootstrap = `
         const { createOrm } = await import(${JSON.stringify(new URL('../../src/db/orm.ts', import.meta.url).href)});
         const orm = await createOrm();
@@ -30,7 +36,7 @@ function startJobProcess(entry: 'api/server.ts' | 'worker/main.ts', schema: stri
             const [resolved] = await orm.em.getConnection().execute(${JSON.stringify(resolvedJobsSchemaSql)});
             if (resolved?.schema !== ${JSON.stringify(schema)}) throw new Error('프로세스 테스트 DB 격리 실패');
         } finally { await orm.close(); }
-        await import(${JSON.stringify(new URL(`../../src/${entry}`, import.meta.url).href)});
+        await import(${JSON.stringify(entryUrl.href)});
     `;
     const child = spawn(process.execPath, ['--input-type=module', '--eval', bootstrap], {
         cwd: fileURLToPath(new URL('../../', import.meta.url)),
@@ -39,6 +45,7 @@ function startJobProcess(entry: 'api/server.ts' | 'worker/main.ts', schema: stri
             DB_USER: env.db.user, DB_PASSWORD: env.db.password,
             API_HOST: '127.0.0.1', API_PORT: '0',
             PGOPTIONS: `-c search_path=${schema} -c statement_timeout=5000`,
+            ...(crashPhase ? { TEST_CRASH_PHASE: crashPhase } : {}),
         },
         stdio: ['ignore', 'pipe', 'pipe'],
     });
@@ -71,12 +78,12 @@ function startJobProcess(entry: 'api/server.ts' | 'worker/main.ts', schema: stri
 export async function withJobProcesses(
     schema: string,
     signal: AbortSignal,
-    run: (start: (entry: 'api/server.ts' | 'worker/main.ts') => ReturnType<typeof startJobProcess>) => Promise<void>,
+    run: (start: (entry: JobProcessEntry, crashPhase?: CrashPhase) => ReturnType<typeof startJobProcess>) => Promise<void>,
 ): Promise<void> {
     const processes: ReturnType<typeof startJobProcess>[] = [];
     try {
-        await run((entry) => {
-            const started = startJobProcess(entry, schema, signal);
+        await run((entry, crashPhase) => {
+            const started = startJobProcess(entry, schema, signal, crashPhase);
             processes.push(started);
             return started;
         });

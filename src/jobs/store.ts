@@ -68,6 +68,27 @@ export async function claimJob(orm: MikroORM, workerId: string): Promise<Claimed
     });
 }
 
+export async function recoverStaleJobs(orm: MikroORM): Promise<number> {
+    // Timeout은 실행 결과를 알 수 없다는 뜻이며, Handler 실패나 Worker 사망을 확정하지 않는다.
+    // 경합한 UPDATE는 Row Lock을 기다린 뒤 현재 status와 시작 시각 조건을 다시 평가한다.
+    const rows = await orm.em.fork().execute<{ id: string }[]>(`
+        update jobs
+        set status = case when attempt < max_attempts
+                         then 'queued'::public.job_status else 'failed'::public.job_status end,
+            available_at = case when attempt < max_attempts then now() else available_at end,
+            last_error = ?::jsonb,
+            updated_at = now()
+        where status = 'processing'
+          and processing_started_at < now() - interval '30 seconds'
+        returning id
+    `, [JSON.stringify({
+        name: 'StaleJobError',
+        message: '마지막 Claim 이후 30초가 경과하여 복구했습니다. 이전 실행의 완료 여부와 결과를 확인할 수 없습니다',
+    })]);
+
+    return rows.length;
+}
+
 export async function scheduleRetry(orm: MikroORM, job: ClaimedJob, lastError: JsonValue): Promise<boolean> {
     const rows = await orm.em.fork().execute<{ id: string }[]>(`
         update jobs

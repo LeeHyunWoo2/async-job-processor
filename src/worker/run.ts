@@ -4,7 +4,7 @@ import type { MikroORM } from '@mikro-orm/postgresql';
 
 import type { JsonValue } from '../db/entities/job.ts';
 import { RetryableJobError } from '../jobs/retry.ts';
-import { claimJob, saveJobOutcome, scheduleRetry, type ClaimedJob, type JobOutcome } from '../jobs/store.ts';
+import { claimJob, recoverStaleJobs, saveJobOutcome, scheduleRetry, type ClaimedJob, type JobOutcome } from '../jobs/store.ts';
 
 export type JobHandler = (job: ClaimedJob) => Promise<JsonValue>;
 
@@ -37,7 +37,15 @@ export async function processJob(orm: MikroORM, job: ClaimedJob, handler: JobHan
 }
 
 export async function runWorker(orm: MikroORM, workerId: string, handler: JobHandler, signal: AbortSignal): Promise<void> {
+    let nextRecoveryAt = 0;
+
     while (!signal.aborted) {
+        if (Date.now() >= nextRecoveryAt) {
+            await recoverStaleJobs(orm);
+            nextRecoveryAt = Date.now() + 10_000;
+        }
+        if (signal.aborted) break;
+
         const job = await claimJob(orm, workerId);
 
         if (job) {
