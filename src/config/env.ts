@@ -14,6 +14,11 @@ export const env = {
         port: Number(process.env.API_PORT ?? 3000),
     },
 
+    worker: {
+        metricsHost: process.env.WORKER_METRICS_HOST ?? '127.0.0.1',
+        metricsPort: Number(process.env.WORKER_METRICS_PORT ?? 9464),
+    },
+
     db: {
         host: requiredEnv('DB_HOST'),
         port: Number(process.env.DB_PORT ?? 5432),

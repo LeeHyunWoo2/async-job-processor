@@ -6,6 +6,7 @@
   "scripts": {
     "test": "echo \"오류: 테스트 명령이 지정되지 않았습니다\" && exit 1",
     "typecheck": "tsc --noEmit",
+    "test:observability": "node --test tests/observability.test.ts",
     "test:db": "node --env-file=.env --test --test-concurrency=1 tests/job-model.test.ts tests/integration/*.test.ts",
     "db:check": "node --env-file=.env src/db/check-connection.ts",
     "db:migration:create": "node --env-file=.env src/db/migrate.ts create",
@@ -34,6 +35,8 @@
     "@mikro-orm/core": "^7.2.3",
     "@mikro-orm/migrations": "^7.2.3",
     "@mikro-orm/postgresql": "^7.2.3",
-    "fastify": "^5.12.5"
+    "@prometheus-io/client": "^0.16.1",
+    "fastify": "^5.12.5",
+    "pino": "10.3.1"
   }
 }

@@ -31,6 +31,15 @@
   - Recovery는 마지막 Claim 정보와 attempt를 유지하고 이전 실행 결과의 불확실성을 오류 정보로 기록
   - Row Lock과 조건 재평가로 동시 Recovery를 보호하며 기존 소유권 검증으로 이전 실행의 결과 저장·Retry 예약 차단
 
+- Observability 기반 및 Compose 통합 실행 환경 구축 완료
+  - API·Worker 공통 Pino JSON Logger, component 구분 및 로그 레벨 설정
+  - Fastify 요청별 Logger·Request ID와 테스트용 로그 비활성화 유지
+  - 프로세스별 독립 Metrics Registry 및 API·Worker의 `/metrics` 제공
+  - Worker Metrics HTTP 서버를 기존 Graceful Shutdown·오류 종료와 함께 정리
+  - PostgreSQL 준비·Migration 이후 API·Worker를 시작하는 공통 이미지 구성
+  - Prometheus의 API·Worker 수집, Named Volume 저장 및 15일 보관
+  - 기존 로컬 Node.js 직접 실행 유지
+
 - 검증 완료
   - 실제 PostgreSQL에서 schema·기본값·제약, API 입력·등록·조회, Handler와 Retry / Backoff 확인
   - 서로 다른 DB 연결과 실제 Row Lock으로 동시 Claim·Recovery, 결과 저장과 Recovery 경합 및 소유권 보호 확인
@@ -39,6 +48,9 @@
   - 독립 테스트 Worker의 Claim 직후·Handler 진입 이후 `SIGKILL`과 Production Worker 재시작으로 복구·두 번째 Claim·성공 확인
   - 테스트 전용 PostgreSQL Side Effect에서 결과 저장 전 중단을 재현하고 중복 발생 및 jobId Unique Key의 중복 INSERT 방지 확인
   - typecheck와 전체 PostgreSQL 테스트 통과, 기존 Claim·Retry / Backoff·독립 프로세스 종료 처리 회귀 없음
+  - JSON 로그·Registry 격리·Metrics 응답과 조회 실패·독립 Worker 서버 정리 확인
+  - 새 DB의 Compose 기동·Migration·Job 처리 및 두 Prometheus Target 수집 성공 확인
+  - Prometheus 중단 중 Job 처리 유지, 컨테이너 재생성 후 수집 재개와 과거 데이터 유지 확인
 
 ## 현재 범위
 
@@ -46,6 +58,7 @@
 - Fixed Timeout은 정상 Worker도 Stale로 오판할 수 있으며, 실행 소유권은 DB Job 상태를 보호하지만 Handler 중복 실행이나 외부 Side Effect를 취소하지는 못함
 - Recovery는 정상 또는 재시작한 Worker가 Loop로 돌아올 때 수행되므로 모든 Worker 중단·Handler 정체 시 지연될 수 있음
 - Idempotency는 테스트 전용 PostgreSQL Unique Key 예시로 검증했으며 외부 시스템의 Exactly-once나 범용 중복 방지는 제공하지 않음
+- Observability는 Logger·Registry·수집 환경 기반까지 제공하며 Job Lifecycle Event와 실제 Job Metrics 계측은 아직 연결하지 않음
 
 ## 막힌 문제
 

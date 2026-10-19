@@ -44,6 +44,7 @@ function startJobProcess(entry: JobProcessEntry, schema: string, signal: AbortSi
             ...process.env, DB_HOST: env.db.host, DB_PORT: String(env.db.port), DB_NAME: env.db.name,
             DB_USER: env.db.user, DB_PASSWORD: env.db.password,
             API_HOST: '127.0.0.1', API_PORT: '0',
+            WORKER_METRICS_HOST: '127.0.0.1', WORKER_METRICS_PORT: '0',
             PGOPTIONS: `-c search_path=${schema} -c statement_timeout=5000`,
             ...(crashPhase ? { TEST_CRASH_PHASE: crashPhase } : {}),
         },

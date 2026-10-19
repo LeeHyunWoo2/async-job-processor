@@ -1,3 +1,14 @@
+x-app: &app
+  image: async-job-processor:local
+  build: .
+  environment: &app-environment
+    DB_HOST: postgres
+    DB_PORT: 5432
+    DB_USER: ${DB_USER}
+    DB_PASSWORD: ${DB_PASSWORD}
+    DB_NAME: ${DB_NAME}
+    LOG_LEVEL: ${LOG_LEVEL:-info}
+
 services:
   postgres:
     image: postgres:18.6-alpine
@@ -9,6 +20,56 @@ services:
       - "${DB_PORT}:5432"
     volumes:
       - postgres_data:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U \"$$POSTGRES_USER\" -d \"$$POSTGRES_DB\""]
+      interval: 2s
+      timeout: 5s
+      retries: 15
+
+  migrate:
+    <<: *app
+    command: ["node", "src/db/migrate.ts", "up"]
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  api:
+    <<: *app
+    command: ["node", "src/api/server.ts"]
+    environment:
+      <<: *app-environment
+      API_HOST: 0.0.0.0
+      API_PORT: 3000
+    ports:
+      - "${API_PORT:-3000}:3000"
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+
+  worker:
+    <<: *app
+    command: ["node", "src/worker/main.ts"]
+    stop_grace_period: 30s
+    environment:
+      <<: *app-environment
+      WORKER_METRICS_HOST: 0.0.0.0
+      WORKER_METRICS_PORT: 9464
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+
+  prometheus:
+    image: prom/prometheus:v3.13.4
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+      - --storage.tsdb.path=/prometheus
+      - --storage.tsdb.retention.time=15d
+    ports:
+      - "${PROMETHEUS_PORT:-9090}:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus_data:/prometheus
 
 volumes:
   postgres_data:
+  prometheus_data:
