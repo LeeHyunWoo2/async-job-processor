@@ -49,6 +49,7 @@ services:
   worker:
     <<: *app
     command: ["node", "src/worker/main.ts"]
+    stop_grace_period: 30s
     environment:
       <<: *app-environment
       WORKER_METRICS_HOST: 0.0.0.0
