@@ -1,13 +1,16 @@
 import Fastify from 'fastify';
 import type { MikroORM } from '@mikro-orm/postgresql';
+import type { Logger } from 'pino';
 
 import { isJobInput } from '../jobs/handlers.ts';
 import { enqueueJob, findJob } from '../jobs/store.ts';
+import { createLogger } from '../observability/logger.ts';
+import { createMetricsRegistry } from '../observability/metrics.ts';
 
-export function createApp(orm: MikroORM, logger = true) {
-    const app = Fastify({
-        logger,
-    });
+export function createApp(orm: MikroORM, logger: boolean | Logger = true, registry = createMetricsRegistry()) {
+    const app = Fastify(logger === false
+        ? { logger: false }
+        : { loggerInstance: logger === true ? createLogger('api') : logger });
 
     app.addHook('onClose', async () => {
         await orm.close();
@@ -17,6 +20,11 @@ export function createApp(orm: MikroORM, logger = true) {
         return {
             status: 'ok',
         };
+    });
+
+    app.get('/metrics', async (_request, reply) => {
+        const metrics = await registry.metrics();
+        return reply.type(registry.contentType).send(metrics);
     });
 
     app.post('/jobs', async (request, reply) => {

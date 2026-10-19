@@ -1,0 +1,103 @@
+import assert from 'node:assert/strict';
+import { spawnSync } from 'node:child_process';
+import { once } from 'node:events';
+import test from 'node:test';
+import { fileURLToPath } from 'node:url';
+
+import { Counter, Gauge, Histogram, register } from '@prometheus-io/client';
+
+import { createLogger } from '../src/observability/logger.ts';
+import { createMetricsRegistry } from '../src/observability/metrics.ts';
+import { createWorkerMetricsServer } from '../src/worker/metrics-server.ts';
+
+test('공통 Logger는 component와 Error를 JSON으로 출력하고 LOG_LEVEL을 적용한다', () => {
+    const previous = process.env.LOG_LEVEL;
+    let output = '';
+    const destination = { write: (chunk: string) => { output += chunk; } };
+    try {
+        delete process.env.LOG_LEVEL;
+        const api = createLogger('api', destination);
+        assert.equal(api.level, 'info');
+        api.debug('출력하지 않는 로그');
+        api.info('API 확인');
+        process.env.LOG_LEVEL = 'warn';
+        const worker = createLogger('worker', destination);
+        worker.info('출력하지 않는 로그');
+        worker.error({ err: new Error('검증용 오류') }, 'Worker 확인');
+        const logs = output.trim().split('\n').map((line) => JSON.parse(line));
+        assert.equal(logs.length, 2);
+        assert.equal(logs[0].component, 'api');
+        assert.equal(logs[1].component, 'worker');
+        assert.equal(logs[1].err.message, '검증용 오류');
+        assert.match(logs[1].err.stack, /검증용 오류/);
+        process.env.LOG_LEVEL = 'silent';
+        createLogger('api', destination).info('출력하지 않는 로그');
+        assert.equal(output.trim().split('\n').length, 2);
+    } finally {
+        if (previous === undefined) delete process.env.LOG_LEVEL;
+        else process.env.LOG_LEVEL = previous;
+    }
+});
+
+test('Registry는 빈 응답과 Counter·Gauge·Histogram을 지원하며 등록 상태를 격리한다', async () => {
+    const api = createMetricsRegistry();
+    const worker = createMetricsRegistry();
+    const isolated = createMetricsRegistry();
+    assert.equal((await isolated.metrics()).trim(), '');
+    assert.match(isolated.contentType, /text\/plain; version=0\.0\.4/);
+    const counter = new Counter({ name: 'test_total', help: '검증용 Counter', registers: [api] });
+    new Counter({ name: 'test_total', help: '검증용 Counter', registers: [worker] }).inc(2);
+    counter.inc();
+    new Gauge({ name: 'test_gauge', help: '검증용 Gauge', registers: [api] }).set(3);
+    new Histogram({ name: 'test_duration_seconds', help: '검증용 Histogram', registers: [api] }).observe(0.1);
+    assert.match(await api.metrics(), /test_total 1\n/);
+    assert.match(await api.metrics(), /test_gauge 3\n/);
+    assert.match(await api.metrics(), /test_duration_seconds_count 1\n/);
+    assert.match(await worker.metrics(), /test_total 2\n/);
+    assert.equal((await isolated.metrics()).trim(), '');
+    assert.equal(register.getSingleMetric('test_total'), undefined);
+});
+
+test('API와 Worker의 초기 설정 오류도 공통 JSON Logger로 출력된다', () => {
+    for (const entry of ['api/server.ts', 'worker/main.ts']) {
+        const child = spawnSync(process.execPath, [fileURLToPath(new URL(`../src/${entry}`, import.meta.url))], {
+            env: { ...process.env, DB_HOST: '', LOG_LEVEL: 'info' }, encoding: 'utf8', timeout: 10_000,
+        });
+        assert.equal(child.status, 1, child.stderr);
+        assert.equal(child.stderr, '');
+        const log = JSON.parse(child.stdout.trim());
+        assert.equal(log.component, entry.startsWith('api/') ? 'api' : 'worker');
+        assert.match(log.err.message, /필수 환경 변수가 없습니다: DB_HOST/);
+    }
+});
+
+test('Worker HTTP는 지정 Registry를 사용하며 조회 실패 후에도 응답을 계속한다', async () => {
+    const registry = createMetricsRegistry();
+    const logger = createLogger('worker', { write() {} });
+    const server = createWorkerMetricsServer(registry, logger);
+    server.listen({ host: '127.0.0.1', port: 0 });
+    await once(server, 'listening');
+    const address = server.address();
+    assert.ok(address && typeof address === 'object');
+    const url = `http://127.0.0.1:${address.port}`;
+    try {
+        const empty = await fetch(`${url}/metrics`);
+        assert.equal(empty.status, 200);
+        assert.match(empty.headers.get('content-type')!, /text\/plain; version=0\.0\.4/);
+        assert.equal((await empty.text()).trim(), '');
+        new Gauge({ name: 'test_worker', help: '검증용 Worker Gauge', registers: [registry] }).set(7);
+        assert.match(await (await fetch(`${url}/metrics?probe=1`)).text(), /test_worker 7\n/);
+        assert.equal((await fetch(`${url}/other`)).status, 404);
+        assert.equal((await fetch(`${url}/metrics`, { method: 'POST' })).status, 404);
+        new Gauge({
+            name: 'test_broken', help: '검증용 수집 오류', registers: [registry],
+            collect() { throw new Error('검증용 수집 실패'); },
+        });
+        assert.equal((await fetch(`${url}/metrics`)).status, 500);
+        registry.removeSingleMetric('test_broken');
+        assert.equal((await fetch(`${url}/metrics`)).status, 200);
+    } finally {
+        await new Promise<void>((resolve, reject) => server.close((error) => error ? reject(error) : resolve()));
+    }
+    await assert.rejects(fetch(`${url}/metrics`));
+});
