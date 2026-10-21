@@ -7,7 +7,7 @@ import { fileURLToPath } from 'node:url';
 import { Counter, Gauge, Histogram, register } from '@prometheus-io/client';
 
 import { createLogger } from '../src/observability/logger.ts';
-import { createMetricsRegistry } from '../src/observability/metrics.ts';
+import { createApiMetrics, createMetricsRegistry, createWorkerMetrics } from '../src/observability/metrics.ts';
 import { createWorkerMetricsServer } from '../src/worker/metrics-server.ts';
 
 test('공통 Logger는 component와 Error를 JSON으로 출력하고 LOG_LEVEL을 적용한다', () => {
@@ -67,7 +67,28 @@ test('API와 Worker의 초기 설정 오류도 공통 JSON Logger로 출력된�
         assert.equal(child.stderr, '');
         const log = JSON.parse(child.stdout.trim());
         assert.equal(log.component, entry.startsWith('api/') ? 'api' : 'worker');
+        if (entry.startsWith('worker/')) assert.equal(log.event, 'worker.error');
         assert.match(log.err.message, /필수 환경 변수가 없습니다: DB_HOST/);
+    }
+});
+
+test('Job Metric 10개는 필요한 프로세스 Registry에만 등록하고 실행별 Label을 사용하지 않는다', async () => {
+    const api = createMetricsRegistry();
+    const worker = createMetricsRegistry();
+    createApiMetrics(api);
+    createWorkerMetrics(worker);
+    const metrics = [...await api.getMetricsAsJSON(), ...await worker.getMetricsAsJSON()];
+    assert.equal(metrics.length, 10);
+    assert.equal(metrics.filter((metric) => metric.type === 'counter').length, 6);
+    assert.equal(metrics.filter((metric) => metric.type === 'gauge').length, 3);
+    assert.equal(metrics.filter((metric) => metric.type === 'histogram').length, 1);
+    assert.equal(api.getMetricsAsArray().length, 4);
+    assert.equal(worker.getMetricsAsArray().length, 6);
+    for (const metric of metrics) {
+        assert.equal(register.getSingleMetric(metric.name), undefined);
+        for (const sample of metric.values) {
+            assert.ok(Object.keys(sample.labels).every((label) => label === 'le'));
+        }
     }
 });
 

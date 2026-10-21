@@ -31,11 +31,13 @@
   - Recovery는 마지막 Claim 정보와 attempt를 유지하고 이전 실행 결과의 불확실성을 오류 정보로 기록
   - Row Lock과 조건 재평가로 동시 Recovery를 보호하며 기존 소유권 검증으로 이전 실행의 결과 저장·Retry 예약 차단
 
-- Observability 기반 및 Compose 통합 실행 환경 구축 완료
-  - API·Worker 공통 Pino JSON Logger, component 구분 및 로그 레벨 설정
-  - Fastify 요청별 Logger·Request ID와 테스트용 로그 비활성화 유지
-  - 프로세스별 독립 Metrics Registry 및 API·Worker의 `/metrics` 제공
-  - Worker Metrics HTTP 서버를 기존 Graceful Shutdown·오류 종료와 함께 정리
+- Job Lifecycle Observability 및 Compose 통합 실행 환경 구축 완료
+  - 공통 Pino JSON Logger로 DB 상태 변경 후 Job Event 6개와 Worker Event 3개 기록
+  - API의 Request ID·jobId와 Worker의 jobId·workerId·attempt로 요청과 실행 추적
+  - 독립 Registry와 API·Worker `/metrics`에서 Gauge 3개·Counter 6개·Histogram 1개 제공
+  - Scrape마다 단일 PostgreSQL 집계로 Queue·Ready Queue·Processing 수 조회, 조회 오류는 응답 실패로 구분
+  - Retry와 Recovery·최종 실패를 구분해 집계하며 Handler 시간은 DB 결과 저장과 분리
+  - 계측 오류를 Job 처리에서 격리하고 기존 Graceful Shutdown·오류 종료에 맞춰 Metrics 서버 정리
   - PostgreSQL 준비·Migration 이후 API·Worker를 시작하는 공통 이미지 구성
   - Prometheus의 API·Worker 수집, Named Volume 저장 및 15일 보관
   - 기존 로컬 Node.js 직접 실행 유지
@@ -48,9 +50,10 @@
   - 독립 테스트 Worker의 Claim 직후·Handler 진입 이후 `SIGKILL`과 Production Worker 재시작으로 복구·두 번째 Claim·성공 확인
   - 테스트 전용 PostgreSQL Side Effect에서 결과 저장 전 중단을 재현하고 중복 발생 및 jobId Unique Key의 중복 INSERT 방지 확인
   - typecheck와 전체 PostgreSQL 테스트 통과, 기존 Claim·Retry / Backoff·독립 프로세스 종료 처리 회귀 없음
-  - JSON 로그·Registry 격리·Metrics 응답과 조회 실패·독립 Worker 서버 정리 확인
-  - 새 DB의 Compose 기동·Migration·Job 처리 및 두 Prometheus Target 수집 성공 확인
-  - Prometheus 중단 중 Job 처리 유지, 컨테이너 재생성 후 수집 재개와 과거 데이터 유지 확인
+  - JSON Event·실행 정보·Registry 격리와 실제 DB Gauge, Retry·Recovery 집계 및 Handler Duration 확인
+  - DB 저장 실패·소유권 상실·동시 Recovery의 관측 정확성과 Logger·Metric 오류의 Job 처리 격리 확인
+  - Compose의 실제 Job 생성·성공·실패·Retry·Recovery 후 두 Prometheus Target에서 새 지표 수집 확인
+  - Prometheus 중단 중 Job 처리 유지와 재시작 후 지표 수집 재개 확인
 
 ## 현재 범위
 
@@ -58,7 +61,7 @@
 - Fixed Timeout은 정상 Worker도 Stale로 오판할 수 있으며, 실행 소유권은 DB Job 상태를 보호하지만 Handler 중복 실행이나 외부 Side Effect를 취소하지는 못함
 - Recovery는 정상 또는 재시작한 Worker가 Loop로 돌아올 때 수행되므로 모든 Worker 중단·Handler 정체 시 지연될 수 있음
 - Idempotency는 테스트 전용 PostgreSQL Unique Key 예시로 검증했으며 외부 시스템의 Exactly-once나 범용 중복 방지는 제공하지 않음
-- Observability는 Logger·Registry·수집 환경 기반까지 제공하며 Job Lifecycle Event와 실제 Job Metrics 계측은 아직 연결하지 않음
+- PostgreSQL이 Job 상태의 기준이며 로그·Metrics는 상태 변경과 원자적이지 않은 Best-effort 관측이다. 강제 종료 시 기록이 누락될 수 있고 Counter는 프로세스 재시작 시 초기화됨
 
 ## 막힌 문제
 
