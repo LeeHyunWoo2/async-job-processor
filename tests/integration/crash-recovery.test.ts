@@ -10,6 +10,7 @@ import { claimJob, recoverStaleJobs, saveJobOutcome, scheduleRetry } from '../..
 import { processJob, runWorker } from '../../src/worker/run.ts';
 import { withJobProcesses, waitFor } from '../helpers/job-process.ts';
 import { withJobTestDatabase, withJobUpdateTrigger } from '../helpers/job-test-database.ts';
+import { captureWorkerObservability, metricValue } from '../helpers/observability.ts';
 
 test('PostgreSQL Crash Recovery / At-least-once', { timeout: 100_000 }, async (t) => {
     await withJobTestDatabase('recovery', 3, async (database) => {
@@ -82,7 +83,17 @@ test('PostgreSQL Crash Recovery / At-least-once', { timeout: 100_000 }, async (t
             }
             const before = await Promise.all(untouched.map((job) => snapshot(job.id)));
             const [start] = await orm.em.getConnection().execute<{ now: string }[]>('select now() as now');
-            assert.equal(await recoverStaleJobs(orm), 3);
+            const recoveredJobs = await recoverStaleJobs(orm);
+            assert.equal(recoveredJobs.length, 3);
+            for (const original of [retry, exhausted, overLimit]) {
+                const recovered = recoveredJobs.find((job) => job.jobId === original.id);
+                assert.ok(recovered);
+                assert.equal(recovered.workerId, original.workerId);
+                assert.equal(recovered.attempt, original.attempt);
+                assert.equal(recovered.jobType, original.type);
+                assert.equal(recovered.status, original.id === retry.id ? 'queued' : 'failed');
+                assert.equal(recovered.lastError.name, 'StaleJobError');
+            }
             const [end] = await orm.em.getConnection().execute<{ now: string }[]>('select now() as now');
             assert.ok(start && end);
 
@@ -117,7 +128,7 @@ test('PostgreSQL Crash Recovery / At-least-once', { timeout: 100_000 }, async (t
                 assert.ok(claimed);
                 assert.equal(claimed.attempt, attempt);
                 await makeStale(job.id);
-                assert.equal(await recoverStaleJobs(other), 1);
+                assert.equal((await recoverStaleJobs(other)).length, 1);
                 const recovered = await saved(job.id);
                 assert.equal(recovered.attempt, attempt);
                 assert.equal(recovered.status, attempt < 3 ? JobStatus.queued : JobStatus.failed);
@@ -127,12 +138,25 @@ test('PostgreSQL Crash Recovery / At-least-once', { timeout: 100_000 }, async (t
 
         await t.test('서로 다른 연결의 동시 Recovery는 Row Lock 이후 조건을 재평가하여 한 번만 적용된다', async () => {
             const job = await insert({ status: JobStatus.processing, attempt: 1, processingStartedAt: new Date(0) });
-            assert.deepEqual(await compete(job.id, () => recoverStaleJobs(other), () => recoverStaleJobs(peer)), [1, 0]);
+            const controllers = [new AbortController(), new AbortController()];
+            const stopAfterRecovery = () => controllers.forEach((controller) => controller.abort());
+            const a = captureWorkerObservability('recovery-a', stopAfterRecovery);
+            const b = captureWorkerObservability('recovery-b', stopAfterRecovery);
+            const handler = async () => { throw new Error('Recovery 이후 종료되어 Handler를 호출하지 않아야 합니다'); };
+            await compete(job.id,
+                () => runWorker(other, 'recovery-a', handler, AbortSignal.any([controllers[0]!.signal, t.signal]), a),
+                () => runWorker(peer, 'recovery-b', handler, AbortSignal.any([controllers[1]!.signal, t.signal]), b));
+            assert.deepEqual(a.logs.map((log) => log.event), ['job.recovered']);
+            assert.deepEqual(b.logs, []);
+            assert.equal(a.logs[0]?.jobId, job.id);
+            assert.equal(await metricValue(a.registry, 'async_job_recovered_total'), 1);
+            assert.equal(await metricValue(b.registry, 'async_job_recovered_total'), 0);
+            assert.equal(await metricValue(a.registry, 'async_job_failed_total'), 0);
             const recovered = await saved(job.id);
             assert.equal(recovered.status, JobStatus.queued);
             assert.equal(recovered.attempt, 1);
             const before = await snapshot(job.id);
-            assert.equal(await recoverStaleJobs(peer), 0);
+            assert.deepEqual(await recoverStaleJobs(peer), []);
             assert.deepEqual(await snapshot(job.id), before, '중복 검사로 수정 시각이나 오류를 다시 쓰지 않습니다');
         });
 
@@ -146,11 +170,11 @@ test('PostgreSQL Crash Recovery / At-least-once', { timeout: 100_000 }, async (t
                 const outcome = { status: 'succeeded', result: { completed: true } } as const;
                 if (recoveryFirst) {
                     assert.deepEqual(await compete(job.id,
-                        () => recoverStaleJobs(other), () => saveJobOutcome(peer, claimed, outcome)), [1, false]);
+                        () => recoverStaleJobs(other).then((jobs) => jobs.length), () => saveJobOutcome(peer, claimed, outcome)), [1, false]);
                     assert.equal((await saved(job.id)).status, JobStatus.queued);
                 } else {
                     assert.deepEqual(await compete(job.id,
-                        () => saveJobOutcome(other, claimed, outcome), () => recoverStaleJobs(peer)), [true, 0]);
+                        () => saveJobOutcome(other, claimed, outcome), () => recoverStaleJobs(peer).then((jobs) => jobs.length)), [true, 0]);
                     const completed = await saved(job.id);
                     assert.equal(completed.status, JobStatus.succeeded);
                     assert.deepEqual(completed.result, outcome.result);
@@ -169,12 +193,21 @@ test('PostgreSQL Crash Recovery / At-least-once', { timeout: 100_000 }, async (t
                 await recoverStaleJobs(other);
                 const assertPreviousRejected = async () => {
                     const before = await snapshot(job.id);
+                    const observation = captureWorkerObservability('worker-a');
                     assert.equal(await saveJobOutcome(orm, previous, { status: 'succeeded', result: { old: true } }), false);
                     assert.equal(await scheduleRetry(orm, previous, { message: '이전 실행 오류' }), false);
-                    await assert.rejects(processJob(orm, previous, async () => ({ old: true })), /실행 상태가 변경되었습니다/);
+                    await assert.rejects(processJob(orm, previous, async () => ({ old: true }), observation), /실행 상태가 변경되었습니다/);
                     await assert.rejects(processJob(orm, previous, async () => {
                         throw new RetryableJobError('이전 실행의 늦은 실패');
-                    }), /실행 상태가 변경되었습니다/);
+                    }, observation), /실행 상태가 변경되었습니다/);
+                    await assert.rejects(processJob(orm, previous, async () => {
+                        throw new Error('이전 실행의 최종 실패');
+                    }, observation), /실행 상태가 변경되었습니다/);
+                    assert.deepEqual(observation.logs, []);
+                    for (const name of ['succeeded', 'failed', 'retry_scheduled']) {
+                        assert.equal(await metricValue(observation.registry, `async_job_${name}_total`), 0);
+                    }
+                    assert.equal(await metricValue(observation.registry, 'async_job_handler_duration_seconds_count'), 3);
                     assert.deepEqual(await snapshot(job.id), before);
                 };
                 assert.equal((await saved(job.id)).status, maxAttempts === 1 ? JobStatus.failed : JobStatus.queued);
@@ -282,8 +315,12 @@ test('PostgreSQL Crash Recovery / At-least-once', { timeout: 100_000 }, async (t
             `, async () => {
                 await assert.rejects(recoverStaleJobs(orm), /검증용 Recovery DB 오류/);
                 let calls = 0;
-                await assert.rejects(runWorker(orm, 'worker-a', async () => { calls++; return null; }, t.signal), /검증용 Recovery DB 오류/);
+                const observation = captureWorkerObservability('worker-a');
+                await assert.rejects(runWorker(orm, 'worker-a', async () => { calls++; return null; }, t.signal, observation), /검증용 Recovery DB 오류/);
                 assert.equal(calls, 0);
+                assert.deepEqual(observation.logs, []);
+                assert.equal(await metricValue(observation.registry, 'async_job_recovered_total'), 0);
+                assert.equal(await metricValue(observation.registry, 'async_job_failed_total'), 0);
                 assert.deepEqual(await Promise.all([retry, exhausted, queued].map((job) => snapshot(job.id))), before);
             });
         });
@@ -334,6 +371,17 @@ test('PostgreSQL Crash Recovery / At-least-once', { timeout: 100_000 }, async (t
                     assert.equal((await found.json() as { status: string }).status, JobStatus.succeeded);
                     assert.equal(restarted.child.kill('SIGTERM'), true);
                     assert.deepEqual(await restarted.exited, { code: 0, signal: null }, restarted.output());
+                    const recoveryLines = restarted.output().trim().split('\n')
+                        .filter((line) => JSON.parse(line).event === 'job.recovered');
+                    assert.equal(recoveryLines.length, 1);
+                    const recoveryLine = recoveryLines[0]!;
+                    const recoveryLog = JSON.parse(recoveryLine);
+                    assert.equal(recoveryLog.jobId, created.id);
+                    assert.equal(recoveryLog.workerId, reclaimed.workerId);
+                    assert.equal(recoveryLog.previousWorkerId, claimed.workerId);
+                    // JSON.parse는 중복 키를 덮어쓰므로 원본 JSON에서도 각각 한 번만 기록되는지 확인한다.
+                    assert.equal((recoveryLine.match(/"workerId"\s*:/g) ?? []).length, 1);
+                    assert.equal((recoveryLine.match(/"previousWorkerId"\s*:/g) ?? []).length, 1);
                 }
                 assert.equal(api.child.kill('SIGTERM'), true);
                 assert.deepEqual(await api.exited, { code: 0, signal: null }, api.output());
@@ -367,7 +415,7 @@ test('PostgreSQL Crash Recovery / At-least-once', { timeout: 100_000 }, async (t
                     const readEffects = () => other.em.getConnection().execute<{ job_id: string; attempt: number }[]>(`select * from ${effectsTable}`);
                     assert.deepEqual(await readEffects(), [{ job_id: job.id, attempt: 1 }]);
                     await makeStale(job.id);
-                    assert.equal(await recoverStaleJobs(orm), 1);
+                    assert.equal((await recoverStaleJobs(orm)).length, 1);
                     const second = await claimJob(other, 'worker-b');
                     assert.ok(second);
                     await processJob(other, second, handler);
