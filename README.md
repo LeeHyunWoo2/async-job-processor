@@ -69,7 +69,7 @@ Compose에서 API·Worker를 이미 실행 중이라면 먼저 `docker compose s
 - API는 `createApp(orm, logger, registry)`에서 API Metric을 등록한다. Worker는 `main.ts`에서 Worker Metric을 등록하고 같은 Registry를 Metrics HTTP 서버에 전달한다. `processJob()`의 네 번째 인자와 `runWorker()`의 다섯 번째 인자에 선택적으로 `{ logger, metrics }`를 전달한다.
 - 두 Endpoint는 `registry.metrics()`와 `registry.contentType`으로 응답한다. 조회 실패는 HTTP 500이며 Worker의 수집 오류는 Polling을 중단시키지 않는다. Worker Metrics 서버는 현재 Job 처리가 끝난 뒤 DB 연결과 함께 정리된다.
 
-Job Lifecycle은 DB 상태 변경 성공 후 `job.enqueued`, `job.claimed`, `job.retry_scheduled`, `job.succeeded`, `job.failed`, `job.recovered`로 기록한다. API 등록 로그의 `reqId + jobId`, Worker 로그의 `jobId + workerId + attempt`로 요청과 실행을 연결한다. Recovery 로그의 `workerId`는 복구 이전 Claim 소유자다. Worker 시작·종료 요청·치명적 오류에는 `worker.started`, `worker.stopping`, `worker.error`를 사용한다. Payload·result·인증 헤더·DB 접속 설정을 로그 필드로 추가하지 않는다.
+Job Lifecycle은 DB 상태 변경 성공 후 `job.enqueued`, `job.claimed`, `job.retry_scheduled`, `job.succeeded`, `job.failed`, `job.recovered`로 기록한다. API 등록 로그의 `reqId + jobId`, Worker 로그의 `jobId + workerId + attempt`로 요청과 실행을 연결한다. Recovery 로그의 `workerId`는 복구를 수행한 현재 Worker의 Context를 유지하며, `previousWorkerId`와 `attempt`는 복구 이전 Claim 소유자와 시도 번호다. Worker 시작·종료 요청·치명적 오류에는 `worker.started`, `worker.stopping`, `worker.error`를 사용한다. Payload·result·인증 헤더·DB 접속 설정을 로그 필드로 추가하지 않는다.
 
 ## Job Metrics
 

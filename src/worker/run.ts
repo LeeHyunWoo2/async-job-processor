@@ -83,7 +83,7 @@ export async function runWorker(orm: MikroORM, workerId: string, handler: JobHan
                 recordObservation(() => metrics?.recovered.inc());
                 if (job.status === 'failed') recordObservation(() => metrics?.failed.inc());
                 recordObservation(() => logger?.warn({
-                    event: 'job.recovered', jobId: job.jobId, workerId: job.workerId,
+                    event: 'job.recovered', jobId: job.jobId, previousWorkerId: job.workerId,
                     attempt: job.attempt, jobType: job.jobType, status: job.status, err: job.lastError,
                 }, 'Stale Job 복구 완료'));
             }

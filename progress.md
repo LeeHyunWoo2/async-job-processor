@@ -33,7 +33,7 @@
 
 - Job Lifecycle Observability 및 Compose 통합 실행 환경 구축 완료
   - 공통 Pino JSON Logger로 DB 상태 변경 후 Job Event 6개와 Worker Event 3개 기록
-  - API의 Request ID·jobId와 Worker의 jobId·workerId·attempt로 요청과 실행 추적
+  - API의 Request ID·jobId와 Worker의 jobId·workerId·attempt로 요청과 실행을 추적하며 Recovery 수행 Worker와 이전 Claim 소유자를 구분
   - 독립 Registry와 API·Worker `/metrics`에서 Gauge 3개·Counter 6개·Histogram 1개 제공
   - Scrape마다 단일 PostgreSQL 집계로 Queue·Ready Queue·Processing 수 조회, 조회 오류는 응답 실패로 구분
   - Retry와 Recovery·최종 실패를 구분해 집계하며 Handler 시간은 DB 결과 저장과 분리

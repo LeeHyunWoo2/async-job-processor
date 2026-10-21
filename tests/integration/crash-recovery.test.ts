@@ -371,6 +371,17 @@ test('PostgreSQL Crash Recovery / At-least-once', { timeout: 100_000 }, async (t
                     assert.equal((await found.json() as { status: string }).status, JobStatus.succeeded);
                     assert.equal(restarted.child.kill('SIGTERM'), true);
                     assert.deepEqual(await restarted.exited, { code: 0, signal: null }, restarted.output());
+                    const recoveryLines = restarted.output().trim().split('\n')
+                        .filter((line) => JSON.parse(line).event === 'job.recovered');
+                    assert.equal(recoveryLines.length, 1);
+                    const recoveryLine = recoveryLines[0]!;
+                    const recoveryLog = JSON.parse(recoveryLine);
+                    assert.equal(recoveryLog.jobId, created.id);
+                    assert.equal(recoveryLog.workerId, reclaimed.workerId);
+                    assert.equal(recoveryLog.previousWorkerId, claimed.workerId);
+                    // JSON.parse는 중복 키를 덮어쓰므로 원본 JSON에서도 각각 한 번만 기록되는지 확인한다.
+                    assert.equal((recoveryLine.match(/"workerId"\s*:/g) ?? []).length, 1);
+                    assert.equal((recoveryLine.match(/"previousWorkerId"\s*:/g) ?? []).length, 1);
                 }
                 assert.equal(api.child.kill('SIGTERM'), true);
                 assert.deepEqual(await api.exited, { code: 0, signal: null }, api.output());

@@ -11,6 +11,7 @@ export interface LogEntry {
     component: string;
     jobId?: string;
     workerId?: string;
+    previousWorkerId?: string | null;
     attempt?: number;
     jobType?: string;
     status?: string;

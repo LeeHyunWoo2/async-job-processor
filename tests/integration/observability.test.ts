@@ -267,7 +267,7 @@ test('Job Lifecycle 계측은 실제 PostgreSQL 상태 전이와 Handler 실행�
             }
         });
 
-        await t.test('Recovery는 이전 소유자를 기록하고 최종 실패에 Recovered·Failed Counter만 함께 반영한다', async (t) => {
+        await t.test('Recovery는 현재 Worker와 이전 소유자를 구분하고 최종 실패에 Recovered·Failed Counter만 함께 반영한다', async (t) => {
             const retry = await insert({ status: JobStatus.processing, workerId: 'previous-retry', attempt: 1, processingStartedAt: new Date(0) });
             const failed = await insert({ status: JobStatus.processing, workerId: 'previous-failed', attempt: 3, processingStartedAt: new Date(0) });
             const observation = captureWorkerObservability('recovery-worker');
@@ -281,7 +281,8 @@ test('Job Lifecycle 계측은 실제 PostgreSQL 상태 전이와 Handler 실행�
             assert.equal(recovered.length, 2);
             for (const original of [retry, failed]) {
                 const log = recovered.find((log) => log.jobId === original.id)!;
-                assert.equal(log.workerId, original.workerId);
+                assert.equal(log.workerId, 'recovery-worker');
+                assert.equal(log.previousWorkerId, original.workerId);
                 assert.equal(log.attempt, original.attempt);
                 assert.equal(log.status, original.id === retry.id ? 'queued' : 'failed');
                 assert.equal(log.err?.name, 'StaleJobError');
