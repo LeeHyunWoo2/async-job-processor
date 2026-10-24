@@ -13,14 +13,19 @@ npm run typecheck
 npm run test:observability
 npm run test:db
 docker compose build
+node --env-file=.env --test tests/compose/worker-safety-preflight.test.ts
 npm run test:multi-worker
 ```
 
 스크립트는 기본 설정에 `tests/compose/worker-safety.yml`을 덧씌워 `async-job-worker-safety` 프로젝트를 시작한다. API·PostgreSQL·Prometheus는 `127.0.0.1`의 임의 호스트 포트를 사용하며, Network·Named Volume은 개발용 Compose와 분리된다. 별도 의존성이나 신규 애플리케이션 Metric은 추가하지 않는다. 로그 관찰을 위해 이 프로젝트의 API·Worker만 `LOG_LEVEL=info`로 실행한다.
 
+PostgreSQL과 Migration만 먼저 시작해 Migration의 정상 완료와 기존 Job 유무를 확인한다. DB가 비어 있을 때만 API·Worker·Prometheus를 시작하므로, 실행을 거부하는 과정에서 이전 Job에 Recovery·Claim을 수행하지 않는다.
+
 시나리오 시작 전 API의 `/health`와 Prometheus의 `/-/ready`를 최대 30초씩 반복 확인한다. Prometheus의 연결 오류·요청 Timeout·준비 중 응답은 이 대기 시간 안에서 재시도한다. Target의 Scrape 시각과 DB의 Job 완료 시각은 밀리초 값으로 변환해 비교한다.
 
 같은 검증 프로젝트의 컨테이너가 이미 있거나 전용 DB에 기존 Job이 있으면 실행을 중단한다. 동일 명령을 동시에 실행하지 않는다. 이전 실행이 비정상 중단되었다면 아래 정리 안내를 먼저 확인한다.
+
+`worker-safety-preflight.test.ts`는 전용 Named Volume에 `queued`·Stale `processing` Job을 남긴 뒤 재실행이 거부되는지 확인하는 회귀 테스트다. 전후 전체 행이 동일하고 Worker 컨테이너가 생성되지 않았는지 검증하며, 마지막에는 테스트가 생성한 두 Job ID만 정리한다. 두 검증 명령은 같은 프로젝트를 사용하므로 순서대로 실행한다.
 
 ## 시나리오별 관찰과 성공 조건
 

@@ -194,15 +194,19 @@ async function createEnvironment(signal: AbortSignal) {
             return activeWorkers(count);
         },
         async start() {
-            await compose('up', '-d', '--no-build', '--scale', 'worker=1');
-            apiUrl = `http://127.0.0.1:${await port('api', '3000')}`;
-            prometheusUrl = `http://127.0.0.1:${await port('prometheus', '9090')}`;
+            // 보존된 Job은 Worker의 시작 시 Recovery·Claim보다 먼저 검사한다.
+            await compose('up', '-d', '--no-build', 'postgres', 'migrate');
+            const migrationId = (await compose('ps', '--all', '--quiet', 'migrate')).trim();
+            assert.equal((await docker('wait', migrationId)).trim(), '0', 'Migration이 정상 완료되어야 합니다');
             orm = await MikroORM.init({
                 ...config, host: '127.0.0.1', port: await port('postgres', '5432'), contextName: project,
                 driverOptions: { connectionTimeoutMillis: 5_000, options: '-c statement_timeout=5000' },
             });
             const [existing] = await orm.em.getConnection().execute<{ count: number }[]>('select count(*)::int as count from jobs');
             assert.equal(existing?.count, 0, '검증 전용 DB에 기존 Job이 있어 실행을 중단합니다. evidence.json의 Job ID로 이전 실행을 확인하세요');
+            await compose('up', '-d', '--no-build', '--no-deps', '--scale', 'worker=1', 'api', 'worker', 'prometheus');
+            apiUrl = `http://127.0.0.1:${await port('api', '3000')}`;
+            prometheusUrl = `http://127.0.0.1:${await port('prometheus', '9090')}`;
             await until('API 준비', async () => {
                 try { return (await json(`${apiUrl}/health`)).status === 'ok' ? true : undefined; }
                 catch { signal.throwIfAborted(); return undefined; }
