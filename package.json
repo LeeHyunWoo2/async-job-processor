@@ -8,6 +8,7 @@
     "typecheck": "tsc --noEmit",
     "test:observability": "node --test tests/observability.test.ts",
     "test:db": "node --env-file=.env --test --test-concurrency=1 tests/job-model.test.ts tests/integration/*.test.ts",
+    "test:multi-worker": "node --env-file=.env tests/compose/worker-safety.ts",
     "db:check": "node --env-file=.env src/db/check-connection.ts",
     "db:migration:create": "node --env-file=.env src/db/migrate.ts create",
     "db:migration:up": "node --env-file=.env src/db/migrate.ts up",
