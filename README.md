@@ -23,7 +23,7 @@ PostgreSQL이 준비되면 일회성 `migrate` 서비스가 기존 migration을 
 
 - API: 기본 `http://localhost:3000` (`API_PORT`로 호스트 포트 변경)
 - API Metrics: `http://localhost:3000/metrics`
-- Worker Metrics: Compose 내부 `http://worker:9464/metrics`, 호스트 포트는 공개하지 않음
+- Worker Metrics: 각 Worker의 내부 포트 `9464`에서 제공, 호스트 포트는 공개하지 않음
 - Prometheus: 기본 `http://localhost:9090` (`PROMETHEUS_PORT`로 호스트 포트 변경)
 
 ```bash
@@ -36,7 +36,9 @@ docker compose exec api node --input-type=module -e \
   'const response = await fetch("http://worker:9464/metrics"); console.log(response.status, response.headers.get("content-type")); console.log(await response.text());'
 ```
 
-Prometheus Web UI의 Targets에서 `api`, `worker` 상태를 확인하고 PromQL `up{job=~"api|worker"}`를 조회한다. 두 Target의 값이 모두 `1`이면 수집에 성공한 상태다. Static Target, 수집 주기 15초, Timeout 5초, 보관 기간 15일로 구성한다.
+Prometheus는 API를 `api:3000` Static Target으로 수집하고, Worker는 `worker` 서비스의 DNS A 레코드를 15초마다 조회해 각 컨테이너의 `9464` 포트를 개별 Target으로 수집한다. 수집 주기 15초, Timeout 5초, 보관 기간 15일로 구성한다.
+
+수집 설정을 변경했다면 `docker compose restart prometheus`로 다시 읽는다.
 
 ```bash
 docker compose exec prometheus promtool check config /etc/prometheus/prometheus.yml
@@ -47,6 +49,36 @@ docker compose down
 ```
 
 기존 `postgres_data`와 추가한 `prometheus_data` Named Volume은 일반적인 종료·재시작·컨테이너 재생성 이후에도 유지된다. `docker compose down -v`는 이 데이터를 삭제한다.
+
+### Worker 수 변경과 수집 확인
+
+Worker는 기본 1개이며, 각 프로세스가 Job을 한 번에 하나씩 처리한다. 다음 명령으로 Worker 수를 늘리거나 줄인다. `N`은 1 이상의 정수다.
+
+```bash
+docker compose up -d --scale worker=3
+docker compose up -d --scale worker=5
+docker compose up -d --scale worker=1
+docker compose ps worker
+```
+
+Prometheus의 [Targets](http://localhost:9090/targets) 또는 아래 API에서 `job="worker"` Target 수가 실행 중인 Worker 수와 같고, 각 `instance`가 서로 다른 `<컨테이너 IP>:9464`이며 모두 `up`인지 확인한다. API Target은 `api:3000` 한 개다. `PROMETHEUS_PORT`를 변경했다면 URL의 포트도 바꾼다.
+
+```bash
+curl -fsS 'http://localhost:9090/api/v1/targets?state=active'
+# Compose 내부 DNS가 반환하는 Worker 주소 확인
+docker compose exec api node --input-type=module -e \
+  'import { resolve4 } from "node:dns/promises"; console.log(await resolve4("worker"));'
+```
+
+DNS 갱신과 첫 Scrape는 즉시 완료되지 않는다. 최대 90초 동안 상태를 다시 조회하며, 축소 시 제거된 주소가 Targets에서 빠지고 남은 Target은 계속 `up`인지 확인한다. 주소나 Target이 누락되면 `docker network inspect async-job-processor_default`(기본 프로젝트 이름 기준)와 Prometheus의 Service Discovery 화면·로그를 함께 확인한다. `worker:9464`에 직접 요청하면 여러 Worker 중 하나에 연결되므로 개별 수집 확인에는 Targets의 주소를 사용한다.
+
+```promql
+up{job="worker"}
+async_job_succeeded_total{job="worker"}
+sum(rate(async_job_succeeded_total{job="worker"}[2m]))
+```
+
+성공 Counter는 Worker마다 독립적이며, 기본 `job`·`instance` Label로 구분한다. 마지막 쿼리는 각 인스턴스의 최근 2분간 초당 성공 처리율을 합산한다. 새 Target은 `rate` 계산에 최소 두 번의 Scrape가 필요하다. 이는 수집 상태 확인용이며 처리량 벤치마크가 아니다. 축소 후에도 과거 시계열과 해당 구간을 포함하는 `rate` 결과가 잠시 남을 수 있으므로 현재 수집 대상은 Targets에서 확인한다.
 
 ### 로컬 Node.js 직접 실행
 
@@ -118,4 +150,4 @@ npm run test:db
 
 ## 구현 범위
 
-Job Lifecycle Logging, PostgreSQL Gauge·프로세스별 Counter·Handler Duration Histogram과 Compose·Prometheus 수집을 제공한다. 기존 상태 전이·Retry·Crash Recovery·실행 소유권 보호를 유지하며, 다중 Worker Target Discovery나 관측 기록의 원자적 저장·재집계는 제공하지 않는다.
+Job Lifecycle Logging, PostgreSQL Gauge·프로세스별 Counter·Handler Duration Histogram과 Compose의 다중 Worker 실행·Prometheus DNS Target Discovery를 제공한다. 기존 상태 전이·Retry·Crash Recovery·실행 소유권 보호를 유지하며, 관측 기록의 원자적 저장·재집계는 제공하지 않는다.

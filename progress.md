@@ -40,6 +40,7 @@
   - 계측 오류를 Job 처리에서 격리하고 기존 Graceful Shutdown·오류 종료에 맞춰 Metrics 서버 정리
   - PostgreSQL 준비·Migration 이후 API·Worker를 시작하는 공통 이미지 구성
   - Prometheus의 API·Worker 수집, Named Volume 저장 및 15일 보관
+  - Compose의 다중 Worker 실행과 DNS A 기반 개별 Target 탐색·제거, 기본 `job`·`instance` Label로 Metrics 구분
   - 기존 로컬 Node.js 직접 실행 유지
 
 - 검증 완료
@@ -52,8 +53,11 @@
   - typecheck와 전체 PostgreSQL 테스트 통과, 기존 Claim·Retry / Backoff·독립 프로세스 종료 처리 회귀 없음
   - JSON Event·실행 정보·Registry 격리와 실제 DB Gauge, Retry·Recovery 집계 및 Handler Duration 확인
   - DB 저장 실패·소유권 상실·동시 Recovery의 관측 정확성과 Logger·Metric 오류의 Job 처리 격리 확인
-  - Compose의 실제 Job 생성·성공·실패·Retry·Recovery 후 두 Prometheus Target에서 새 지표 수집 확인
+  - Compose의 실제 Job 생성·성공·실패·Retry·Recovery 후 API·Worker Prometheus Target에서 새 지표 수집 확인
   - Prometheus 중단 중 Job 처리 유지와 재시작 후 지표 수집 재개 확인
+  - Compose Worker 1·3·5개와 축소 후 DNS·개별 Target·정상 수집, Worker별 Job 처리 수와 독립 Counter 증가량 일치 확인
+  - 동일 시각의 인스턴스별 성공 처리율 합과 전체 집계 PromQL 결과 일치 확인
+  - 기본 Compose와 로컬 단일 Worker의 Job 성공·Metrics 제공 및 정상 종료 확인
 
 ## 현재 범위
 
