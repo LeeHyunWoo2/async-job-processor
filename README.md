@@ -148,6 +148,13 @@ npm run test:db
 
 관측 테스트는 JSON Event·Request ID·실행 정보, 10개 Metric과 Registry 격리, 실제 DB Gauge·저장 실패·소유권 상실·동시 Recovery의 계측, 결과 저장과 분리된 Handler Duration, 계측 오류의 격리와 독립 Worker의 종료 Event·서버 정리를 확인한다. 기존 PostgreSQL 테스트는 Claim·Retry·Recovery·실행 소유권·DB 오류 중단·Graceful Shutdown을 검증한다.
 
+실제 Compose Worker 3개의 정상 분담, 단일 Worker의 SIGKILL 중 처리 지속과 자연 Timeout Recovery, 1→3→1 Scale 변경·SIGTERM·Prometheus 개별 수집은 선택 실행으로 확인한다. 개발용 데이터와 포트를 공유하지 않는 별도 프로젝트를 사용하며, 실행·관찰·정리는 [다중 Worker 검증 안내](tests/compose/README.md)를 따른다.
+
+```bash
+docker compose build
+npm run test:multi-worker
+```
+
 ## 구현 범위
 
 Job Lifecycle Logging, PostgreSQL Gauge·프로세스별 Counter·Handler Duration Histogram과 Compose의 다중 Worker 실행·Prometheus DNS Target Discovery를 제공한다. 기존 상태 전이·Retry·Crash Recovery·실행 소유권 보호를 유지하며, 관측 기록의 원자적 저장·재집계는 제공하지 않는다.

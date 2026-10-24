@@ -55,7 +55,8 @@
   - DB 저장 실패·소유권 상실·동시 Recovery의 관측 정확성과 Logger·Metric 오류의 Job 처리 격리 확인
   - Compose의 실제 Job 생성·성공·실패·Retry·Recovery 후 API·Worker Prometheus Target에서 새 지표 수집 확인
   - Prometheus 중단 중 Job 처리 유지와 재시작 후 지표 수집 재개 확인
-  - Compose Worker 1·3·5개와 축소 후 DNS·개별 Target·정상 수집, Worker별 Job 처리 수와 독립 Counter 증가량 일치 확인
+  - 실제 Compose Worker 3개의 정상 분담·Job별 단일 Claim, SIGKILL 중 생존 Worker의 새 Job 처리와 자연 Timeout 이후 다른 Worker의 두 번째 Claim·성공 확인
+  - Compose Worker 1·3·5개 개별 수집과 1→3→1 변경 시 신규 Worker 참여·현재 Job 완료 후 SIGTERM 정상 종료·Target 제거, Worker별 완료 수와 Counter 수집 확인
   - 동일 시각의 인스턴스별 성공 처리율 합과 전체 집계 PromQL 결과 일치 확인
   - 기본 Compose와 로컬 단일 Worker의 Job 성공·Metrics 제공 및 정상 종료 확인
 
