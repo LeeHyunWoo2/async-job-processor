@@ -7,5 +7,8 @@ scrape_configs:
     static_configs:
       - targets: [api:3000]
   - job_name: worker
-    static_configs:
-      - targets: [worker:9464]
+    dns_sd_configs:
+      - names: [worker]
+        type: A
+        port: 9464
+        refresh_interval: 15s
