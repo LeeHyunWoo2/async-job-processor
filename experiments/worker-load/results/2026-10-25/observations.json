@@ -1,0 +1,246 @@
+{
+  "rawDirectory": "artifacts/worker-load/2026-10-25-default",
+  "totalDistinctJobs": 3840,
+  "runs": [
+    {
+      "name": "r1-w1",
+      "firstClaim": "2026-10-25T09:46:48.532Z",
+      "lastSuccess": "2026-10-25T09:55:34.436Z",
+      "all480ReadyBeforeStart": true,
+      "all480SucceededAttempt1": true,
+      "distinctOwners": 1,
+      "readyQueueBeforeRelease": 480,
+      "dbFinalQueue": 0,
+      "lastRangeQueue": 2,
+      "lastRangeReadyQueue": 2,
+      "maxObservedProcessingGauge": 1,
+      "succeededRateMin": 0.13294696072348508,
+      "succeededRateMax": 0.92781592132121,
+      "targetWaitSeconds": 20.374,
+      "resourceSamples": {
+        "total": 98,
+        "errors": 0,
+        "insideWindow": 96
+      },
+      "samplesWithUnexpectedWorkerTargets": 0,
+      "jobWallSeconds": {
+        "min": 0.548,
+        "max": 4.193
+      },
+      "handlerMeanSeconds": 1.0006562673833341
+    },
+    {
+      "name": "r1-w2",
+      "firstClaim": "2026-10-25T09:56:08.712Z",
+      "lastSuccess": "2026-10-25T10:00:31.671Z",
+      "all480ReadyBeforeStart": true,
+      "all480SucceededAttempt1": true,
+      "distinctOwners": 2,
+      "readyQueueBeforeRelease": 480,
+      "dbFinalQueue": 0,
+      "lastRangeQueue": 0,
+      "lastRangeReadyQueue": 0,
+      "maxObservedProcessingGauge": 2,
+      "succeededRateMin": 0.6298207167877418,
+      "succeededRateMax": 1.8553777240178482,
+      "targetWaitSeconds": 16.837,
+      "resourceSamples": {
+        "total": 50,
+        "errors": 0,
+        "insideWindow": 47
+      },
+      "samplesWithUnexpectedWorkerTargets": 0,
+      "jobWallSeconds": {
+        "min": 0.534,
+        "max": 4.198
+      },
+      "handlerMeanSeconds": 1.0006393838916667
+    },
+    {
+      "name": "r1-w4",
+      "firstClaim": "2026-10-25T10:01:03.847Z",
+      "lastSuccess": "2026-10-25T10:03:16.117Z",
+      "all480ReadyBeforeStart": true,
+      "all480SucceededAttempt1": true,
+      "distinctOwners": 4,
+      "readyQueueBeforeRelease": 480,
+      "dbFinalQueue": 0,
+      "lastRangeQueue": 0,
+      "lastRangeReadyQueue": 0,
+      "maxObservedProcessingGauge": 4,
+      "succeededRateMin": 1.3036948577755556,
+      "succeededRateMax": 3.691033673971441,
+      "targetWaitSeconds": 13.391,
+      "resourceSamples": {
+        "total": 26,
+        "errors": 0,
+        "insideWindow": 23
+      },
+      "samplesWithUnexpectedWorkerTargets": 0,
+      "jobWallSeconds": {
+        "min": 0.539,
+        "max": 4.194
+      },
+      "handlerMeanSeconds": 1.0006361979249998
+    },
+    {
+      "name": "r1-w8",
+      "firstClaim": "2026-10-25T10:03:51.799Z",
+      "lastSuccess": "2026-10-25T10:04:58.289Z",
+      "all480ReadyBeforeStart": true,
+      "all480SucceededAttempt1": true,
+      "distinctOwners": 8,
+      "readyQueueBeforeRelease": 480,
+      "dbFinalQueue": 0,
+      "lastRangeQueue": 0,
+      "lastRangeReadyQueue": 0,
+      "maxObservedProcessingGauge": 8,
+      "succeededRateMin": 2.4739796042145255,
+      "succeededRateMax": 4.837383242055509,
+      "targetWaitSeconds": 17.576,
+      "resourceSamples": {
+        "total": 14,
+        "errors": 0,
+        "insideWindow": 11
+      },
+      "samplesWithUnexpectedWorkerTargets": 0,
+      "jobWallSeconds": {
+        "min": 0.533,
+        "max": 4.2
+      },
+      "handlerMeanSeconds": 1.0006427801416664
+    },
+    {
+      "name": "r2-w1",
+      "firstClaim": "2026-10-25T10:05:33.320Z",
+      "lastSuccess": "2026-10-25T10:14:21.752Z",
+      "all480ReadyBeforeStart": true,
+      "all480SucceededAttempt1": true,
+      "distinctOwners": 1,
+      "readyQueueBeforeRelease": 480,
+      "dbFinalQueue": 0,
+      "lastRangeQueue": 0,
+      "lastRangeReadyQueue": 0,
+      "maxObservedProcessingGauge": 1,
+      "succeededRateMin": 0.6213521029203549,
+      "succeededRateMax": 4.65184850526753,
+      "targetWaitSeconds": 14.572,
+      "resourceSamples": {
+        "total": 98,
+        "errors": 0,
+        "insideWindow": 96
+      },
+      "samplesWithUnexpectedWorkerTargets": 0,
+      "jobWallSeconds": {
+        "min": 0.527,
+        "max": 4.205
+      },
+      "handlerMeanSeconds": 1.0006576154041655
+    },
+    {
+      "name": "r2-w2",
+      "firstClaim": "2026-10-25T10:14:56.414Z",
+      "lastSuccess": "2026-10-25T10:19:19.383Z",
+      "all480ReadyBeforeStart": true,
+      "all480SucceededAttempt1": true,
+      "distinctOwners": 2,
+      "readyQueueBeforeRelease": 480,
+      "dbFinalQueue": 0,
+      "lastRangeQueue": 4,
+      "lastRangeReadyQueue": 4,
+      "maxObservedProcessingGauge": 2,
+      "succeededRateMin": 0.6112033575437774,
+      "succeededRateMax": 1.8467546651410127,
+      "targetWaitSeconds": 17.558,
+      "resourceSamples": {
+        "total": 50,
+        "errors": 0,
+        "insideWindow": 47
+      },
+      "samplesWithUnexpectedWorkerTargets": 0,
+      "jobWallSeconds": {
+        "min": 0.525,
+        "max": 4.198
+      },
+      "handlerMeanSeconds": 1.0006694876020827
+    },
+    {
+      "name": "r2-w4",
+      "firstClaim": "2026-10-25T10:20:00.461Z",
+      "lastSuccess": "2026-10-25T10:22:12.799Z",
+      "all480ReadyBeforeStart": true,
+      "all480SucceededAttempt1": true,
+      "distinctOwners": 4,
+      "readyQueueBeforeRelease": 480,
+      "dbFinalQueue": 0,
+      "lastRangeQueue": 0,
+      "lastRangeReadyQueue": 0,
+      "maxObservedProcessingGauge": 4,
+      "succeededRateMin": 1.1920972727165642,
+      "succeededRateMax": 3.6461777227129133,
+      "targetWaitSeconds": 25.141,
+      "resourceSamples": {
+        "total": 26,
+        "errors": 0,
+        "insideWindow": 24
+      },
+      "samplesWithUnexpectedWorkerTargets": 0,
+      "jobWallSeconds": {
+        "min": 0.53,
+        "max": 4.203
+      },
+      "handlerMeanSeconds": 1.0005828066749998
+    },
+    {
+      "name": "r2-w8",
+      "firstClaim": "2026-10-25T10:22:57.472Z",
+      "lastSuccess": "2026-10-25T10:24:04.000Z",
+      "all480ReadyBeforeStart": true,
+      "all480SucceededAttempt1": true,
+      "distinctOwners": 8,
+      "readyQueueBeforeRelease": 480,
+      "dbFinalQueue": 0,
+      "lastRangeQueue": 0,
+      "lastRangeReadyQueue": 0,
+      "maxObservedProcessingGauge": 8,
+      "succeededRateMin": 2.166829888535368,
+      "succeededRateMax": 4.414539569290795,
+      "targetWaitSeconds": 28.359,
+      "resourceSamples": {
+        "total": 14,
+        "errors": 0,
+        "insideWindow": 11
+      },
+      "samplesWithUnexpectedWorkerTargets": 0,
+      "jobWallSeconds": {
+        "min": 0.533,
+        "max": 4.211
+      },
+      "handlerMeanSeconds": 1.0006425971895834
+    }
+  ],
+  "clocks": [
+    {
+      "filename": "clock-check.jsonl",
+      "samples": 25,
+      "firstAt": "2026-10-25T09:49:58.196Z",
+      "lastAt": "2026-10-25T09:52:09.196Z",
+      "wallElapsedMs": 131000,
+      "monotonicElapsedMs": 120086.18453099999,
+      "driftChangeMs": 10913.815469000008,
+      "minStepDriftMs": -454.1952659999952,
+      "maxStepDriftMs": 3181.274633000008
+    },
+    {
+      "filename": "clock-check-continued.jsonl",
+      "samples": 351,
+      "firstAt": "2026-10-25T09:52:39.973Z",
+      "lastAt": "2026-10-25T10:24:28.113Z",
+      "wallElapsedMs": 1908140,
+      "monotonicElapsedMs": 1749924.289188,
+      "driftChangeMs": 158215.710812,
+      "minStepDriftMs": -0.8772660000249743,
+      "maxStepDriftMs": 2743.7559750000946
+    }
+  ]
+}

@@ -1,2 +1,19 @@
+# Dependencies
 node_modules/
+
+# Environment
 .env
+.env.*
+!.env.example
+
+# Raw experiment artifacts
+/artifacts/worker-load/
+
+# Experiment results: only selected files
+/experiments/worker-load/results/**
+
+!/experiments/worker-load/results/2026-10-25/
+!/experiments/worker-load/results/2026-10-25/report.md
+!/experiments/worker-load/results/2026-10-25/runs.csv
+!/experiments/worker-load/results/2026-10-25/summary.json
+!/experiments/worker-load/results/2026-10-25/observations.json
