@@ -43,6 +43,12 @@
   - Compose의 다중 Worker 실행과 DNS A 기반 개별 Target 탐색·제거, 기본 `job`·`instance` Label로 Metrics 구분
   - 기존 로컬 Node.js 직접 실행 유지
 
+- Worker 수별 처리량·자원 사용 반복 실험 도구 및 기본 실측 완료
+  - 기존 API로 Batch를 사전 등록하고 ID별로 분리하며, 전용 Compose에서 Worker·Prometheus 준비 이후 처리 시작
+  - Worker 1·2·4·8개를 조건별 두 번 측정하고 총 3,840개 Job의 첫 시도 성공·프로세스별 단일 Claim·완료를 확인
+  - DB 기준 처리량·Speedup·Efficiency와 반복 산포, Handler·Queue 추세, 복수 CPU·메모리·DB 연결 샘플 보존
+  - 실측 요약과 원자료를 분리하고 wall clock 변동·짧은 Prometheus 창·평가 해상도의 한계를 결과 문서에 기록
+
 - 검증 완료
   - 실제 PostgreSQL에서 schema·기본값·제약, API 입력·등록·조회, Handler와 Retry / Backoff 확인
   - 서로 다른 DB 연결과 실제 Row Lock으로 동시 Claim·Recovery, 결과 저장과 Recovery 경합 및 소유권 보호 확인
@@ -59,6 +65,7 @@
   - Compose Worker 1·3·5개 개별 수집과 1→3→1 변경 시 신규 Worker 참여·현재 Job 완료 후 SIGTERM 정상 종료·Target 제거, Worker별 완료 수와 Counter 수집 확인
   - 동일 시각의 인스턴스별 성공 처리율 합과 전체 집계 PromQL 결과 일치 확인
   - 기본 Compose와 로컬 단일 Worker의 Job 성공·Metrics 제공 및 정상 종료 확인
+  - 실험 집계 산식·비정상 Batch 제외와 실제 잔여 Ready·Stale Job의 Worker 시작 전 거부·행 보존 확인
 
 ## 현재 범위
 
@@ -67,6 +74,7 @@
 - Recovery는 정상 또는 재시작한 Worker가 Loop로 돌아올 때 수행되므로 모든 Worker 중단·Handler 정체 시 지연될 수 있음
 - Idempotency는 테스트 전용 PostgreSQL Unique Key 예시로 검증했으며 외부 시스템의 Exactly-once나 범용 중복 방지는 제공하지 않음
 - PostgreSQL이 Job 상태의 기준이며 로그·Metrics는 상태 변경과 원자적이지 않은 Best-effort 관측이다. 강제 종료 시 기록이 누락될 수 있고 Counter는 프로세스 재시작 시 초기화됨
+- 기본 실험은 Timer 기반 대기에 한정하며, 관측된 시각 변동을 고려한 처리량의 정밀 해석·병목 원인·최적 Worker 수는 확정하지 않음
 
 ## 막힌 문제
 

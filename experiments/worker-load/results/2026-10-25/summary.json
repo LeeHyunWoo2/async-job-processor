@@ -1,0 +1,1793 @@
+{
+  "environment": {
+    "startedAt": "2026-10-25T09:46:26.095Z",
+    "project": "async-job-worker-load",
+    "revision": "68f8be26ac67105ffa93597893af5dccefe82f7c",
+    "branch": "feature/worker-load",
+    "workingTree": "M .dockerignore\n M .gitignore\n M README.md\n M tsconfig.json\n?? experiments/",
+    "hashes": {
+      "experiments/worker-load/run.ts": "e7053c95527910c095fd3e78026c303b8524dde8b24a2bdc12e8c4adafefecf3",
+      "experiments/worker-load/results.ts": "002c020c90f1306cb3e381c15b7f184b18e01806bc9b607a92481a829066d41f",
+      "experiments/worker-load/compose.yml": "15a35f75ab5241f182960e24006db43c225938d323f0540ad3659c9a0e384a51",
+      "package-lock.json": "bbb3ef10d16a2ce3da750c0aa063373fe4a706c4fd7ba68dab3deba9b3a6fabd",
+      "compose.yml": "75eee2d2a9c385ac69d1ab465a666640a161de03f24ba2ffe69276e8ba6ab2d9",
+      "prometheus.yml": "e9a68c26c45c049143efe9e4912b54746b9768bffe54e7ee1f43d5aa68d82e46",
+      "src/jobs/store.ts": "9f057dceb612ae8c3f68053c19472d8c8622ea293761a93c27986f0545c80a03",
+      "src/jobs/handlers.ts": "0834c2c37e85fe664a99251d25b735376c806ae188fad8c71ff8c58e4eb200c9",
+      "src/worker/run.ts": "56e6d79d4da10efe7352f3f0a3481d18c55f0291933160337ff6869a2e87f35a",
+      "src/db/mikro-orm.config.ts": "fc3e888426a4c6b25f75dae95b7de7597843c36839ac4ef80337731e91bcb413"
+    },
+    "host": {
+      "platform": "linux",
+      "release": "6.18.54.1-microsoft-standard-WSL2",
+      "cpuModel": "Intel(R) Core(TM) i7-7700K CPU @ 4.20GHz",
+      "logicalCpus": 8,
+      "memoryBytes": 8329564160
+    },
+    "docker": {
+      "version": "29.8.2",
+      "operatingSystem": "Docker Desktop (containerized)",
+      "kernel": "6.18.54.1-microsoft-standard-WSL2",
+      "logicalCpus": 8,
+      "memoryBytes": 8329564160
+    },
+    "node": "v24.21.0",
+    "compose": "5.5.1",
+    "apiUrl": "http://127.0.0.1:2281",
+    "prometheusUrl": "http://127.0.0.1:2280",
+    "settings": [
+      {
+        "name": "max_connections",
+        "setting": "100",
+        "unit": null
+      },
+      {
+        "name": "max_parallel_workers",
+        "setting": "8",
+        "unit": null
+      },
+      {
+        "name": "max_worker_processes",
+        "setting": "8",
+        "unit": null
+      },
+      {
+        "name": "shared_buffers",
+        "setting": "16384",
+        "unit": "8kB"
+      },
+      {
+        "name": "work_mem",
+        "setting": "4096",
+        "unit": "kB"
+      }
+    ],
+    "existingRows": {
+      "total": 24,
+      "unfinished": 0
+    },
+    "worker": {
+      "jobsAtOnce": 1,
+      "idlePollMs": 1000,
+      "recoveryCheckMs": 10000,
+      "staleTimeoutMs": 30000,
+      "pool": "MikroORM 기본값"
+    },
+    "containers": [
+      {
+        "name": "/async-job-worker-load-api-1",
+        "image": "async-job-processor:local",
+        "imageId": "sha256:5b0aeb6afafb5df54469bb1679f9c2b2a85f7292c12bd36f7594372f47ca28d2",
+        "limits": {
+          "NanoCpus": 0,
+          "CpuQuota": 0,
+          "CpuPeriod": 0,
+          "CpusetCpus": "",
+          "Memory": 0,
+          "MemorySwap": 0
+        }
+      },
+      {
+        "name": "/async-job-worker-load-postgres-1",
+        "image": "postgres:18.6-alpine",
+        "imageId": "sha256:77f585114c32fbca283dc835b0596f4e52b51b4c6662d7810b2f4084f60a1873",
+        "limits": {
+          "NanoCpus": 0,
+          "CpuQuota": 0,
+          "CpuPeriod": 0,
+          "CpusetCpus": "",
+          "Memory": 0,
+          "MemorySwap": 0
+        }
+      },
+      {
+        "name": "/async-job-worker-load-prometheus-1",
+        "image": "prom/prometheus:v3.13.4",
+        "imageId": "sha256:87861b8cf91579109319ebc300f3f1060e6da9c05d6ae8ad15a20c879e84e32e",
+        "limits": {
+          "NanoCpus": 0,
+          "CpuQuota": 0,
+          "CpuPeriod": 0,
+          "CpusetCpus": "",
+          "Memory": 0,
+          "MemorySwap": 0
+        }
+      }
+    ],
+    "parameters": {
+      "workers": [
+        1,
+        2,
+        4,
+        8
+      ],
+      "repeats": 2,
+      "count": 480,
+      "durationMs": 1000,
+      "intervalMs": 5000,
+      "scrapeIntervalMs": 15000,
+      "dnsRefreshMs": 15000,
+      "prometheusRangeStepMs": 5000,
+      "observerPoolMax": 2,
+      "maxTargetWaitMs": 90000
+    }
+  },
+  "runs": [
+    {
+      "name": "r1-w1",
+      "workers": 1,
+      "repeat": 1,
+      "count": 480,
+      "durationMs": 1000,
+      "valid": true,
+      "workerContainers": [
+        {
+          "id": "a809a6e10dd39294ba9bb53e1d8e99f0d421c564225cbbd4d18e6b9b86fe3384",
+          "workerId": "47e3b80e-dd4f-4cfd-be5d-1abcedf33be7",
+          "instance": "172.19.0.5:9464",
+          "startedAt": "2026-10-25T09:46:28.115287826Z",
+          "imageId": "sha256:5b0aeb6afafb5df54469bb1679f9c2b2a85f7292c12bd36f7594372f47ca28d2",
+          "limits": {
+            "NanoCpus": 0,
+            "CpuQuota": 0,
+            "CpuPeriod": 0,
+            "CpusetCpus": "",
+            "Memory": 0,
+            "MemorySwap": 0
+          }
+        }
+      ],
+      "gateReleasedAt": "2026-10-25T09:46:48.207Z",
+      "targetWaitSeconds": 20.374,
+      "timing": {
+        "firstClaim": "2026-10-25T09:46:48.532Z",
+        "lastSuccess": "2026-10-25T09:55:34.436Z",
+        "elapsedSeconds": 525.904,
+        "throughput": 0.9127141075177219
+      },
+      "resources": {
+        "workerCpuPercent": {
+          "count": 96,
+          "median": 0.2,
+          "min": 0.13,
+          "max": 4.5,
+          "populationStddev": 0.5432374260318106
+        },
+        "workerMemoryBytes": {
+          "count": 96,
+          "median": 47348449.28,
+          "min": 45665484.8,
+          "max": 68734156.8,
+          "populationStddev": 9279451.302041482
+        },
+        "postgresCpuPercent": {
+          "count": 96,
+          "median": 0.5900000000000001,
+          "min": 0.12,
+          "max": 8.88,
+          "populationStddev": 1.9933383740007333
+        },
+        "postgresMemoryBytes": {
+          "count": 96,
+          "median": 37061918.72,
+          "min": 33502003.2,
+          "max": 43159388.16,
+          "populationStddev": 1233692.9869931806
+        },
+        "databaseConnections": {
+          "count": 96,
+          "median": 4,
+          "min": 3,
+          "max": 4,
+          "populationStddev": 0.47140452079103146
+        },
+        "a809a6e10dd3.cpuPercent": {
+          "count": 96,
+          "median": 0.2,
+          "min": 0.13,
+          "max": 4.5,
+          "populationStddev": 0.5432374260318106
+        },
+        "a809a6e10dd3.memoryBytes": {
+          "count": 96,
+          "median": 47348449.28,
+          "min": 45665484.8,
+          "max": 68734156.8,
+          "populationStddev": 9279451.302041482
+        }
+      },
+      "handler": {
+        "count": 480,
+        "sumSeconds": 480.3150083440004,
+        "meanSeconds": 1.0006562673833341,
+        "workers": [
+          {
+            "instance": "172.19.0.5:9464",
+            "count": 480,
+            "sumSeconds": 480.3150083440004,
+            "meanSeconds": 1.0006562673833341
+          }
+        ]
+      },
+      "sampling": {
+        "total": 98,
+        "errors": 0,
+        "insideWindow": 96
+      },
+      "speedup": 1,
+      "efficiencyPercent": 100
+    },
+    {
+      "name": "r1-w2",
+      "workers": 2,
+      "repeat": 1,
+      "count": 480,
+      "durationMs": 1000,
+      "valid": true,
+      "workerContainers": [
+        {
+          "id": "48caf84f78c9d76dfb403dd2afa2c0e425cb28ccc7d7c7961edc2a0cb0a29c85",
+          "workerId": "cc436c28-a823-46ee-984c-26c1a6a27825",
+          "instance": "172.19.0.5:9464",
+          "startedAt": "2026-10-25T09:55:52.017280888Z",
+          "imageId": "sha256:5b0aeb6afafb5df54469bb1679f9c2b2a85f7292c12bd36f7594372f47ca28d2",
+          "limits": {
+            "NanoCpus": 0,
+            "CpuQuota": 0,
+            "CpuPeriod": 0,
+            "CpusetCpus": "",
+            "Memory": 0,
+            "MemorySwap": 0
+          }
+        },
+        {
+          "id": "6cbab03a1dc7fe3bdc59dc1ea76d90d8ec1fe7842e9b338a1ee95f73776a7931",
+          "workerId": "329b8ca8-47a9-4149-92f0-cd7286190d7b",
+          "instance": "172.19.0.6:9464",
+          "startedAt": "2026-10-25T09:55:52.129442388Z",
+          "imageId": "sha256:5b0aeb6afafb5df54469bb1679f9c2b2a85f7292c12bd36f7594372f47ca28d2",
+          "limits": {
+            "NanoCpus": 0,
+            "CpuQuota": 0,
+            "CpuPeriod": 0,
+            "CpusetCpus": "",
+            "Memory": 0,
+            "MemorySwap": 0
+          }
+        }
+      ],
+      "gateReleasedAt": "2026-10-25T09:56:08.567Z",
+      "targetWaitSeconds": 16.837,
+      "timing": {
+        "firstClaim": "2026-10-25T09:56:08.712Z",
+        "lastSuccess": "2026-10-25T10:00:31.671Z",
+        "elapsedSeconds": 262.959,
+        "throughput": 1.8253796219182459
+      },
+      "resources": {
+        "workerCpuPercent": {
+          "count": 47,
+          "median": 0.38,
+          "min": 0.26,
+          "max": 1.34,
+          "populationStddev": 0.21797142859770705
+        },
+        "workerMemoryBytes": {
+          "count": 47,
+          "median": 128974848,
+          "min": 92977233.92,
+          "max": 140089753.6,
+          "populationStddev": 18064329.828537516
+        },
+        "postgresCpuPercent": {
+          "count": 47,
+          "median": 3.33,
+          "min": 0.26,
+          "max": 4.67,
+          "populationStddev": 1.6076795387517249
+        },
+        "postgresMemoryBytes": {
+          "count": 47,
+          "median": 39510343.68,
+          "min": 37486592,
+          "max": 42247127.04,
+          "populationStddev": 1001445.8413403727
+        },
+        "databaseConnections": {
+          "count": 47,
+          "median": 5,
+          "min": 4,
+          "max": 5,
+          "populationStddev": 0.47385228619829967
+        },
+        "48caf84f78c9.cpuPercent": {
+          "count": 47,
+          "median": 0.18,
+          "min": 0.13,
+          "max": 0.8,
+          "populationStddev": 0.12599661553151378
+        },
+        "48caf84f78c9.memoryBytes": {
+          "count": 47,
+          "median": 65043169.28,
+          "min": 45833256.96,
+          "max": 70023905.28,
+          "populationStddev": 9195343.780520549
+        },
+        "6cbab03a1dc7.cpuPercent": {
+          "count": 47,
+          "median": 0.17,
+          "min": 0.13,
+          "max": 1.06,
+          "populationStddev": 0.15121389010715905
+        },
+        "6cbab03a1dc7.memoryBytes": {
+          "count": 47,
+          "median": 64948797.44,
+          "min": 46514831.36,
+          "max": 70422364.16,
+          "populationStddev": 9498278.587191826
+        }
+      },
+      "handler": {
+        "count": 480,
+        "sumSeconds": 480.30690426800004,
+        "meanSeconds": 1.0006393838916667,
+        "workers": [
+          {
+            "instance": "172.19.0.5:9464",
+            "count": 240,
+            "sumSeconds": 240.16031562999993,
+            "meanSeconds": 1.0006679817916664
+          },
+          {
+            "instance": "172.19.0.6:9464",
+            "count": 240,
+            "sumSeconds": 240.1465886380001,
+            "meanSeconds": 1.000610785991667
+          }
+        ]
+      },
+      "sampling": {
+        "total": 50,
+        "errors": 0,
+        "insideWindow": 47
+      },
+      "speedup": 1.9999467597610274,
+      "efficiencyPercent": 99.99733798805137
+    },
+    {
+      "name": "r1-w4",
+      "workers": 4,
+      "repeat": 1,
+      "count": 480,
+      "durationMs": 1000,
+      "valid": true,
+      "workerContainers": [
+        {
+          "id": "3afda6f144ef1e972bbb8a43e2e859778b0be164d3aae9091796eaf354a1a0ea",
+          "workerId": "1aff5ea4-07ed-4e39-a010-05b2d27314cc",
+          "instance": "172.19.0.7:9464",
+          "startedAt": "2026-10-25T10:00:50.977603046Z",
+          "imageId": "sha256:5b0aeb6afafb5df54469bb1679f9c2b2a85f7292c12bd36f7594372f47ca28d2",
+          "limits": {
+            "NanoCpus": 0,
+            "CpuQuota": 0,
+            "CpuPeriod": 0,
+            "CpusetCpus": "",
+            "Memory": 0,
+            "MemorySwap": 0
+          }
+        },
+        {
+          "id": "d42633d667432dbb615bcd6a0a0d266c8120b3d943f76980beaf959fc274b1a1",
+          "workerId": "f560b6e0-ee8f-4701-9f9d-f3ae611b337e",
+          "instance": "172.19.0.6:9464",
+          "startedAt": "2026-10-25T10:00:50.846308146Z",
+          "imageId": "sha256:5b0aeb6afafb5df54469bb1679f9c2b2a85f7292c12bd36f7594372f47ca28d2",
+          "limits": {
+            "NanoCpus": 0,
+            "CpuQuota": 0,
+            "CpuPeriod": 0,
+            "CpusetCpus": "",
+            "Memory": 0,
+            "MemorySwap": 0
+          }
+        },
+        {
+          "id": "36aaf24d7304f585e0d2af88fde4d75a0e8e5f08e7792662d6c3c90fa3446b37",
+          "workerId": "e9bda1f2-ced7-4985-ad86-20f2eee62f35",
+          "instance": "172.19.0.5:9464",
+          "startedAt": "2026-10-25T10:00:50.720947929Z",
+          "imageId": "sha256:5b0aeb6afafb5df54469bb1679f9c2b2a85f7292c12bd36f7594372f47ca28d2",
+          "limits": {
+            "NanoCpus": 0,
+            "CpuQuota": 0,
+            "CpuPeriod": 0,
+            "CpusetCpus": "",
+            "Memory": 0,
+            "MemorySwap": 0
+          }
+        },
+        {
+          "id": "336b3dd8c912e8d8a62fd28fe8e09e13ae1832fe1828c4597efc0f1fd1658115",
+          "workerId": "c3886774-49c9-489c-8923-5b05940acb3f",
+          "instance": "172.19.0.8:9464",
+          "startedAt": "2026-10-25T10:00:51.128929313Z",
+          "imageId": "sha256:5b0aeb6afafb5df54469bb1679f9c2b2a85f7292c12bd36f7594372f47ca28d2",
+          "limits": {
+            "NanoCpus": 0,
+            "CpuQuota": 0,
+            "CpuPeriod": 0,
+            "CpusetCpus": "",
+            "Memory": 0,
+            "MemorySwap": 0
+          }
+        }
+      ],
+      "gateReleasedAt": "2026-10-25T10:01:03.764Z",
+      "targetWaitSeconds": 13.391,
+      "timing": {
+        "firstClaim": "2026-10-25T10:01:03.847Z",
+        "lastSuccess": "2026-10-25T10:03:16.117Z",
+        "elapsedSeconds": 132.27,
+        "throughput": 3.6289408029031525
+      },
+      "resources": {
+        "workerCpuPercent": {
+          "count": 23,
+          "median": 0.84,
+          "min": 0.5900000000000001,
+          "max": 4.28,
+          "populationStddev": 0.7289493176829737
+        },
+        "workerMemoryBytes": {
+          "count": 23,
+          "median": 245020753.92000002,
+          "min": 221375365.12000003,
+          "max": 251479982.07999998,
+          "populationStddev": 7816257.106600323
+        },
+        "postgresCpuPercent": {
+          "count": 23,
+          "median": 3.57,
+          "min": 0.51,
+          "max": 4.36,
+          "populationStddev": 1.5563599624454536
+        },
+        "postgresMemoryBytes": {
+          "count": 23,
+          "median": 43966791.68,
+          "min": 41838182.4,
+          "max": 44648366.08,
+          "populationStddev": 1008914.0181256954
+        },
+        "databaseConnections": {
+          "count": 23,
+          "median": 7,
+          "min": 6,
+          "max": 7,
+          "populationStddev": 0.47628048478710094
+        },
+        "3afda6f144ef.cpuPercent": {
+          "count": 23,
+          "median": 0.18,
+          "min": 0.14,
+          "max": 0.5,
+          "populationStddev": 0.08551412401718923
+        },
+        "3afda6f144ef.memoryBytes": {
+          "count": 23,
+          "median": 61215866.88,
+          "min": 59464744.96,
+          "max": 62033756.16,
+          "populationStddev": 740748.7291597301
+        },
+        "d42633d66743.cpuPercent": {
+          "count": 23,
+          "median": 0.18,
+          "min": 0.14,
+          "max": 3.37,
+          "populationStddev": 0.6490769948007586
+        },
+        "d42633d66743.memoryBytes": {
+          "count": 23,
+          "median": 60618178.56,
+          "min": 45088768,
+          "max": 61278781.44,
+          "populationStddev": 4383603.320541877
+        },
+        "36aaf24d7304.cpuPercent": {
+          "count": 23,
+          "median": 0.19,
+          "min": 0.14,
+          "max": 0.37,
+          "populationStddev": 0.06513037673417046
+        },
+        "36aaf24d7304.memoryBytes": {
+          "count": 23,
+          "median": 65011712,
+          "min": 61100523.52,
+          "max": 69059215.36,
+          "populationStddev": 2947415.336772967
+        },
+        "336b3dd8c912.cpuPercent": {
+          "count": 23,
+          "median": 0.18,
+          "min": 0.14,
+          "max": 0.78,
+          "populationStddev": 0.13301363689202644
+        },
+        "336b3dd8c912.memoryBytes": {
+          "count": 23,
+          "median": 59873689.6,
+          "min": 46095400.96,
+          "max": 60649635.84,
+          "populationStddev": 3888442.7133108675
+        }
+      },
+      "handler": {
+        "count": 480,
+        "sumSeconds": 480.30537500399987,
+        "meanSeconds": 1.0006361979249998,
+        "workers": [
+          {
+            "instance": "172.19.0.7:9464",
+            "count": 120,
+            "sumSeconds": 120.07581657800004,
+            "meanSeconds": 1.0006318048166671
+          },
+          {
+            "instance": "172.19.0.6:9464",
+            "count": 120,
+            "sumSeconds": 120.07559465199994,
+            "meanSeconds": 1.0006299554333329
+          },
+          {
+            "instance": "172.19.0.5:9464",
+            "count": 120,
+            "sumSeconds": 120.06952155099998,
+            "meanSeconds": 1.0005793462583332
+          },
+          {
+            "instance": "172.19.0.8:9464",
+            "count": 120,
+            "sumSeconds": 120.08444222299991,
+            "meanSeconds": 1.000703685191666
+          }
+        ]
+      },
+      "sampling": {
+        "total": 26,
+        "errors": 0,
+        "insideWindow": 23
+      },
+      "speedup": 3.9759885083541238,
+      "efficiencyPercent": 99.39971270885309
+    },
+    {
+      "name": "r1-w8",
+      "workers": 8,
+      "repeat": 1,
+      "count": 480,
+      "durationMs": 1000,
+      "valid": true,
+      "workerContainers": [
+        {
+          "id": "31ea50e706a99e19828187bf8fb15d4819fb6462d106f770c34de6be5876d396",
+          "workerId": "cd4cec5e-bdab-407a-bed5-fa7c0ba62189",
+          "instance": "172.19.0.10:9464",
+          "startedAt": "2026-10-25T10:03:35.323971769Z",
+          "imageId": "sha256:5b0aeb6afafb5df54469bb1679f9c2b2a85f7292c12bd36f7594372f47ca28d2",
+          "limits": {
+            "NanoCpus": 0,
+            "CpuQuota": 0,
+            "CpuPeriod": 0,
+            "CpusetCpus": "",
+            "Memory": 0,
+            "MemorySwap": 0
+          }
+        },
+        {
+          "id": "35144c537b9a609fc77653e732db6e5ba2750c7f6b231119143cbe3149cc545a",
+          "workerId": "64b22a16-82a5-4517-ba2f-cbf904710f7a",
+          "instance": "172.19.0.9:9464",
+          "startedAt": "2026-10-25T10:03:35.123649119Z",
+          "imageId": "sha256:5b0aeb6afafb5df54469bb1679f9c2b2a85f7292c12bd36f7594372f47ca28d2",
+          "limits": {
+            "NanoCpus": 0,
+            "CpuQuota": 0,
+            "CpuPeriod": 0,
+            "CpusetCpus": "",
+            "Memory": 0,
+            "MemorySwap": 0
+          }
+        },
+        {
+          "id": "87021c97d6ff3c268b32855e153cb3a15946cbf858b93bda4bcc124ccb1a7108",
+          "workerId": "302a8e77-a7bb-4514-8a57-39c468eb0b38",
+          "instance": "172.19.0.6:9464",
+          "startedAt": "2026-10-25T10:03:34.678505153Z",
+          "imageId": "sha256:5b0aeb6afafb5df54469bb1679f9c2b2a85f7292c12bd36f7594372f47ca28d2",
+          "limits": {
+            "NanoCpus": 0,
+            "CpuQuota": 0,
+            "CpuPeriod": 0,
+            "CpusetCpus": "",
+            "Memory": 0,
+            "MemorySwap": 0
+          }
+        },
+        {
+          "id": "724526eb9f239c4d1ac29a2c44218a1534b3a5c1a93d8f2f8d1b0b43e4385a02",
+          "workerId": "fb671839-cc99-4510-9d58-eddaf0ff9bba",
+          "instance": "172.19.0.5:9464",
+          "startedAt": "2026-10-25T10:03:34.526426303Z",
+          "imageId": "sha256:5b0aeb6afafb5df54469bb1679f9c2b2a85f7292c12bd36f7594372f47ca28d2",
+          "limits": {
+            "NanoCpus": 0,
+            "CpuQuota": 0,
+            "CpuPeriod": 0,
+            "CpusetCpus": "",
+            "Memory": 0,
+            "MemorySwap": 0
+          }
+        },
+        {
+          "id": "f3b364fe60121fb726c61b19dbce688dfb0a6b967a9860321774e369157cab2b",
+          "workerId": "967eb5cc-37af-41ce-9cc8-4346ac0f0519",
+          "instance": "172.19.0.7:9464",
+          "startedAt": "2026-10-25T10:03:34.810842761Z",
+          "imageId": "sha256:5b0aeb6afafb5df54469bb1679f9c2b2a85f7292c12bd36f7594372f47ca28d2",
+          "limits": {
+            "NanoCpus": 0,
+            "CpuQuota": 0,
+            "CpuPeriod": 0,
+            "CpusetCpus": "",
+            "Memory": 0,
+            "MemorySwap": 0
+          }
+        },
+        {
+          "id": "8db9364af4431f2f20b3fecf2ae221558c702d90ece2fcbd85e8c174331eefbd",
+          "workerId": "514d95d9-6280-454b-8d5f-0e5c0344d85e",
+          "instance": "172.19.0.11:9464",
+          "startedAt": "2026-10-25T10:03:35.505321344Z",
+          "imageId": "sha256:5b0aeb6afafb5df54469bb1679f9c2b2a85f7292c12bd36f7594372f47ca28d2",
+          "limits": {
+            "NanoCpus": 0,
+            "CpuQuota": 0,
+            "CpuPeriod": 0,
+            "CpusetCpus": "",
+            "Memory": 0,
+            "MemorySwap": 0
+          }
+        },
+        {
+          "id": "b30ef115116ad6b8b1a771b18adda8b3dc6ea402473b89eb12c8d4806f37c678",
+          "workerId": "d4363993-a87c-43be-a2bd-edfaad9f790c",
+          "instance": "172.19.0.8:9464",
+          "startedAt": "2026-10-25T10:03:34.962422486Z",
+          "imageId": "sha256:5b0aeb6afafb5df54469bb1679f9c2b2a85f7292c12bd36f7594372f47ca28d2",
+          "limits": {
+            "NanoCpus": 0,
+            "CpuQuota": 0,
+            "CpuPeriod": 0,
+            "CpusetCpus": "",
+            "Memory": 0,
+            "MemorySwap": 0
+          }
+        },
+        {
+          "id": "57e1e9a96c1476e0194fd4a371ed519049b4eec6c6a25b45ff69e8c96e9c7543",
+          "workerId": "93dee8b8-6c43-42c5-917c-67678cbb976f",
+          "instance": "172.19.0.12:9464",
+          "startedAt": "2026-10-25T10:03:35.689262886Z",
+          "imageId": "sha256:5b0aeb6afafb5df54469bb1679f9c2b2a85f7292c12bd36f7594372f47ca28d2",
+          "limits": {
+            "NanoCpus": 0,
+            "CpuQuota": 0,
+            "CpuPeriod": 0,
+            "CpusetCpus": "",
+            "Memory": 0,
+            "MemorySwap": 0
+          }
+        }
+      ],
+      "gateReleasedAt": "2026-10-25T10:03:51.625Z",
+      "targetWaitSeconds": 17.576,
+      "timing": {
+        "firstClaim": "2026-10-25T10:03:51.799Z",
+        "lastSuccess": "2026-10-25T10:04:58.289Z",
+        "elapsedSeconds": 66.49,
+        "throughput": 7.2191306963453155
+      },
+      "resources": {
+        "workerCpuPercent": {
+          "count": 11,
+          "median": 1.6199999999999999,
+          "min": 1.3499999999999999,
+          "max": 2.5700000000000003,
+          "populationStddev": 0.30899731203195807
+        },
+        "workerMemoryBytes": {
+          "count": 11,
+          "median": 489779363.84,
+          "min": 484117053.44,
+          "max": 510813798.40000004,
+          "populationStddev": 7739478.238407429
+        },
+        "postgresCpuPercent": {
+          "count": 11,
+          "median": 4.18,
+          "min": 1.02,
+          "max": 5.12,
+          "populationStddev": 1.6787116271929277
+        },
+        "postgresMemoryBytes": {
+          "count": 11,
+          "median": 52281999.36,
+          "min": 50331648,
+          "max": 56906219.52,
+          "populationStddev": 1647926.839891912
+        },
+        "databaseConnections": {
+          "count": 11,
+          "median": 11,
+          "min": 10,
+          "max": 11,
+          "populationStddev": 0.4810456929208346
+        },
+        "31ea50e706a9.cpuPercent": {
+          "count": 11,
+          "median": 0.19,
+          "min": 0.16,
+          "max": 0.23,
+          "populationStddev": 0.02178027009220171
+        },
+        "31ea50e706a9.memoryBytes": {
+          "count": 11,
+          "median": 59705917.44,
+          "min": 59464744.96,
+          "max": 61383639.04,
+          "populationStddev": 607770.5327211721
+        },
+        "35144c537b9a.cpuPercent": {
+          "count": 11,
+          "median": 0.19,
+          "min": 0.15,
+          "max": 0.35,
+          "populationStddev": 0.05278993142166536
+        },
+        "35144c537b9a.memoryBytes": {
+          "count": 11,
+          "median": 61970841.6,
+          "min": 61299752.96,
+          "max": 65116569.6,
+          "populationStddev": 1060840.2118528897
+        },
+        "87021c97d6ff.cpuPercent": {
+          "count": 11,
+          "median": 0.22,
+          "min": 0.15,
+          "max": 0.34,
+          "populationStddev": 0.05561080815337136
+        },
+        "87021c97d6ff.memoryBytes": {
+          "count": 11,
+          "median": 61614325.76,
+          "min": 61079552,
+          "max": 64162365.44,
+          "populationStddev": 874362.3489296997
+        },
+        "724526eb9f23.cpuPercent": {
+          "count": 11,
+          "median": 0.21,
+          "min": 0.15,
+          "max": 0.29,
+          "populationStddev": 0.042814224870242244
+        },
+        "724526eb9f23.memoryBytes": {
+          "count": 11,
+          "median": 61960355.84,
+          "min": 61289267.2,
+          "max": 64560824.32,
+          "populationStddev": 1020620.6013536237
+        },
+        "f3b364fe6012.cpuPercent": {
+          "count": 11,
+          "median": 0.22,
+          "min": 0.16,
+          "max": 0.4,
+          "populationStddev": 0.06658121244945657
+        },
+        "f3b364fe6012.memoryBytes": {
+          "count": 11,
+          "median": 62788730.88,
+          "min": 59789803.52,
+          "max": 68660756.48,
+          "populationStddev": 2494925.158801128
+        },
+        "8db9364af443.cpuPercent": {
+          "count": 11,
+          "median": 0.18,
+          "min": 0.15,
+          "max": 0.35,
+          "populationStddev": 0.060055071145140894
+        },
+        "8db9364af443.memoryBytes": {
+          "count": 11,
+          "median": 62474158.08,
+          "min": 61540925.44,
+          "max": 64990740.48,
+          "populationStddev": 1027268.3996752511
+        },
+        "b30ef115116a.cpuPercent": {
+          "count": 11,
+          "median": 0.2,
+          "min": 0.15,
+          "max": 0.36,
+          "populationStddev": 0.059209670865213754
+        },
+        "b30ef115116a.memoryBytes": {
+          "count": 11,
+          "median": 59884175.36,
+          "min": 59034828.8,
+          "max": 60911779.84,
+          "populationStddev": 507156.3602994216
+        },
+        "57e1e9a96c14.cpuPercent": {
+          "count": 11,
+          "median": 0.2,
+          "min": 0.15,
+          "max": 0.37,
+          "populationStddev": 0.06354538951745925
+        },
+        "57e1e9a96c14.memoryBytes": {
+          "count": 11,
+          "median": 59863203.84,
+          "min": 59380858.88,
+          "max": 61111009.28,
+          "populationStddev": 567801.5654777822
+        }
+      },
+      "handler": {
+        "count": 480,
+        "sumSeconds": 480.3085344679999,
+        "meanSeconds": 1.0006427801416664,
+        "workers": [
+          {
+            "instance": "172.19.0.10:9464",
+            "count": 60,
+            "sumSeconds": 60.04129394899997,
+            "meanSeconds": 1.0006882324833328
+          },
+          {
+            "instance": "172.19.0.9:9464",
+            "count": 60,
+            "sumSeconds": 60.041292940999995,
+            "meanSeconds": 1.0006882156833332
+          },
+          {
+            "instance": "172.19.0.6:9464",
+            "count": 60,
+            "sumSeconds": 60.04199345500001,
+            "meanSeconds": 1.000699890916667
+          },
+          {
+            "instance": "172.19.0.5:9464",
+            "count": 60,
+            "sumSeconds": 60.035453316999984,
+            "meanSeconds": 1.0005908886166663
+          },
+          {
+            "instance": "172.19.0.7:9464",
+            "count": 60,
+            "sumSeconds": 60.03551088500002,
+            "meanSeconds": 1.0005918480833338
+          },
+          {
+            "instance": "172.19.0.11:9464",
+            "count": 60,
+            "sumSeconds": 60.03783921499998,
+            "meanSeconds": 1.000630653583333
+          },
+          {
+            "instance": "172.19.0.8:9464",
+            "count": 60,
+            "sumSeconds": 60.036562298999996,
+            "meanSeconds": 1.00060937165
+          },
+          {
+            "instance": "172.19.0.12:9464",
+            "count": 60,
+            "sumSeconds": 60.03858840699998,
+            "meanSeconds": 1.0006431401166662
+          }
+        ]
+      },
+      "sampling": {
+        "total": 14,
+        "errors": 0,
+        "insideWindow": 11
+      },
+      "speedup": 7.909520228605806,
+      "efficiencyPercent": 98.86900285757257
+    },
+    {
+      "name": "r2-w1",
+      "workers": 1,
+      "repeat": 2,
+      "count": 480,
+      "durationMs": 1000,
+      "valid": true,
+      "workerContainers": [
+        {
+          "id": "b884a3c6fde270a03a273ed7462cfa5d09b9f3b2f61086a3315227d5457711c2",
+          "workerId": "17a4667f-dd6f-4c10-8971-c6bf044f6b5a",
+          "instance": "172.19.0.5:9464",
+          "startedAt": "2026-10-25T10:05:18.702725686Z",
+          "imageId": "sha256:5b0aeb6afafb5df54469bb1679f9c2b2a85f7292c12bd36f7594372f47ca28d2",
+          "limits": {
+            "NanoCpus": 0,
+            "CpuQuota": 0,
+            "CpuPeriod": 0,
+            "CpusetCpus": "",
+            "Memory": 0,
+            "MemorySwap": 0
+          }
+        }
+      ],
+      "gateReleasedAt": "2026-10-25T10:05:33.024Z",
+      "targetWaitSeconds": 14.572,
+      "timing": {
+        "firstClaim": "2026-10-25T10:05:33.320Z",
+        "lastSuccess": "2026-10-25T10:14:21.752Z",
+        "elapsedSeconds": 528.432,
+        "throughput": 0.9083477155054954
+      },
+      "resources": {
+        "workerCpuPercent": {
+          "count": 96,
+          "median": 0.16,
+          "min": 0.13,
+          "max": 0.83,
+          "populationStddev": 0.09861932061875885
+        },
+        "workerMemoryBytes": {
+          "count": 96,
+          "median": 47652536.32,
+          "min": 45822771.2,
+          "max": 68304240.64,
+          "populationStddev": 9117939.737406394
+        },
+        "postgresCpuPercent": {
+          "count": 96,
+          "median": 2.9749999999999996,
+          "min": 0.14,
+          "max": 5.07,
+          "populationStddev": 1.6021954034003107
+        },
+        "postgresMemoryBytes": {
+          "count": 96,
+          "median": 37837864.96,
+          "min": 35462840.32,
+          "max": 42100326.4,
+          "populationStddev": 1256206.38665504
+        },
+        "databaseConnections": {
+          "count": 96,
+          "median": 4,
+          "min": 3,
+          "max": 4,
+          "populationStddev": 0.47140452079103146
+        },
+        "b884a3c6fde2.cpuPercent": {
+          "count": 96,
+          "median": 0.16,
+          "min": 0.13,
+          "max": 0.83,
+          "populationStddev": 0.09861932061875885
+        },
+        "b884a3c6fde2.memoryBytes": {
+          "count": 96,
+          "median": 47652536.32,
+          "min": 45822771.2,
+          "max": 68304240.64,
+          "populationStddev": 9117939.737406394
+        }
+      },
+      "handler": {
+        "count": 480,
+        "sumSeconds": 480.31565539399946,
+        "meanSeconds": 1.0006576154041655,
+        "workers": [
+          {
+            "instance": "172.19.0.5:9464",
+            "count": 480,
+            "sumSeconds": 480.31565539399946,
+            "meanSeconds": 1.0006576154041655
+          }
+        ]
+      },
+      "sampling": {
+        "total": 98,
+        "errors": 0,
+        "insideWindow": 96
+      },
+      "speedup": 1,
+      "efficiencyPercent": 100
+    },
+    {
+      "name": "r2-w2",
+      "workers": 2,
+      "repeat": 2,
+      "count": 480,
+      "durationMs": 1000,
+      "valid": true,
+      "workerContainers": [
+        {
+          "id": "f3790e711a93c214e992c40455ac1a4cdf45a39f5af02acbf4b6a0603b1dc035",
+          "workerId": "74671ba5-8f82-4632-afd1-8315faf42957",
+          "instance": "172.19.0.6:9464",
+          "startedAt": "2026-10-25T10:14:39.061503536Z",
+          "imageId": "sha256:5b0aeb6afafb5df54469bb1679f9c2b2a85f7292c12bd36f7594372f47ca28d2",
+          "limits": {
+            "NanoCpus": 0,
+            "CpuQuota": 0,
+            "CpuPeriod": 0,
+            "CpusetCpus": "",
+            "Memory": 0,
+            "MemorySwap": 0
+          }
+        },
+        {
+          "id": "45ad8378affe612c118b1a85069a070379503bde3c4916e1e6f29f115d09a8e5",
+          "workerId": "7a0211d1-52ee-43bc-a13f-bdfc46371290",
+          "instance": "172.19.0.5:9464",
+          "startedAt": "2026-10-25T10:14:38.945852561Z",
+          "imageId": "sha256:5b0aeb6afafb5df54469bb1679f9c2b2a85f7292c12bd36f7594372f47ca28d2",
+          "limits": {
+            "NanoCpus": 0,
+            "CpuQuota": 0,
+            "CpuPeriod": 0,
+            "CpusetCpus": "",
+            "Memory": 0,
+            "MemorySwap": 0
+          }
+        }
+      ],
+      "gateReleasedAt": "2026-10-25T10:14:56.229Z",
+      "targetWaitSeconds": 17.558,
+      "timing": {
+        "firstClaim": "2026-10-25T10:14:56.414Z",
+        "lastSuccess": "2026-10-25T10:19:19.383Z",
+        "elapsedSeconds": 262.969,
+        "throughput": 1.8253102076670635
+      },
+      "resources": {
+        "workerCpuPercent": {
+          "count": 47,
+          "median": 0.38,
+          "min": 0.28,
+          "max": 1.4100000000000001,
+          "populationStddev": 0.17233201975823303
+        },
+        "workerMemoryBytes": {
+          "count": 47,
+          "median": 128702218.24,
+          "min": 91813314.56,
+          "max": 138422517.76,
+          "populationStddev": 16981940.097903647
+        },
+        "postgresCpuPercent": {
+          "count": 47,
+          "median": 0.36,
+          "min": 0.28,
+          "max": 3.79,
+          "populationStddev": 1.500596410781024
+        },
+        "postgresMemoryBytes": {
+          "count": 47,
+          "median": 40034631.68,
+          "min": 37643878.4,
+          "max": 45078282.24,
+          "populationStddev": 1225941.6569963333
+        },
+        "databaseConnections": {
+          "count": 47,
+          "median": 5,
+          "min": 4,
+          "max": 5,
+          "populationStddev": 0.47385228619829967
+        },
+        "f3790e711a93.cpuPercent": {
+          "count": 47,
+          "median": 0.19,
+          "min": 0.13,
+          "max": 1.05,
+          "populationStddev": 0.13686160909937217
+        },
+        "f3790e711a93.memoryBytes": {
+          "count": 47,
+          "median": 64770539.52,
+          "min": 45529169.92,
+          "max": 68524441.6,
+          "populationStddev": 8299530.585587563
+        },
+        "45ad8378affe.cpuPercent": {
+          "count": 47,
+          "median": 0.19,
+          "min": 0.14,
+          "max": 0.36,
+          "populationStddev": 0.05552906163697875
+        },
+        "45ad8378affe.memoryBytes": {
+          "count": 47,
+          "median": 65284341.76,
+          "min": 45822771.2,
+          "max": 70254592,
+          "populationStddev": 9317318.657443102
+        }
+      },
+      "handler": {
+        "count": 480,
+        "sumSeconds": 480.3213540489997,
+        "meanSeconds": 1.0006694876020827,
+        "workers": [
+          {
+            "instance": "172.19.0.6:9464",
+            "count": 240,
+            "sumSeconds": 240.1609077969997,
+            "meanSeconds": 1.0006704491541654
+          },
+          {
+            "instance": "172.19.0.5:9464",
+            "count": 240,
+            "sumSeconds": 240.16044625199999,
+            "meanSeconds": 1.00066852605
+          }
+        ]
+      },
+      "sampling": {
+        "total": 50,
+        "errors": 0,
+        "insideWindow": 47
+      },
+      "speedup": 2.0094840076206704,
+      "efficiencyPercent": 100.47420038103351
+    },
+    {
+      "name": "r2-w4",
+      "workers": 4,
+      "repeat": 2,
+      "count": 480,
+      "durationMs": 1000,
+      "valid": true,
+      "workerContainers": [
+        {
+          "id": "7a0965f68ca6107ea8b8754874170520472ffa8566238cc0000991f010851a87",
+          "workerId": "76938890-dfab-4087-badf-99bdc3fff8b7",
+          "instance": "172.19.0.6:9464",
+          "startedAt": "2026-10-25T10:19:35.729621692Z",
+          "imageId": "sha256:5b0aeb6afafb5df54469bb1679f9c2b2a85f7292c12bd36f7594372f47ca28d2",
+          "limits": {
+            "NanoCpus": 0,
+            "CpuQuota": 0,
+            "CpuPeriod": 0,
+            "CpusetCpus": "",
+            "Memory": 0,
+            "MemorySwap": 0
+          }
+        },
+        {
+          "id": "35d33f5de3f4e90c9b82e8ea1582a2f0301a5b572b8ad728a95bff37a3999156",
+          "workerId": "2586aaf2-adc4-41be-97b3-94cee8d72180",
+          "instance": "172.19.0.7:9464",
+          "startedAt": "2026-10-25T10:19:35.8735566Z",
+          "imageId": "sha256:5b0aeb6afafb5df54469bb1679f9c2b2a85f7292c12bd36f7594372f47ca28d2",
+          "limits": {
+            "NanoCpus": 0,
+            "CpuQuota": 0,
+            "CpuPeriod": 0,
+            "CpusetCpus": "",
+            "Memory": 0,
+            "MemorySwap": 0
+          }
+        },
+        {
+          "id": "66c9e139535c1d42f0acd9d6b579fad2fabfa8f6365717eeb2779583d4a64a79",
+          "workerId": "6825bc1e-8adb-4c05-8f3a-b03e552d3262",
+          "instance": "172.19.0.5:9464",
+          "startedAt": "2026-10-25T10:19:35.6048992Z",
+          "imageId": "sha256:5b0aeb6afafb5df54469bb1679f9c2b2a85f7292c12bd36f7594372f47ca28d2",
+          "limits": {
+            "NanoCpus": 0,
+            "CpuQuota": 0,
+            "CpuPeriod": 0,
+            "CpusetCpus": "",
+            "Memory": 0,
+            "MemorySwap": 0
+          }
+        },
+        {
+          "id": "79128c30afc694e02474b98304ac5708d45c2a63b9bf2e6dfb4e86f4ada96ce9",
+          "workerId": "a15b753e-5f75-4e39-9baf-2eeba2a3f133",
+          "instance": "172.19.0.8:9464",
+          "startedAt": "2026-10-25T10:19:36.025329925Z",
+          "imageId": "sha256:5b0aeb6afafb5df54469bb1679f9c2b2a85f7292c12bd36f7594372f47ca28d2",
+          "limits": {
+            "NanoCpus": 0,
+            "CpuQuota": 0,
+            "CpuPeriod": 0,
+            "CpusetCpus": "",
+            "Memory": 0,
+            "MemorySwap": 0
+          }
+        }
+      ],
+      "gateReleasedAt": "2026-10-25T10:20:00.401Z",
+      "targetWaitSeconds": 25.141,
+      "timing": {
+        "firstClaim": "2026-10-25T10:20:00.461Z",
+        "lastSuccess": "2026-10-25T10:22:12.799Z",
+        "elapsedSeconds": 132.338,
+        "throughput": 3.627076123260137
+      },
+      "resources": {
+        "workerCpuPercent": {
+          "count": 24,
+          "median": 0.8700000000000001,
+          "min": 0.6000000000000001,
+          "max": 4.28,
+          "populationStddev": 0.6985847548595818
+        },
+        "workerMemoryBytes": {
+          "count": 24,
+          "median": 263800750.07999998,
+          "min": 242776801.28000003,
+          "max": 277306408.96000004,
+          "populationStddev": 12655840.534054883
+        },
+        "postgresCpuPercent": {
+          "count": 24,
+          "median": 3.605,
+          "min": 0.58,
+          "max": 3.84,
+          "populationStddev": 1.5609476733346601
+        },
+        "postgresMemoryBytes": {
+          "count": 24,
+          "median": 44485836.8,
+          "min": 42331013.12,
+          "max": 45235568.64,
+          "populationStddev": 933741.4075855323
+        },
+        "databaseConnections": {
+          "count": 24,
+          "median": 7,
+          "min": 6,
+          "max": 7,
+          "populationStddev": 0.47140452079103157
+        },
+        "7a0965f68ca6.cpuPercent": {
+          "count": 24,
+          "median": 0.215,
+          "min": 0.16,
+          "max": 0.39,
+          "populationStddev": 0.0497423919364113
+        },
+        "7a0965f68ca6.memoryBytes": {
+          "count": 24,
+          "median": 64933068.8,
+          "min": 61415096.32,
+          "max": 69006786.56,
+          "populationStddev": 2966315.0308637097
+        },
+        "35d33f5de3f4.cpuPercent": {
+          "count": 24,
+          "median": 0.20500000000000002,
+          "min": 0.14,
+          "max": 0.36,
+          "populationStddev": 0.0506057061999929
+        },
+        "35d33f5de3f4.memoryBytes": {
+          "count": 24,
+          "median": 68078796.8,
+          "min": 58772684.8,
+          "max": 69090672.64,
+          "populationStddev": 3485592.536895098
+        },
+        "66c9e139535c.cpuPercent": {
+          "count": 24,
+          "median": 0.21000000000000002,
+          "min": 0.14,
+          "max": 0.35,
+          "populationStddev": 0.05410733930500248
+        },
+        "66c9e139535c.memoryBytes": {
+          "count": 24,
+          "median": 65053655.04,
+          "min": 60869836.8,
+          "max": 69656903.68,
+          "populationStddev": 3266840.5193570135
+        },
+        "79128c30afc6.cpuPercent": {
+          "count": 24,
+          "median": 0.20500000000000002,
+          "min": 0.14,
+          "max": 3.67,
+          "populationStddev": 0.6933121741562983
+        },
+        "79128c30afc6.memoryBytes": {
+          "count": 24,
+          "median": 65635614.72,
+          "min": 61719183.36,
+          "max": 69971476.48,
+          "populationStddev": 3219491.6471621087
+        }
+      },
+      "handler": {
+        "count": 480,
+        "sumSeconds": 480.27974720399993,
+        "meanSeconds": 1.0005828066749998,
+        "workers": [
+          {
+            "instance": "172.19.0.6:9464",
+            "count": 120,
+            "sumSeconds": 120.066941595,
+            "meanSeconds": 1.000557846625
+          },
+          {
+            "instance": "172.19.0.7:9464",
+            "count": 120,
+            "sumSeconds": 120.07294979500007,
+            "meanSeconds": 1.000607914958334
+          },
+          {
+            "instance": "172.19.0.5:9464",
+            "count": 120,
+            "sumSeconds": 120.06577990199993,
+            "meanSeconds": 1.0005481658499995
+          },
+          {
+            "instance": "172.19.0.8:9464",
+            "count": 120,
+            "sumSeconds": 120.07407591199994,
+            "meanSeconds": 1.0006172992666662
+          }
+        ]
+      },
+      "sampling": {
+        "total": 26,
+        "errors": 0,
+        "insideWindow": 24
+      },
+      "speedup": 3.993048104097085,
+      "efficiencyPercent": 99.82620260242713
+    },
+    {
+      "name": "r2-w8",
+      "workers": 8,
+      "repeat": 2,
+      "count": 480,
+      "durationMs": 1000,
+      "valid": true,
+      "workerContainers": [
+        {
+          "id": "ac2cea72d6889905e86cdbc1a1594ee064c4a363db633bfdc90f007bf9a39fd4",
+          "workerId": "7f5d814c-61dc-48ee-b4aa-1361f2746bd0",
+          "instance": "172.19.0.8:9464",
+          "startedAt": "2026-10-25T10:22:32.595030303Z",
+          "imageId": "sha256:5b0aeb6afafb5df54469bb1679f9c2b2a85f7292c12bd36f7594372f47ca28d2",
+          "limits": {
+            "NanoCpus": 0,
+            "CpuQuota": 0,
+            "CpuPeriod": 0,
+            "CpusetCpus": "",
+            "Memory": 0,
+            "MemorySwap": 0
+          }
+        },
+        {
+          "id": "87d515c2b6f4125b023bd0a98e7b25a29cb8b6278de93aeb7d422186b2f3b37b",
+          "workerId": "b753e616-bb39-44c3-96c5-21d43d4ae2fc",
+          "instance": "172.19.0.6:9464",
+          "startedAt": "2026-10-25T10:22:32.308894819Z",
+          "imageId": "sha256:5b0aeb6afafb5df54469bb1679f9c2b2a85f7292c12bd36f7594372f47ca28d2",
+          "limits": {
+            "NanoCpus": 0,
+            "CpuQuota": 0,
+            "CpuPeriod": 0,
+            "CpusetCpus": "",
+            "Memory": 0,
+            "MemorySwap": 0
+          }
+        },
+        {
+          "id": "1c0429a4cef0ea66feafcf4e5778abac3ad33f14856b12ebd14cbcbfab8c65f6",
+          "workerId": "a3116405-9b37-44fc-b078-ae17069fd1fb",
+          "instance": "172.19.0.12:9464",
+          "startedAt": "2026-10-25T10:22:33.305294803Z",
+          "imageId": "sha256:5b0aeb6afafb5df54469bb1679f9c2b2a85f7292c12bd36f7594372f47ca28d2",
+          "limits": {
+            "NanoCpus": 0,
+            "CpuQuota": 0,
+            "CpuPeriod": 0,
+            "CpusetCpus": "",
+            "Memory": 0,
+            "MemorySwap": 0
+          }
+        },
+        {
+          "id": "99469782ab27b610b5124298e2a946409d9b6d7f29ef4ad3716b37306be2aef1",
+          "workerId": "45094d0b-8246-4295-a6b0-bb7f7f642918",
+          "instance": "172.19.0.11:9464",
+          "startedAt": "2026-10-25T10:22:33.119887511Z",
+          "imageId": "sha256:5b0aeb6afafb5df54469bb1679f9c2b2a85f7292c12bd36f7594372f47ca28d2",
+          "limits": {
+            "NanoCpus": 0,
+            "CpuQuota": 0,
+            "CpuPeriod": 0,
+            "CpusetCpus": "",
+            "Memory": 0,
+            "MemorySwap": 0
+          }
+        },
+        {
+          "id": "9bb3d918b7c6ab7eedf875c4e8a67e2b265927262484fd92b37f6fc2fb8ead11",
+          "workerId": "99503d2a-ddfa-406a-998e-007e383ccd2f",
+          "instance": "172.19.0.10:9464",
+          "startedAt": "2026-10-25T10:22:32.946411736Z",
+          "imageId": "sha256:5b0aeb6afafb5df54469bb1679f9c2b2a85f7292c12bd36f7594372f47ca28d2",
+          "limits": {
+            "NanoCpus": 0,
+            "CpuQuota": 0,
+            "CpuPeriod": 0,
+            "CpusetCpus": "",
+            "Memory": 0,
+            "MemorySwap": 0
+          }
+        },
+        {
+          "id": "fae1725dd63f8894d1952b4d34a037e17dc9610818391ec865427c4bfd7b070a",
+          "workerId": "e3ee1d89-96d8-40b7-af5a-075e62f32131",
+          "instance": "172.19.0.7:9464",
+          "startedAt": "2026-10-25T10:22:32.440497628Z",
+          "imageId": "sha256:5b0aeb6afafb5df54469bb1679f9c2b2a85f7292c12bd36f7594372f47ca28d2",
+          "limits": {
+            "NanoCpus": 0,
+            "CpuQuota": 0,
+            "CpuPeriod": 0,
+            "CpusetCpus": "",
+            "Memory": 0,
+            "MemorySwap": 0
+          }
+        },
+        {
+          "id": "54a7853300572c7ade3f781433122ec645203df3dfbdd135ba8c3d7128f387e4",
+          "workerId": "74397d5c-f9d7-4fb9-9781-8e1e8e6aa10c",
+          "instance": "172.19.0.5:9464",
+          "startedAt": "2026-10-25T10:22:32.162543578Z",
+          "imageId": "sha256:5b0aeb6afafb5df54469bb1679f9c2b2a85f7292c12bd36f7594372f47ca28d2",
+          "limits": {
+            "NanoCpus": 0,
+            "CpuQuota": 0,
+            "CpuPeriod": 0,
+            "CpusetCpus": "",
+            "Memory": 0,
+            "MemorySwap": 0
+          }
+        },
+        {
+          "id": "753ca738e6a1107bed26edb6f59b9bf304fc057ca31ec6515e5ce077b4915595",
+          "workerId": "38ea5c2f-3d4c-49c0-bfb9-bb37fea3d41e",
+          "instance": "172.19.0.9:9464",
+          "startedAt": "2026-10-25T10:22:32.761643636Z",
+          "imageId": "sha256:5b0aeb6afafb5df54469bb1679f9c2b2a85f7292c12bd36f7594372f47ca28d2",
+          "limits": {
+            "NanoCpus": 0,
+            "CpuQuota": 0,
+            "CpuPeriod": 0,
+            "CpusetCpus": "",
+            "Memory": 0,
+            "MemorySwap": 0
+          }
+        }
+      ],
+      "gateReleasedAt": "2026-10-25T10:22:57.330Z",
+      "targetWaitSeconds": 28.359,
+      "timing": {
+        "firstClaim": "2026-10-25T10:22:57.472Z",
+        "lastSuccess": "2026-10-25T10:24:04.000Z",
+        "elapsedSeconds": 66.528,
+        "throughput": 7.215007215007215
+      },
+      "resources": {
+        "workerCpuPercent": {
+          "count": 11,
+          "median": 1.7499999999999996,
+          "min": 1.3099999999999998,
+          "max": 6.03,
+          "populationStddev": 1.296052493580296
+        },
+        "workerMemoryBytes": {
+          "count": 11,
+          "median": 494351155.1999999,
+          "min": 482879733.76,
+          "max": 521687531.52,
+          "populationStddev": 12104772.583263189
+        },
+        "postgresCpuPercent": {
+          "count": 11,
+          "median": 1.63,
+          "min": 1.16,
+          "max": 4.43,
+          "populationStddev": 1.4849670948298055
+        },
+        "postgresMemoryBytes": {
+          "count": 11,
+          "median": 53383004.16,
+          "min": 51201966.08,
+          "max": 54148464.64,
+          "populationStddev": 940653.3910251963
+        },
+        "databaseConnections": {
+          "count": 11,
+          "median": 11,
+          "min": 10,
+          "max": 11,
+          "populationStddev": 0.4810456929208346
+        },
+        "ac2cea72d688.cpuPercent": {
+          "count": 11,
+          "median": 0.2,
+          "min": 0.16,
+          "max": 0.43,
+          "populationStddev": 0.10477839661253752
+        },
+        "ac2cea72d688.memoryBytes": {
+          "count": 11,
+          "median": 62117642.24,
+          "min": 61152952.32,
+          "max": 65032683.52,
+          "populationStddev": 1254770.8015756
+        },
+        "87d515c2b6f4.cpuPercent": {
+          "count": 11,
+          "median": 0.19,
+          "min": 0.15,
+          "max": 0.47,
+          "populationStddev": 0.09651788683626908
+        },
+        "87d515c2b6f4.memoryBytes": {
+          "count": 11,
+          "median": 62054727.68,
+          "min": 61289267.2,
+          "max": 65074626.56,
+          "populationStddev": 1191163.9665546706
+        },
+        "1c0429a4cef0.cpuPercent": {
+          "count": 11,
+          "median": 0.19,
+          "min": 0.14,
+          "max": 3.8,
+          "populationStddev": 1.0321124930680314
+        },
+        "1c0429a4cef0.memoryBytes": {
+          "count": 11,
+          "median": 59989032.96,
+          "min": 59496202.24,
+          "max": 60439920.64,
+          "populationStddev": 266091.92787379224
+        },
+        "99469782ab27.cpuPercent": {
+          "count": 11,
+          "median": 0.18,
+          "min": 0.14,
+          "max": 0.34,
+          "populationStddev": 0.05247588978058841
+        },
+        "99469782ab27.memoryBytes": {
+          "count": 11,
+          "median": 62075699.2,
+          "min": 61519953.92,
+          "max": 64917340.16,
+          "populationStddev": 1174660.4273139385
+        },
+        "9bb3d918b7c6.cpuPercent": {
+          "count": 11,
+          "median": 0.19,
+          "min": 0.14,
+          "max": 0.43,
+          "populationStddev": 0.0875752333003076
+        },
+        "9bb3d918b7c6.memoryBytes": {
+          "count": 11,
+          "median": 62820188.16,
+          "min": 59265515.52,
+          "max": 67779952.64,
+          "populationStddev": 2508308.7359489235
+        },
+        "fae1725dd63f.cpuPercent": {
+          "count": 11,
+          "median": 0.21,
+          "min": 0.15,
+          "max": 0.4,
+          "populationStddev": 0.07932567039408538
+        },
+        "fae1725dd63f.memoryBytes": {
+          "count": 11,
+          "median": 64015564.8,
+          "min": 59915632.64,
+          "max": 68639784.96,
+          "populationStddev": 2662655.2082003127
+        },
+        "54a785330057.cpuPercent": {
+          "count": 11,
+          "median": 0.19,
+          "min": 0.16,
+          "max": 0.37,
+          "populationStddev": 0.07203075559832839
+        },
+        "54a785330057.memoryBytes": {
+          "count": 11,
+          "median": 61624811.52,
+          "min": 61173923.84,
+          "max": 65609400.32,
+          "populationStddev": 1525707.1894618701
+        },
+        "753ca738e6a1.cpuPercent": {
+          "count": 11,
+          "median": 0.2,
+          "min": 0.16,
+          "max": 0.41,
+          "populationStddev": 0.08403069096939157
+        },
+        "753ca738e6a1.memoryBytes": {
+          "count": 11,
+          "median": 61551411.2,
+          "min": 58038681.6,
+          "max": 64938311.68,
+          "populationStddev": 2156543.473489391
+        }
+      },
+      "handler": {
+        "count": 480,
+        "sumSeconds": 480.308446651,
+        "meanSeconds": 1.0006425971895834,
+        "workers": [
+          {
+            "instance": "172.19.0.8:9464",
+            "count": 60,
+            "sumSeconds": 60.04020888899996,
+            "meanSeconds": 1.0006701481499993
+          },
+          {
+            "instance": "172.19.0.6:9464",
+            "count": 60,
+            "sumSeconds": 60.03984057400002,
+            "meanSeconds": 1.000664009566667
+          },
+          {
+            "instance": "172.19.0.12:9464",
+            "count": 60,
+            "sumSeconds": 60.03563783899995,
+            "meanSeconds": 1.0005939639833326
+          },
+          {
+            "instance": "172.19.0.11:9464",
+            "count": 60,
+            "sumSeconds": 60.03710442000001,
+            "meanSeconds": 1.0006184070000002
+          },
+          {
+            "instance": "172.19.0.10:9464",
+            "count": 60,
+            "sumSeconds": 60.038528364000015,
+            "meanSeconds": 1.0006421394000002
+          },
+          {
+            "instance": "172.19.0.7:9464",
+            "count": 60,
+            "sumSeconds": 60.03438997900001,
+            "meanSeconds": 1.0005731663166668
+          },
+          {
+            "instance": "172.19.0.5:9464",
+            "count": 60,
+            "sumSeconds": 60.04410499899999,
+            "meanSeconds": 1.0007350833166666
+          },
+          {
+            "instance": "172.19.0.9:9464",
+            "count": 60,
+            "sumSeconds": 60.038631587,
+            "meanSeconds": 1.0006438597833334
+          }
+        ]
+      },
+      "sampling": {
+        "total": 14,
+        "errors": 0,
+        "insideWindow": 11
+      },
+      "speedup": 7.943001443001443,
+      "efficiencyPercent": 99.28751803751804
+    }
+  ],
+  "groups": [
+    {
+      "workers": 1,
+      "validRuns": 2,
+      "throughput": {
+        "count": 2,
+        "median": 0.9105309115116087,
+        "min": 0.9083477155054954,
+        "max": 0.9127141075177219,
+        "populationStddev": 0.0021831960061132194
+      },
+      "speedup": 1,
+      "efficiencyPercent": 100
+    },
+    {
+      "workers": 2,
+      "validRuns": 2,
+      "throughput": {
+        "count": 2,
+        "median": 1.8253449147926548,
+        "min": 1.8253102076670635,
+        "max": 1.8253796219182459,
+        "populationStddev": 0.000034707125591171284
+      },
+      "speedup": 2.00470394987725,
+      "efficiencyPercent": 100.2351974938625
+    },
+    {
+      "workers": 4,
+      "validRuns": 2,
+      "throughput": {
+        "count": 2,
+        "median": 3.6280084630816445,
+        "min": 3.627076123260137,
+        "max": 3.6289408029031525,
+        "populationStddev": 0.000932339821507755
+      },
+      "speedup": 3.98449785417899,
+      "efficiencyPercent": 99.61244635447474
+    },
+    {
+      "workers": 8,
+      "validRuns": 2,
+      "throughput": {
+        "count": 2,
+        "median": 7.217068955676265,
+        "min": 7.215007215007215,
+        "max": 7.2191306963453155,
+        "populationStddev": 0.0020617406690504048
+      },
+      "speedup": 7.926220696554849,
+      "efficiencyPercent": 99.07775870693561
+    }
+  ]
+}

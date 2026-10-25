@@ -157,4 +157,6 @@ npm run test:multi-worker
 
 ## 구현 범위
 
+Worker 수 1·2·4·8에 따른 Batch 처리량·Handler 시간·Queue 추세·CPU·메모리·DB 연결 비교는 [Worker 부하 실험 안내](experiments/worker-load/README.md)를 따른다. 기존 데이터와 분리한 Compose 프로젝트에서 API 사전 등록과 반복 측정을 수행한다.
+
 Job Lifecycle Logging, PostgreSQL Gauge·프로세스별 Counter·Handler Duration Histogram과 Compose의 다중 Worker 실행·Prometheus DNS Target Discovery를 제공한다. 기존 상태 전이·Retry·Crash Recovery·실행 소유권 보호를 유지하며, 관측 기록의 원자적 저장·재집계는 제공하지 않는다.
