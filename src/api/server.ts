@@ -7,7 +7,7 @@ async function start() {
     const { env } = await import('../config/env.ts');
     const { createOrm } = await import('../db/orm.ts');
     const orm = await createOrm();
-    const app = createApp(orm, logger);
+    const app = createApp(orm, logger, undefined, env.api.enqueue);
     let closing = false;
 
     async function shutdown(signal: NodeJS.Signals) {

@@ -8,6 +8,7 @@ export function createMetricsRegistry() {
 export function createApiMetrics(registry: Registry) {
     return {
         enqueued: new Counter({ name: 'async_job_enqueued_total', help: '등록에 성공한 Job 수', registers: [registry] }),
+        enqueueRejected: new Counter({ name: 'async_job_enqueue_rejected_total', help: '미완료 Job 용량 초과로 거부한 등록 요청 수', registers: [registry] }),
         queueDepth: new Gauge({ name: 'async_job_queue_depth', help: 'Backoff 대기를 포함한 queued Job 수', registers: [registry] }),
         readyQueueDepth: new Gauge({ name: 'async_job_ready_queue_depth', help: '현재 Claim 가능한 queued Job 수', registers: [registry] }),
         processingJobs: new Gauge({ name: 'async_job_processing_jobs', help: 'Stale을 포함한 processing Job 수', registers: [registry] }),

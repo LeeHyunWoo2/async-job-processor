@@ -93,6 +93,30 @@ npm run start:worker
 
 Compose에서 API·Worker를 이미 실행 중이라면 먼저 `docker compose stop api worker`로 중지한다. 로컬 프로세스는 `.env`를 읽으며 API와 Worker Metrics는 기본적으로 `127.0.0.1:3000`, `127.0.0.1:9464`에서 응답한다. Worker Metrics 주소는 `WORKER_METRICS_HOST`, `WORKER_METRICS_PORT`로 변경할 수 있다. Compose의 Prometheus 설정은 컨테이너 API·Worker를 수집 대상으로 한다.
 
+## Enqueue Admission Control
+
+`POST /jobs`는 기본적으로 미완료 Job인 `queued + processing`을 최대 100개까지 받는다. Retry·미래 실행 대기와 Stale Processing도 포함하며 `succeeded/failed`는 제외한다. 입력 오류는 용량 검사보다 먼저 HTTP 400으로 응답한다. 용량이 가득 차면 INSERT 없이 HTTP 503과 다음 본문을 반환하며 `Retry-After`는 제공하지 않는다.
+
+```json
+{ "error": "작업 처리 용량이 가득 찼습니다", "code": "QUEUE_CAPACITY_EXCEEDED" }
+```
+
+- `ENABLE_BACKPRESSURE`: 기본 `true`. `true/false`만 허용한다. `false`는 같은 코드 버전으로 정책 ON/OFF를 비교하기 위한 실험 옵션이며 COUNT·잠금 없이 기존 등록 경로를 사용한다.
+- `MAX_OUTSTANDING_JOBS`: 기본 `100`. 양의 안전한 정수로 검증하며 잘못된 값은 시작 오류로 처리한다. OFF에서도 설정값 검증은 유지한다.
+
+로컬 실행은 기존 `.env` 로딩을 사용한다. Compose는 두 변수를 API 컨테이너에 전달한다. 설정 변경 후 API 프로세스를 재시작하거나 컨테이너를 재생성한다.
+
+```bash
+# 정책 OFF 비교 실행 예시
+ENABLE_BACKPRESSURE=false docker compose up -d --build api
+```
+
+ON에서는 하나의 READ COMMITTED 트랜잭션·물리 연결 안에서 고정 Enqueue 전용 `pg_advisory_xact_lock(1668244581, 1)` 획득 → 별도 SQL의 Outstanding COUNT → 여유가 있으면 INSERT를 수행한다. 잠금을 기다린 뒤의 COUNT는 앞선 Enqueue의 Commit을 새 Snapshot으로 읽는다. Commit/Rollback 후 잠금을 해제하고, 성공 응답과 성공 계측은 Commit 이후에 수행한다. DB 오류는 기존 HTTP 500 오류 경로를 따른다.
+
+상한은 같은 DB의 모든 API 인스턴스가 정책 ON·동일한 제한값·동일한 잠금 키로 이 등록 경로를 사용할 때 보장한다. OFF 인스턴스, 직접 DB INSERT나 잠금을 우회한 외부 경로까지 막는 DB 제약은 아니다. 기존 미완료 수가 이미 상한보다 크면 완료로 줄어들 때까지 신규 등록을 거부한다. Claim·Retry·재시도 가능한 Recovery는 미완료 수를 유지하고 최종 성공·실패만 슬롯을 반환한다. 잠금 대기와 매번 수행하는 COUNT 비용이 있으며 별도 Capacity Counter·인덱스·Enqueue Rate Limit·Worker 자동 증설은 제공하지 않는다.
+
+용량 거부만 `async_job_enqueue_rejected_total`과 요청별 `reqId`를 가진 `job.enqueue_rejected` 로그에 반영한다. 로그는 `reason`, `outstandingJobs`, `maxOutstandingJobs`를 기록하며 생성되지 않은 `jobId`는 넣지 않는다. 계측은 기존 Best-effort 방식이며 로그 Sampling은 적용하지 않아 요청 폭주 시 거부 로그 자체의 부하가 남는다.
+
 ## Logger와 Registry 재사용
 
 - `src/observability/logger.ts`의 `createLogger('api' | 'worker')`는 Pino 인스턴스를 반환한다. 표준 출력의 기본 JSON 형식, 기본 `info` 레벨과 `component` 필드를 공유하며 `LOG_LEVEL`로 레벨을 변경한다. 오류는 `{ err: error }`로 기록한다.
@@ -111,6 +135,7 @@ Job Lifecycle은 DB 상태 변경 성공 후 `job.enqueued`, `job.claimed`, `job
 | API | `async_job_ready_queue_depth` | `queued`, `availableAt <= now()`, `attempt < maxAttempts`인 수 |
 | API | `async_job_processing_jobs` | Stale을 포함한 DB의 `processing` 수 |
 | API | `async_job_enqueued_total` | INSERT 성공 횟수 |
+| API | `async_job_enqueue_rejected_total` | 용량 초과로 실제 거부된 등록 요청 수 (400·500·성공 제외) |
 | Worker | `async_job_claimed_total` | Claim 성공 횟수 |
 | Worker | `async_job_succeeded_total` | 최종 성공 결과 저장 횟수 |
 | Worker | `async_job_failed_total` | Handler 또는 Recovery에 의한 최종 실패 확정 횟수 |
@@ -146,7 +171,7 @@ npm run test:observability
 npm run test:db
 ```
 
-관측 테스트는 JSON Event·Request ID·실행 정보, 10개 Metric과 Registry 격리, 실제 DB Gauge·저장 실패·소유권 상실·동시 Recovery의 계측, 결과 저장과 분리된 Handler Duration, 계측 오류의 격리와 독립 Worker의 종료 Event·서버 정리를 확인한다. 기존 PostgreSQL 테스트는 Claim·Retry·Recovery·실행 소유권·DB 오류 중단·Graceful Shutdown을 검증한다.
+관측 테스트는 JSON Event·Request ID·실행 정보, 11개 Metric과 Registry 격리, 실제 DB Gauge·저장 실패·소유권 상실·동시 Recovery의 계측, 결과 저장과 분리된 Handler Duration, 계측 오류의 격리와 독립 Worker의 종료 Event·서버 정리를 확인한다. PostgreSQL 테스트는 Claim·Retry·Recovery·실행 소유권·DB 오류 중단·Graceful Shutdown에 더해 Admission의 상태 집계·ON/OFF·실제 10개 연결의 잠금 경합·COUNT/INSERT/COMMIT 오류와 거부 계측을 검증한다.
 
 실제 Compose Worker 3개의 정상 분담, 단일 Worker의 SIGKILL 중 처리 지속과 자연 Timeout Recovery, 1→3→1 Scale 변경·SIGTERM·Prometheus 개별 수집은 선택 실행으로 확인한다. 개발용 데이터와 포트를 공유하지 않는 별도 프로젝트를 사용하며, 실행·관찰·정리는 [다중 Worker 검증 안내](tests/compose/README.md)를 따른다.
 
@@ -157,6 +182,6 @@ npm run test:multi-worker
 
 ## 구현 범위
 
-Worker 수 1·2·4·8에 따른 Batch 처리량·Handler 시간·Queue 추세·CPU·메모리·DB 연결 비교는 [Worker 부하 실험 안내](experiments/worker-load/README.md)를 따른다. 기존 데이터와 분리한 Compose 프로젝트에서 API 사전 등록과 반복 측정을 수행한다.
+Worker 수 1·2·4·8에 따른 Batch 처리량·Handler 시간·Queue 추세·CPU·메모리·DB 연결 비교는 [Worker 부하 실험 안내](experiments/worker-load/README.md)를 따른다. 기존 데이터와 분리한 Compose 프로젝트에서 API 사전 등록과 반복 측정을 수행한다. 기존 기본 Batch 480개를 사전 등록하려면 실행 환경에서 `ENABLE_BACKPRESSURE=false`를 지정해야 한다.
 
 Job Lifecycle Logging, PostgreSQL Gauge·프로세스별 Counter·Handler Duration Histogram과 Compose의 다중 Worker 실행·Prometheus DNS Target Discovery를 제공한다. 기존 상태 전이·Retry·Crash Recovery·실행 소유권 보호를 유지하며, 관측 기록의 원자적 저장·재집계는 제공하지 않는다.

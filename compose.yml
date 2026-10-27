@@ -40,6 +40,8 @@ services:
       <<: *app-environment
       API_HOST: 0.0.0.0
       API_PORT: 3000
+      ENABLE_BACKPRESSURE: ${ENABLE_BACKPRESSURE-true}
+      MAX_OUTSTANDING_JOBS: ${MAX_OUTSTANDING_JOBS-100}
     ports:
       - "${API_PORT:-3000}:3000"
     depends_on:

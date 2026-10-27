@@ -1,11 +1,53 @@
-import type { MikroORM } from '@mikro-orm/postgresql';
+import type { EntityManager, MikroORM } from '@mikro-orm/postgresql';
 
 import { Job, JobStatus, type JobType, type JsonValue } from '../db/entities/job.ts';
 import { getRetryDelayMs } from './retry.ts';
 
-export async function enqueueJob(orm: MikroORM, type: JobType, payload: JsonValue): Promise<{ id: string; status: JobStatus }> {
+export interface EnqueueOptions {
+    enableBackpressure: boolean;
+    maxOutstandingJobs: number;
+}
+
+export class QueueCapacityExceededError extends Error {
+    readonly outstandingJobs: number;
+    readonly maxOutstandingJobs: number;
+
+    constructor(outstandingJobs: number, maxOutstandingJobs: number) {
+        super('작업 처리 용량이 가득 찼습니다');
+        this.name = 'QueueCapacityExceededError';
+        this.outstandingJobs = outstandingJobs;
+        this.maxOutstandingJobs = maxOutstandingJobs;
+    }
+}
+
+export async function enqueueJob(
+    orm: MikroORM, type: JobType, payload: JsonValue,
+    options: EnqueueOptions = { enableBackpressure: true, maxOutstandingJobs: 100 },
+): Promise<{ id: string; status: JobStatus }> {
+    const em = orm.em.fork();
+    if (!options.enableBackpressure) return insertJob(em, type, payload);
+
+    return em.transactional(async (transaction) => {
+        // 모든 API 인스턴스가 공유하는 Enqueue 전용 키이며 Commit/Rollback 시 해제된다.
+        await transaction.execute('select pg_advisory_xact_lock(1668244581, 1)');
+        // 잠금 대기 이후 새 READ COMMITTED Snapshot으로 앞선 Enqueue의 Commit을 읽는다.
+        // 잠금 획득과 COUNT는 반드시 별도 SQL 문장으로 유지한다.
+        const [counts] = await transaction.execute<{ outstandingJobs: string }[]>(`
+            select count(*) as "outstandingJobs" from jobs
+            where status in ('queued', 'processing')
+        `);
+        if (!counts) throw new Error('미완료 Job 집계 결과가 없습니다');
+        const outstandingJobs = Number(counts.outstandingJobs);
+        if (outstandingJobs >= options.maxOutstandingJobs) {
+            throw new QueueCapacityExceededError(outstandingJobs, options.maxOutstandingJobs);
+        }
+        return insertJob(transaction, type, payload);
+    }, { isolationLevel: 'read committed' });
+}
+
+async function insertJob(em: EntityManager, type: JobType, payload: JsonValue): Promise<{ id: string; status: JobStatus }> {
     // 최초 실행을 포함한 최대 Claim 횟수만 지정하고 초기 상태와 시각은 DB 기본값을 사용한다.
-    const [job] = await orm.em.fork().execute<{ id: string; status: JobStatus }[]>(`
+    const [job] = await em.execute<{ id: string; status: JobStatus }[]>(`
         insert into jobs (type, payload, max_attempts)
         values (?, ?::jsonb, 3)
         returning id, status

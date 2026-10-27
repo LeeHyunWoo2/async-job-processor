@@ -20,8 +20,8 @@ interface JobTestDatabase {
 }
 
 export async function withJobTestDatabase(
-    prefix: 'job' | 'retry' | 'recovery',
-    connectionCount: 2 | 3,
+    prefix: 'job' | 'retry' | 'recovery' | 'admission',
+    connectionCount: number,
     run: (database: JobTestDatabase) => Promise<void>,
 ): Promise<void> {
     const admin = await createOrm();
