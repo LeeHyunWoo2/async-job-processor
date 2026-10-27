@@ -55,6 +55,11 @@
   - 기존 입력 검증·성공 응답·Worker 상태 전이를 유지하며 용량 초과만 503·거부 Counter·요청별 로그로 구분
   - 로컬·Compose 설정 전달 및 잘못된 설정의 시작 오류 처리
 
+- Producer/Consumer 불균형과 Admission Control 지속 유입 실험 완료
+  - 전용 Compose에서 Worker 처리와 동시에 Monotonic 기준 지속 등록·DB 상태 표본·배타적인 HTTP 결과 집계·기존 Metrics 수집
+  - 기본 조건 ON/OFF 각각 두 번에서 OFF의 미완료 누적과 ON의 503 거부·관측 상한 유지, 모든 수락 Job의 첫 시도 성공 확인
+  - 측정 유효성과 종료 처리 결과를 구분하고 시작 조건 거부·중단·로그 저장 실패 시 자료·기존 행 보존 검증, 재현 도구·선별한 실측 요약과 원자료 분리
+
 - 검증 완료
   - 실제 PostgreSQL에서 schema·기본값·제약, API 입력·등록·조회, Handler와 Retry / Backoff 확인
   - 서로 다른 DB 연결과 실제 Row Lock으로 동시 Claim·Recovery, 결과 저장과 Recovery 경합 및 소유권 보호 확인
@@ -82,7 +87,8 @@
 - Recovery는 정상 또는 재시작한 Worker가 Loop로 돌아올 때 수행되므로 모든 Worker 중단·Handler 정체 시 지연될 수 있음
 - Idempotency는 테스트 전용 PostgreSQL Unique Key 예시로 검증했으며 외부 시스템의 Exactly-once나 범용 중복 방지는 제공하지 않음
 - PostgreSQL이 Job 상태의 기준이며 로그·Metrics는 상태 변경과 원자적이지 않은 Best-effort 관측이다. 강제 종료 시 기록이 누락될 수 있고 Counter는 프로세스 재시작 시 초기화됨
-- Admission 상한은 동일 DB에서 모든 API가 ON·동일 제한값·공통 잠금 키를 사용하는 등록 경로에 한정되며 OFF·직접 INSERT는 우회 가능함. COUNT·잠금 대기·거부 로그 비용은 남아 있으며 지속 유입 실험과 실측은 후속 범위임
+- Admission 상한은 동일 DB에서 모든 API가 ON·동일 제한값·공통 잠금 키를 사용하는 등록 경로에 한정되며 OFF·직접 INSERT는 우회 가능함. COUNT·잠금 대기·거부 로그 비용은 남으며 순간 요청 폭주나 완료 행을 포함한 전체 저장량은 제한하지 않음
+- 지속 유입 실측의 DB 표본과 기존 동시성 테스트의 상한 보장은 별도 근거이며, 반복 순서·완료 행 누적·관측 및 로그 부하의 영향은 통제하지 않음
 - 기본 실험은 Timer 기반 대기에 한정하며, 관측된 시각 변동을 고려한 처리량의 정밀 해석·병목 원인·최적 Worker 수는 확정하지 않음
 
 ## 막힌 문제

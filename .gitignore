@@ -8,6 +8,7 @@ node_modules/
 
 # Raw experiment artifacts
 /artifacts/worker-load/
+/artifacts/backpressure/
 
 # Experiment results: only selected files
 /experiments/worker-load/results/**
@@ -17,3 +18,8 @@ node_modules/
 !/experiments/worker-load/results/2026-10-25/runs.csv
 !/experiments/worker-load/results/2026-10-25/summary.json
 !/experiments/worker-load/results/2026-10-25/observations.json
+
+/experiments/backpressure/results/**
+!/experiments/backpressure/results/2026-10-27/
+!/experiments/backpressure/results/2026-10-27/report.md
+!/experiments/backpressure/results/2026-10-27/summary.json
