@@ -72,17 +72,17 @@ test('API와 Worker의 초기 설정 오류도 공통 JSON Logger로 출력된�
     }
 });
 
-test('Job Metric 10개는 필요한 프로세스 Registry에만 등록하고 실행별 Label을 사용하지 않는다', async () => {
+test('Job Metric 11개는 필요한 프로세스 Registry에만 등록하고 실행별 Label을 사용하지 않는다', async () => {
     const api = createMetricsRegistry();
     const worker = createMetricsRegistry();
     createApiMetrics(api);
     createWorkerMetrics(worker);
     const metrics = [...await api.getMetricsAsJSON(), ...await worker.getMetricsAsJSON()];
-    assert.equal(metrics.length, 10);
-    assert.equal(metrics.filter((metric) => metric.type === 'counter').length, 6);
+    assert.equal(metrics.length, 11);
+    assert.equal(metrics.filter((metric) => metric.type === 'counter').length, 7);
     assert.equal(metrics.filter((metric) => metric.type === 'gauge').length, 3);
     assert.equal(metrics.filter((metric) => metric.type === 'histogram').length, 1);
-    assert.equal(api.getMetricsAsArray().length, 4);
+    assert.equal(api.getMetricsAsArray().length, 5);
     assert.equal(worker.getMetricsAsArray().length, 6);
     for (const metric of metrics) {
         assert.equal(register.getSingleMetric(metric.name), undefined);

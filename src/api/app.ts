@@ -3,12 +3,15 @@ import type { MikroORM } from '@mikro-orm/postgresql';
 import type { Logger } from 'pino';
 
 import { isJobInput } from '../jobs/handlers.ts';
-import { enqueueJob, findJob, getJobCounts } from '../jobs/store.ts';
+import { enqueueJob, findJob, getJobCounts, QueueCapacityExceededError, type EnqueueOptions } from '../jobs/store.ts';
 import { recordObservation } from '../observability/best-effort.ts';
 import { createLogger } from '../observability/logger.ts';
 import { createApiMetrics, createMetricsRegistry } from '../observability/metrics.ts';
 
-export function createApp(orm: MikroORM, logger: boolean | Logger = true, registry = createMetricsRegistry()) {
+export function createApp(
+    orm: MikroORM, logger: boolean | Logger = true, registry = createMetricsRegistry(),
+    enqueueOptions?: EnqueueOptions,
+) {
     const app = Fastify(logger === false
         ? { logger: false }
         : { loggerInstance: logger === true ? createLogger('api') : logger });
@@ -39,7 +42,18 @@ export function createApp(orm: MikroORM, logger: boolean | Logger = true, regist
         }
 
         const { type, payload } = request.body;
-        const job = await enqueueJob(orm, type, payload);
+        let job;
+        try {
+            job = await enqueueJob(orm, type, payload, enqueueOptions);
+        } catch (error) {
+            if (!(error instanceof QueueCapacityExceededError)) throw error;
+            recordObservation(() => metrics.enqueueRejected.inc());
+            recordObservation(() => request.log.warn({
+                event: 'job.enqueue_rejected', reason: 'QUEUE_CAPACITY_EXCEEDED',
+                outstandingJobs: error.outstandingJobs, maxOutstandingJobs: error.maxOutstandingJobs,
+            }, error.message));
+            return reply.code(503).send({ error: error.message, code: 'QUEUE_CAPACITY_EXCEEDED' });
+        }
         recordObservation(() => metrics.enqueued.inc());
         recordObservation(() => request.log.info({
             event: 'job.enqueued', jobId: job.id, jobType: type, status: job.status,

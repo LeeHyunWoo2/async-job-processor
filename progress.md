@@ -32,9 +32,9 @@
   - Row Lock과 조건 재평가로 동시 Recovery를 보호하며 기존 소유권 검증으로 이전 실행의 결과 저장·Retry 예약 차단
 
 - Job Lifecycle Observability 및 Compose 통합 실행 환경 구축 완료
-  - 공통 Pino JSON Logger로 DB 상태 변경 후 Job Event 6개와 Worker Event 3개 기록
+  - 공통 Pino JSON Logger로 Job Lifecycle·등록 거부 및 Worker Event 기록
   - API의 Request ID·jobId와 Worker의 jobId·workerId·attempt로 요청과 실행을 추적하며 Recovery 수행 Worker와 이전 Claim 소유자를 구분
-  - 독립 Registry와 API·Worker `/metrics`에서 Gauge 3개·Counter 6개·Histogram 1개 제공
+  - 독립 Registry와 API·Worker `/metrics`에서 Gauge 3개·Counter 7개·Histogram 1개 제공
   - Scrape마다 단일 PostgreSQL 집계로 Queue·Ready Queue·Processing 수 조회, 조회 오류는 응답 실패로 구분
   - Retry와 Recovery·최종 실패를 구분해 집계하며 Handler 시간은 DB 결과 저장과 분리
   - 계측 오류를 Job 처리에서 격리하고 기존 Graceful Shutdown·오류 종료에 맞춰 Metrics 서버 정리
@@ -48,6 +48,12 @@
   - Worker 1·2·4·8개를 조건별 두 번 측정하고 총 3,840개 Job의 첫 시도 성공·프로세스별 단일 Claim·완료를 확인
   - DB 기준 처리량·Speedup·Efficiency와 반복 산포, Handler·Queue 추세, 복수 CPU·메모리·DB 연결 샘플 보존
   - 실측 요약과 원자료를 분리하고 wall clock 변동·짧은 Prometheus 창·평가 해상도의 한계를 결과 문서에 기록
+
+- PostgreSQL 기반 Enqueue Admission Control 구현 완료
+  - 기본 ON·최대 100개의 `queued + processing` 상한과 실험 비교용 OFF 설정 제공
+  - 동일 READ COMMITTED 트랜잭션에서 Advisory Lock 획득 후 별도 COUNT·INSERT로 동시 등록 보호
+  - 기존 입력 검증·성공 응답·Worker 상태 전이를 유지하며 용량 초과만 503·거부 Counter·요청별 로그로 구분
+  - 로컬·Compose 설정 전달 및 잘못된 설정의 시작 오류 처리
 
 - 검증 완료
   - 실제 PostgreSQL에서 schema·기본값·제약, API 입력·등록·조회, Handler와 Retry / Backoff 확인
@@ -66,6 +72,8 @@
   - 동일 시각의 인스턴스별 성공 처리율 합과 전체 집계 PromQL 결과 일치 확인
   - 기본 Compose와 로컬 단일 Worker의 Job 성공·Metrics 제공 및 정상 종료 확인
   - 실험 집계 산식·비정상 Batch 제외와 실제 잔여 Ready·Stale Job의 Worker 시작 전 거부·행 보존 확인
+  - Admission의 상태 집계·슬롯 유지와 반환·ON/OFF·입력 검증 우선순위, 서로 다른 10개 연결의 실제 잠금 경합에서 잔여 1개 슬롯만 수락함을 확인
+  - COUNT·INSERT·Commit 오류의 Rollback·잠금 해제·관측 정확성과 거부 계측 오류 격리, 독립 API의 환경변수 적용 확인
 
 ## 현재 범위
 
@@ -74,6 +82,7 @@
 - Recovery는 정상 또는 재시작한 Worker가 Loop로 돌아올 때 수행되므로 모든 Worker 중단·Handler 정체 시 지연될 수 있음
 - Idempotency는 테스트 전용 PostgreSQL Unique Key 예시로 검증했으며 외부 시스템의 Exactly-once나 범용 중복 방지는 제공하지 않음
 - PostgreSQL이 Job 상태의 기준이며 로그·Metrics는 상태 변경과 원자적이지 않은 Best-effort 관측이다. 강제 종료 시 기록이 누락될 수 있고 Counter는 프로세스 재시작 시 초기화됨
+- Admission 상한은 동일 DB에서 모든 API가 ON·동일 제한값·공통 잠금 키를 사용하는 등록 경로에 한정되며 OFF·직접 INSERT는 우회 가능함. COUNT·잠금 대기·거부 로그 비용은 남아 있으며 지속 유입 실험과 실측은 후속 범위임
 - 기본 실험은 Timer 기반 대기에 한정하며, 관측된 시각 변동을 고려한 처리량의 정밀 해석·병목 원인·최적 Worker 수는 확정하지 않음
 
 ## 막힌 문제
