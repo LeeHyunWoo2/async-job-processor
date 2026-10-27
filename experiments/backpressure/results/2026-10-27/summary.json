@@ -1,0 +1,1565 @@
+{
+  "measuredDate": "2026-10-27",
+  "rawDirectory": "artifacts/backpressure/2026-10-27-default",
+  "environment": {
+    "at": "2026-10-27T14:29:44.117Z",
+    "project": "async-job-backpressure",
+    "dbName": "async_job_backpressure",
+    "revision": "8c36c64d531e52a5989a01378092b23d6d90f5d2",
+    "branch": "feature/queue-flow",
+    "workingTree": " M .gitignore\n M README.md\n?? experiments/backpressure/\n",
+    "hashes": {
+      "experiments/backpressure/run.ts": "6085f4aeef751253ae857966c2a42b05734219c982431fe98fb0e0c21b2bdf6b",
+      "experiments/backpressure/experiment.ts": "f8e78f4d2d4cb4eebd041ba810e4f0788081460736712de1420e73c0aba4c688",
+      "experiments/backpressure/compose.yml": "bbfd30ece413ee5a64d3607d887f8e016e5c7ccfdbe3e337d57574daa0919ca9",
+      "compose.yml": "3a48f45626a60a38cbd72799500f249681ddb44e2f49380e9e7c0576cc0bcd71",
+      "prometheus.yml": "e9a68c26c45c049143efe9e4912b54746b9768bffe54e7ee1f43d5aa68d82e46",
+      "Dockerfile": "fecb78aa70fe03227528dfaf7c87cff7dd7aed93703ce3994beebd14b889a361",
+      "package-lock.json": "bbb3ef10d16a2ce3da750c0aa063373fe4a706c4fd7ba68dab3deba9b3a6fabd",
+      "src/jobs/store.ts": "46192b4f89685b2b96e2970209facce565afa2836d187146cf83d61d7b3f5c77",
+      "src/jobs/handlers.ts": "0834c2c37e85fe664a99251d25b735376c806ae188fad8c71ff8c58e4eb200c9",
+      "src/api/app.ts": "fc5dfe8d37a9eca5acf365e9b1590642fa80d4581073f6a7f582c6005fa44156"
+    },
+    "imageId": "sha256:a46e0ee2c5540f82788e2786683ae8f79768bf300ccfc8792ce09477bf4b92e6",
+    "parameters": {
+      "modes": [
+        "off",
+        "on"
+      ],
+      "repeats": 2,
+      "seconds": 30,
+      "rate": 10,
+      "durationMs": 1000,
+      "limit": 100,
+      "intervalMs": 1000,
+      "maxInflight": 4,
+      "drainSeconds": 900,
+      "out": "artifacts/backpressure/2026-10-27-default"
+    },
+    "order": [
+      {
+        "repeat": 1,
+        "modes": [
+          "off",
+          "on"
+        ]
+      },
+      {
+        "repeat": 2,
+        "modes": [
+          "on",
+          "off"
+        ]
+      }
+    ],
+    "initial": {
+      "total": 71,
+      "queued": 0,
+      "processing": 0,
+      "outstanding": 0,
+      "succeeded": 71,
+      "failed": 0
+    },
+    "apiUrl": "",
+    "prometheusUrl": "http://127.0.0.1:64009",
+    "host": {
+      "platform": "linux",
+      "release": "6.18.54.1-microsoft-standard-WSL2",
+      "cpuModel": "Intel(R) Core(TM) i7-7700K CPU @ 4.20GHz",
+      "logicalCpus": 8,
+      "memoryBytes": 8329555968
+    },
+    "docker": {
+      "version": "29.8.2",
+      "operatingSystem": "Docker Desktop (containerized)",
+      "kernel": "6.18.54.1-microsoft-standard-WSL2",
+      "logicalCpus": 8,
+      "memoryBytes": 8329555968
+    },
+    "node": "v24.21.0",
+    "compose": "5.5.1",
+    "observation": {
+      "sampleIntervalMs": 1000,
+      "observerPoolMax": 2,
+      "scrapeIntervalMs": 15000,
+      "rangeStepSeconds": 15,
+      "clock": "performance.now()"
+    },
+    "settings": [
+      {
+        "name": "max_connections",
+        "setting": "100",
+        "unit": null
+      },
+      {
+        "name": "shared_buffers",
+        "setting": "16384",
+        "unit": "8kB"
+      },
+      {
+        "name": "work_mem",
+        "setting": "4096",
+        "unit": "kB"
+      }
+    ],
+    "containers": [
+      {
+        "id": "1e68a29e5d210fc8667c5a0acc59e824010deb6b7d8ec4324296c5d877234fec",
+        "service": "migrate",
+        "imageId": "sha256:a46e0ee2c5540f82788e2786683ae8f79768bf300ccfc8792ce09477bf4b92e6",
+        "startedAt": "2026-10-27T14:29:41.607260972Z",
+        "running": false,
+        "restartCount": 0,
+        "settings": [
+          "LOG_LEVEL=info",
+          "DB_NAME=async_job_backpressure"
+        ],
+        "limits": {
+          "NanoCpus": 0,
+          "CpuQuota": 0,
+          "CpuPeriod": 0,
+          "CpusetCpus": "",
+          "Memory": 0,
+          "MemorySwap": 0
+        }
+      },
+      {
+        "id": "9a02b60f4725850183e7ee0173c1381e3957f2b8ecf7c04f23b86dfca59f6a76",
+        "service": "postgres",
+        "imageId": "sha256:77f585114c32fbca283dc835b0596f4e52b51b4c6662d7810b2f4084f60a1873",
+        "startedAt": "2026-10-27T14:29:38.74417644Z",
+        "running": true,
+        "restartCount": 0,
+        "settings": [],
+        "limits": {
+          "NanoCpus": 0,
+          "CpuQuota": 0,
+          "CpuPeriod": 0,
+          "CpusetCpus": "",
+          "Memory": 0,
+          "MemorySwap": 0
+        }
+      },
+      {
+        "id": "dcd71de80f852a2f4f181e77ea44f4156c3639797377f2d520fe11fa61bddbf9",
+        "service": "prometheus",
+        "imageId": "sha256:87861b8cf91579109319ebc300f3f1060e6da9c05d6ae8ad15a20c879e84e32e",
+        "startedAt": "2026-10-27T14:29:43.124095587Z",
+        "running": true,
+        "restartCount": 0,
+        "settings": [],
+        "limits": {
+          "NanoCpus": 0,
+          "CpuQuota": 0,
+          "CpuPeriod": 0,
+          "CpusetCpus": "",
+          "Memory": 0,
+          "MemorySwap": 0
+        }
+      }
+    ]
+  },
+  "runs": [
+    {
+      "name": "r1-off",
+      "mode": "off",
+      "repeat": 1,
+      "valid": true,
+      "initial": {
+        "total": 71,
+        "queued": 0,
+        "processing": 0,
+        "outstanding": 0,
+        "succeeded": 71,
+        "failed": 0
+      },
+      "http": {
+        "planned": 300,
+        "sent": 300,
+        "accepted": 300,
+        "rejected": 0,
+        "otherHttp": 0,
+        "networkOrBodyErrors": 0,
+        "rejectionFraction": 0,
+        "firstSentMs": 4.569686999995611,
+        "lastSentMs": 29900.096613,
+        "dispatchRate": 10.001496235209725,
+        "windowDispatchRate": 10,
+        "maxScheduleLagMs": 4.569686999995611,
+        "peakInflight": 1,
+        "settledMs": 29999.163361999992
+      },
+      "startedAt": "2026-10-27T14:30:15.297Z",
+      "loadEnd": {
+        "total": 371,
+        "queued": 270,
+        "processing": 1,
+        "outstanding": 271,
+        "succeeded": 100,
+        "failed": 0,
+        "elapsedMs": 30000.021381,
+        "queryMs": 0.7891269999963697,
+        "phase": "load-end"
+      },
+      "loadBalance": {
+        "elapsedMs": 30000.021381,
+        "accepted": 300,
+        "completed": 29,
+        "acceptedPerSecond": 9.99999287300508,
+        "completedPerSecond": 0.9666659777238243,
+        "deltaOutstanding": 271
+      },
+      "completed": {
+        "total": 371,
+        "queued": 0,
+        "processing": 0,
+        "outstanding": 0,
+        "succeeded": 371,
+        "failed": 0,
+        "elapsedMs": 303428.164753,
+        "queryMs": 1.2089389999746345,
+        "phase": "completed"
+      },
+      "finalJobs": {
+        "total": 300,
+        "succeeded": 300,
+        "failed": 0,
+        "unfinished": 0,
+        "attempts": [
+          1
+        ],
+        "unknownResponseIds": 0
+      },
+      "sampling": {
+        "count": 306,
+        "observedMaxOutstanding": 271,
+        "maxQueryMs": 13.944155000004685,
+        "meanQueryMs": 1.1769935130726843,
+        "maxActualIntervalMs": 1013.2667660000006
+      },
+      "metricsVerified": true,
+      "timeline": [
+        {
+          "targetSecond": 0,
+          "total": 71,
+          "queued": 0,
+          "processing": 0,
+          "outstanding": 0,
+          "succeeded": 71,
+          "failed": 0,
+          "elapsedMs": 0.11045000000012806,
+          "queryMs": 1.3242839999948046,
+          "phase": "start"
+        },
+        {
+          "targetSecond": 5,
+          "total": 122,
+          "queued": 46,
+          "processing": 1,
+          "outstanding": 47,
+          "succeeded": 75,
+          "failed": 0,
+          "elapsedMs": 5010.9785919999995,
+          "queryMs": 0.9757039999967674,
+          "phase": "periodic"
+        },
+        {
+          "targetSecond": 10,
+          "total": 172,
+          "queued": 91,
+          "processing": 1,
+          "outstanding": 92,
+          "succeeded": 80,
+          "failed": 0,
+          "elapsedMs": 10014.241082,
+          "queryMs": 1.0753659999973024,
+          "phase": "periodic"
+        },
+        {
+          "targetSecond": 15,
+          "total": 222,
+          "queued": 136,
+          "processing": 1,
+          "outstanding": 137,
+          "succeeded": 85,
+          "failed": 0,
+          "elapsedMs": 15017.124918000001,
+          "queryMs": 0.9889939999993658,
+          "phase": "periodic"
+        },
+        {
+          "targetSecond": 20,
+          "total": 272,
+          "queued": 181,
+          "processing": 1,
+          "outstanding": 182,
+          "succeeded": 90,
+          "failed": 0,
+          "elapsedMs": 20019.114032999998,
+          "queryMs": 0.8404959999970743,
+          "phase": "periodic"
+        },
+        {
+          "targetSecond": 25,
+          "total": 322,
+          "queued": 226,
+          "processing": 1,
+          "outstanding": 227,
+          "succeeded": 95,
+          "failed": 0,
+          "elapsedMs": 25021.901849999995,
+          "queryMs": 1.0984840000019176,
+          "phase": "periodic"
+        },
+        {
+          "targetSecond": 30,
+          "total": 371,
+          "queued": 270,
+          "processing": 1,
+          "outstanding": 271,
+          "succeeded": 100,
+          "failed": 0,
+          "elapsedMs": 30000.021381,
+          "queryMs": 0.7891269999963697,
+          "phase": "load-end"
+        }
+      ],
+      "metrics": {
+        "async_job_enqueued_total": 300,
+        "async_job_enqueue_rejected_total": 0,
+        "async_job_queue_depth": 0,
+        "async_job_ready_queue_depth": 0,
+        "async_job_processing_jobs": 0,
+        "async_job_claimed_total": 300,
+        "async_job_succeeded_total": 300,
+        "async_job_failed_total": 0,
+        "async_job_retry_scheduled_total": 0,
+        "async_job_recovered_total": 0
+      },
+      "targets": [
+        {
+          "discoveredLabels": {
+            "__address__": "api:3000",
+            "__always_scrape_classic_histograms__": "false",
+            "__convert_classic_histograms_to_nhcb__": "false",
+            "__metrics_path__": "/metrics",
+            "__scheme__": "http",
+            "__scrape_interval__": "15s",
+            "__scrape_native_histograms__": "false",
+            "__scrape_timeout__": "5s",
+            "job": "api"
+          },
+          "labels": {
+            "instance": "api:3000",
+            "job": "api"
+          },
+          "scrapePool": "api",
+          "scrapeUrl": "http://api:3000/metrics",
+          "globalUrl": "http://api:3000/metrics",
+          "lastError": "",
+          "lastScrape": "2026-10-27T14:35:35.825246801Z",
+          "lastScrapeDuration": 0.011634854,
+          "health": "up",
+          "scrapeInterval": "15s",
+          "scrapeTimeout": "5s"
+        },
+        {
+          "discoveredLabels": {
+            "__address__": "172.19.0.4:9464",
+            "__always_scrape_classic_histograms__": "false",
+            "__convert_classic_histograms_to_nhcb__": "false",
+            "__meta_dns_name": "worker",
+            "__metrics_path__": "/metrics",
+            "__scheme__": "http",
+            "__scrape_interval__": "15s",
+            "__scrape_native_histograms__": "false",
+            "__scrape_timeout__": "5s",
+            "job": "worker"
+          },
+          "labels": {
+            "instance": "172.19.0.4:9464",
+            "job": "worker"
+          },
+          "scrapePool": "worker",
+          "scrapeUrl": "http://172.19.0.4:9464/metrics",
+          "globalUrl": "http://172.19.0.4:9464/metrics",
+          "lastError": "",
+          "lastScrape": "2026-10-27T14:35:31.732793162Z",
+          "lastScrapeDuration": 0.001052642,
+          "health": "up",
+          "scrapeInterval": "15s",
+          "scrapeTimeout": "5s"
+        }
+      ],
+      "containers": [
+        {
+          "id": "83d7bc7a7173c8ce713177fd95d32002c285aae76e3813c5f121ec47a6d76b58",
+          "service": "api",
+          "imageId": "sha256:a46e0ee2c5540f82788e2786683ae8f79768bf300ccfc8792ce09477bf4b92e6",
+          "startedAt": "2026-10-27T14:29:44.921773076Z",
+          "running": true,
+          "restartCount": 0,
+          "settings": [
+            "ENABLE_BACKPRESSURE=false",
+            "MAX_OUTSTANDING_JOBS=100",
+            "DB_NAME=async_job_backpressure",
+            "LOG_LEVEL=info"
+          ],
+          "limits": {
+            "NanoCpus": 0,
+            "CpuQuota": 0,
+            "CpuPeriod": 0,
+            "CpusetCpus": "",
+            "Memory": 0,
+            "MemorySwap": 0
+          }
+        },
+        {
+          "id": "1e68a29e5d210fc8667c5a0acc59e824010deb6b7d8ec4324296c5d877234fec",
+          "service": "migrate",
+          "imageId": "sha256:a46e0ee2c5540f82788e2786683ae8f79768bf300ccfc8792ce09477bf4b92e6",
+          "startedAt": "2026-10-27T14:29:41.607260972Z",
+          "running": false,
+          "restartCount": 0,
+          "settings": [
+            "LOG_LEVEL=info",
+            "DB_NAME=async_job_backpressure"
+          ],
+          "limits": {
+            "NanoCpus": 0,
+            "CpuQuota": 0,
+            "CpuPeriod": 0,
+            "CpusetCpus": "",
+            "Memory": 0,
+            "MemorySwap": 0
+          }
+        },
+        {
+          "id": "9a02b60f4725850183e7ee0173c1381e3957f2b8ecf7c04f23b86dfca59f6a76",
+          "service": "postgres",
+          "imageId": "sha256:77f585114c32fbca283dc835b0596f4e52b51b4c6662d7810b2f4084f60a1873",
+          "startedAt": "2026-10-27T14:29:38.74417644Z",
+          "running": true,
+          "restartCount": 0,
+          "settings": [],
+          "limits": {
+            "NanoCpus": 0,
+            "CpuQuota": 0,
+            "CpuPeriod": 0,
+            "CpusetCpus": "",
+            "Memory": 0,
+            "MemorySwap": 0
+          }
+        },
+        {
+          "id": "dcd71de80f852a2f4f181e77ea44f4156c3639797377f2d520fe11fa61bddbf9",
+          "service": "prometheus",
+          "imageId": "sha256:87861b8cf91579109319ebc300f3f1060e6da9c05d6ae8ad15a20c879e84e32e",
+          "startedAt": "2026-10-27T14:29:43.124095587Z",
+          "running": true,
+          "restartCount": 0,
+          "settings": [],
+          "limits": {
+            "NanoCpus": 0,
+            "CpuQuota": 0,
+            "CpuPeriod": 0,
+            "CpusetCpus": "",
+            "Memory": 0,
+            "MemorySwap": 0
+          }
+        },
+        {
+          "id": "039d36fe8971a171a0a93d1ba3cc44c28d6d5b60fe6f716348e87ba46978cac7",
+          "service": "worker",
+          "imageId": "sha256:a46e0ee2c5540f82788e2786683ae8f79768bf300ccfc8792ce09477bf4b92e6",
+          "startedAt": "2026-10-27T14:29:44.767228175Z",
+          "running": true,
+          "restartCount": 0,
+          "settings": [
+            "LOG_LEVEL=info",
+            "DB_NAME=async_job_backpressure"
+          ],
+          "limits": {
+            "NanoCpus": 0,
+            "CpuQuota": 0,
+            "CpuPeriod": 0,
+            "CpusetCpus": "",
+            "Memory": 0,
+            "MemorySwap": 0
+          }
+        }
+      ],
+      "rawDirectory": "artifacts/backpressure/2026-10-27-default/r1-off",
+      "rawSha256": {
+        "before.json": "f9cb6007e5636b0bba296818e0236742e103442d83e43d4cd82c4dcb9a41af8c",
+        "ready.json": "7574ea36be5aeeb5a7a0aec122dff6408824e788d664d5c7838a85d5d33ca399",
+        "requests.jsonl": "12cbfb543005ecc76986e1dc5936415bd8f7775940947b371dd8bdacd38ecca1",
+        "accepted-ids.json": "6344827aac4fa3c0b7c32413bc04698563800ddf1c67d42e63e64f533a064c9d",
+        "samples.jsonl": "e6e7351a21e375a0b089926e29ad72a819b4cacfac2fbe54b8885a864f3bd432",
+        "load-end-jobs.json": "d800108e1f586f6aa4cbe6607017daf32b82c70d6d86f2b9ca8f38682fed0af1",
+        "jobs.json": "4b0679fa93a6547c9930169339e15968a8163f5ceae22cd530cd175647a12eec",
+        "metrics-final.json": "544f3edfedc967dafdd18df9b665f8ce60a6c49617d3a4de29671e7ba5c862eb",
+        "worker.jsonl": "d5aa5e748eff8ffe766c3923b86d14810c3cd8f344dadd5de5d889f690d0594b",
+        "result.json": "19dc6d7462d408707cb62cf0b79bc3e28dd4857ee25a402759f7724b594a5731"
+      }
+    },
+    {
+      "name": "r1-on",
+      "mode": "on",
+      "repeat": 1,
+      "valid": true,
+      "initial": {
+        "total": 371,
+        "queued": 0,
+        "processing": 0,
+        "outstanding": 0,
+        "succeeded": 371,
+        "failed": 0
+      },
+      "http": {
+        "planned": 300,
+        "sent": 300,
+        "accepted": 129,
+        "rejected": 171,
+        "otherHttp": 0,
+        "networkOrBodyErrors": 0,
+        "rejectionFraction": 0.57,
+        "firstSentMs": 3.160941999987699,
+        "lastSentMs": 29898.561019000015,
+        "dispatchRate": 10.001538672500828,
+        "windowDispatchRate": 10,
+        "maxScheduleLagMs": 3.160941999987699,
+        "peakInflight": 1,
+        "settledMs": 29999.781836999988
+      },
+      "startedAt": "2026-10-27T14:35:55.566Z",
+      "loadEnd": {
+        "total": 500,
+        "queued": 99,
+        "processing": 1,
+        "outstanding": 100,
+        "succeeded": 400,
+        "failed": 0,
+        "elapsedMs": 30000.64491999999,
+        "queryMs": 0.9603280000155792,
+        "phase": "load-end"
+      },
+      "loadBalance": {
+        "elapsedMs": 30000.64491999999,
+        "accepted": 129,
+        "completed": 29,
+        "acceptedPerSecond": 4.299907563453807,
+        "completedPerSecond": 0.9666458863578327,
+        "deltaOutstanding": 100
+      },
+      "completed": {
+        "total": 500,
+        "queued": 0,
+        "processing": 0,
+        "outstanding": 0,
+        "succeeded": 500,
+        "failed": 0,
+        "elapsedMs": 131211.822965,
+        "queryMs": 0.5331289999885485,
+        "phase": "completed"
+      },
+      "finalJobs": {
+        "total": 129,
+        "succeeded": 129,
+        "failed": 0,
+        "unfinished": 0,
+        "attempts": [
+          1
+        ],
+        "unknownResponseIds": 0
+      },
+      "sampling": {
+        "count": 134,
+        "observedMaxOutstanding": 100,
+        "maxQueryMs": 16.92984100000467,
+        "meanQueryMs": 1.6240403731336206,
+        "maxActualIntervalMs": 1016.7591959999991
+      },
+      "metricsVerified": true,
+      "timeline": [
+        {
+          "targetSecond": 0,
+          "total": 371,
+          "queued": 0,
+          "processing": 0,
+          "outstanding": 0,
+          "succeeded": 371,
+          "failed": 0,
+          "elapsedMs": 0.0068530000280588865,
+          "queryMs": 1.4238889999687672,
+          "phase": "start"
+        },
+        {
+          "targetSecond": 5,
+          "total": 422,
+          "queued": 46,
+          "processing": 1,
+          "outstanding": 47,
+          "succeeded": 375,
+          "failed": 0,
+          "elapsedMs": 5005.336252000008,
+          "queryMs": 1.3334579999791458,
+          "phase": "periodic"
+        },
+        {
+          "targetSecond": 10,
+          "total": 472,
+          "queued": 91,
+          "processing": 1,
+          "outstanding": 92,
+          "succeeded": 380,
+          "failed": 0,
+          "elapsedMs": 10011.206516999984,
+          "queryMs": 1.4109400000306778,
+          "phase": "periodic"
+        },
+        {
+          "targetSecond": 15,
+          "total": 485,
+          "queued": 99,
+          "processing": 1,
+          "outstanding": 100,
+          "succeeded": 385,
+          "failed": 0,
+          "elapsedMs": 15018.036148999992,
+          "queryMs": 2.0018960000015795,
+          "phase": "periodic"
+        },
+        {
+          "targetSecond": 20,
+          "total": 490,
+          "queued": 99,
+          "processing": 1,
+          "outstanding": 100,
+          "succeeded": 390,
+          "failed": 0,
+          "elapsedMs": 20023.60441000003,
+          "queryMs": 1.390806999988854,
+          "phase": "periodic"
+        },
+        {
+          "targetSecond": 25,
+          "total": 495,
+          "queued": 99,
+          "processing": 1,
+          "outstanding": 100,
+          "succeeded": 395,
+          "failed": 0,
+          "elapsedMs": 25029.669536,
+          "queryMs": 2.0166709999903105,
+          "phase": "periodic"
+        },
+        {
+          "targetSecond": 30,
+          "total": 500,
+          "queued": 99,
+          "processing": 1,
+          "outstanding": 100,
+          "succeeded": 400,
+          "failed": 0,
+          "elapsedMs": 30000.64491999999,
+          "queryMs": 0.9603280000155792,
+          "phase": "load-end"
+        }
+      ],
+      "metrics": {
+        "async_job_enqueued_total": 129,
+        "async_job_enqueue_rejected_total": 171,
+        "async_job_queue_depth": 0,
+        "async_job_ready_queue_depth": 0,
+        "async_job_processing_jobs": 0,
+        "async_job_claimed_total": 129,
+        "async_job_succeeded_total": 129,
+        "async_job_failed_total": 0,
+        "async_job_retry_scheduled_total": 0,
+        "async_job_recovered_total": 0
+      },
+      "targets": [
+        {
+          "discoveredLabels": {
+            "__address__": "api:3000",
+            "__always_scrape_classic_histograms__": "false",
+            "__convert_classic_histograms_to_nhcb__": "false",
+            "__metrics_path__": "/metrics",
+            "__scheme__": "http",
+            "__scrape_interval__": "15s",
+            "__scrape_native_histograms__": "false",
+            "__scrape_timeout__": "5s",
+            "job": "api"
+          },
+          "labels": {
+            "instance": "api:3000",
+            "job": "api"
+          },
+          "scrapePool": "api",
+          "scrapeUrl": "http://api:3000/metrics",
+          "globalUrl": "http://api:3000/metrics",
+          "lastError": "",
+          "lastScrape": "2026-10-27T14:38:21.832291611Z",
+          "lastScrapeDuration": 0.013185408,
+          "health": "up",
+          "scrapeInterval": "15s",
+          "scrapeTimeout": "5s"
+        },
+        {
+          "discoveredLabels": {
+            "__address__": "172.19.0.5:9464",
+            "__always_scrape_classic_histograms__": "false",
+            "__convert_classic_histograms_to_nhcb__": "false",
+            "__meta_dns_name": "worker",
+            "__metrics_path__": "/metrics",
+            "__scheme__": "http",
+            "__scrape_interval__": "15s",
+            "__scrape_native_histograms__": "false",
+            "__scrape_timeout__": "5s",
+            "job": "worker"
+          },
+          "labels": {
+            "instance": "172.19.0.5:9464",
+            "job": "worker"
+          },
+          "scrapePool": "worker",
+          "scrapeUrl": "http://172.19.0.5:9464/metrics",
+          "globalUrl": "http://172.19.0.5:9464/metrics",
+          "lastError": "",
+          "lastScrape": "2026-10-27T14:38:10.905534536Z",
+          "lastScrapeDuration": 0.001554594,
+          "health": "up",
+          "scrapeInterval": "15s",
+          "scrapeTimeout": "5s"
+        }
+      ],
+      "containers": [
+        {
+          "id": "24cde493712067ba0660b4a8a1d9216e72596c9969de0e384f8eedc2b418e9ab",
+          "service": "api",
+          "imageId": "sha256:a46e0ee2c5540f82788e2786683ae8f79768bf300ccfc8792ce09477bf4b92e6",
+          "startedAt": "2026-10-27T14:35:37.84541592Z",
+          "running": true,
+          "restartCount": 0,
+          "settings": [
+            "LOG_LEVEL=info",
+            "ENABLE_BACKPRESSURE=true",
+            "DB_NAME=async_job_backpressure",
+            "MAX_OUTSTANDING_JOBS=100"
+          ],
+          "limits": {
+            "NanoCpus": 0,
+            "CpuQuota": 0,
+            "CpuPeriod": 0,
+            "CpusetCpus": "",
+            "Memory": 0,
+            "MemorySwap": 0
+          }
+        },
+        {
+          "id": "1e68a29e5d210fc8667c5a0acc59e824010deb6b7d8ec4324296c5d877234fec",
+          "service": "migrate",
+          "imageId": "sha256:a46e0ee2c5540f82788e2786683ae8f79768bf300ccfc8792ce09477bf4b92e6",
+          "startedAt": "2026-10-27T14:29:41.607260972Z",
+          "running": false,
+          "restartCount": 0,
+          "settings": [
+            "LOG_LEVEL=info",
+            "DB_NAME=async_job_backpressure"
+          ],
+          "limits": {
+            "NanoCpus": 0,
+            "CpuQuota": 0,
+            "CpuPeriod": 0,
+            "CpusetCpus": "",
+            "Memory": 0,
+            "MemorySwap": 0
+          }
+        },
+        {
+          "id": "9a02b60f4725850183e7ee0173c1381e3957f2b8ecf7c04f23b86dfca59f6a76",
+          "service": "postgres",
+          "imageId": "sha256:77f585114c32fbca283dc835b0596f4e52b51b4c6662d7810b2f4084f60a1873",
+          "startedAt": "2026-10-27T14:29:38.74417644Z",
+          "running": true,
+          "restartCount": 0,
+          "settings": [],
+          "limits": {
+            "NanoCpus": 0,
+            "CpuQuota": 0,
+            "CpuPeriod": 0,
+            "CpusetCpus": "",
+            "Memory": 0,
+            "MemorySwap": 0
+          }
+        },
+        {
+          "id": "dcd71de80f852a2f4f181e77ea44f4156c3639797377f2d520fe11fa61bddbf9",
+          "service": "prometheus",
+          "imageId": "sha256:87861b8cf91579109319ebc300f3f1060e6da9c05d6ae8ad15a20c879e84e32e",
+          "startedAt": "2026-10-27T14:29:43.124095587Z",
+          "running": true,
+          "restartCount": 0,
+          "settings": [],
+          "limits": {
+            "NanoCpus": 0,
+            "CpuQuota": 0,
+            "CpuPeriod": 0,
+            "CpusetCpus": "",
+            "Memory": 0,
+            "MemorySwap": 0
+          }
+        },
+        {
+          "id": "4816bbaaafcd836204cf69cc0b555ae61759de6bfa58dc779afaa8e943a9aeb6",
+          "service": "worker",
+          "imageId": "sha256:a46e0ee2c5540f82788e2786683ae8f79768bf300ccfc8792ce09477bf4b92e6",
+          "startedAt": "2026-10-27T14:35:38.087727869Z",
+          "running": true,
+          "restartCount": 0,
+          "settings": [
+            "LOG_LEVEL=info",
+            "DB_NAME=async_job_backpressure"
+          ],
+          "limits": {
+            "NanoCpus": 0,
+            "CpuQuota": 0,
+            "CpuPeriod": 0,
+            "CpusetCpus": "",
+            "Memory": 0,
+            "MemorySwap": 0
+          }
+        }
+      ],
+      "rawDirectory": "artifacts/backpressure/2026-10-27-default/r1-on",
+      "rawSha256": {
+        "before.json": "246f991525e2a3dd7bde2145a19cf212e06495086f3fd73f8eb0e3d133d196c1",
+        "ready.json": "3e9422b3754e404dfbf0442b5c48af99574811d4504a9aad6f90dc91c45ff426",
+        "requests.jsonl": "dfdd624e65998a19c4c1885e8980c78d2f2bda0c5bde6ee8fd1aad9fded80743",
+        "accepted-ids.json": "f47af710862edcf5e8968691ef2ed442dff4e86c3922334675b4838626d8525e",
+        "samples.jsonl": "254cb986e1d0a0137cc07b5f6023a5f6fbf8545fc1854c8b9357a2d034c0d6c5",
+        "load-end-jobs.json": "95c802fc1b378408cf85ba56575784b538985de7eada2ec2eda14bb6c92d7abf",
+        "jobs.json": "aacbb0577551fe3b50b3f2bf12fca3b7b57592b8a562c8beccadc8b79e866d08",
+        "metrics-final.json": "afa07b5923dc6b486d4f78427dbfa33fc183649f6150d2d33e3e3265dd36a4b9",
+        "worker.jsonl": "a3644d6318d37ebea38ee4a110194ca708e2697c095363db8cb7ccd839fbd711",
+        "result.json": "8931cabdfcd9857db924faeef1462d101f7953b797cac606a1a7217ac4e3e0db"
+      }
+    },
+    {
+      "name": "r2-on",
+      "mode": "on",
+      "repeat": 2,
+      "valid": true,
+      "initial": {
+        "total": 500,
+        "queued": 0,
+        "processing": 0,
+        "outstanding": 0,
+        "succeeded": 500,
+        "failed": 0
+      },
+      "http": {
+        "planned": 300,
+        "sent": 300,
+        "accepted": 129,
+        "rejected": 171,
+        "otherHttp": 0,
+        "networkOrBodyErrors": 0,
+        "rejectionFraction": 0.57,
+        "firstSentMs": 2.7286890000104904,
+        "lastSentMs": 29900.579823000007,
+        "dispatchRate": 10.00071873593536,
+        "windowDispatchRate": 10,
+        "maxScheduleLagMs": 4.274166000075638,
+        "peakInflight": 1,
+        "settledMs": 30000.071423000074
+      },
+      "startedAt": "2026-10-27T14:38:45.440Z",
+      "loadEnd": {
+        "total": 629,
+        "queued": 99,
+        "processing": 1,
+        "outstanding": 100,
+        "succeeded": 529,
+        "failed": 0,
+        "elapsedMs": 30000.77558300004,
+        "queryMs": 1.3269709999440238,
+        "phase": "load-end"
+      },
+      "loadBalance": {
+        "elapsedMs": 30000.77558300004,
+        "accepted": 129,
+        "completed": 29,
+        "acceptedPerSecond": 4.299888835977225,
+        "completedPerSecond": 0.9666416763049577,
+        "deltaOutstanding": 100
+      },
+      "completed": {
+        "total": 629,
+        "queued": 0,
+        "processing": 0,
+        "outstanding": 0,
+        "succeeded": 629,
+        "failed": 0,
+        "elapsedMs": 131183.27758,
+        "queryMs": 1.3189479999709874,
+        "phase": "completed"
+      },
+      "finalJobs": {
+        "total": 129,
+        "succeeded": 129,
+        "failed": 0,
+        "unfinished": 0,
+        "attempts": [
+          1
+        ],
+        "unknownResponseIds": 0
+      },
+      "sampling": {
+        "count": 134,
+        "observedMaxOutstanding": 100,
+        "maxQueryMs": 12.324239999987185,
+        "meanQueryMs": 1.2587976343286877,
+        "maxActualIntervalMs": 1012.4519779999973
+      },
+      "metricsVerified": true,
+      "timeline": [
+        {
+          "targetSecond": 0,
+          "total": 500,
+          "queued": 0,
+          "processing": 0,
+          "outstanding": 0,
+          "succeeded": 500,
+          "failed": 0,
+          "elapsedMs": 0.0020589999621734023,
+          "queryMs": 0.8665770000079647,
+          "phase": "start"
+        },
+        {
+          "targetSecond": 5,
+          "total": 551,
+          "queued": 46,
+          "processing": 1,
+          "outstanding": 47,
+          "succeeded": 504,
+          "failed": 0,
+          "elapsedMs": 5004.51387600007,
+          "queryMs": 1.2712179999798536,
+          "phase": "periodic"
+        },
+        {
+          "targetSecond": 10,
+          "total": 601,
+          "queued": 91,
+          "processing": 1,
+          "outstanding": 92,
+          "succeeded": 509,
+          "failed": 0,
+          "elapsedMs": 10010.217216000077,
+          "queryMs": 1.6306269998895004,
+          "phase": "periodic"
+        },
+        {
+          "targetSecond": 15,
+          "total": 614,
+          "queued": 99,
+          "processing": 1,
+          "outstanding": 100,
+          "succeeded": 514,
+          "failed": 0,
+          "elapsedMs": 15015.85510200006,
+          "queryMs": 1.1339249999728054,
+          "phase": "periodic"
+        },
+        {
+          "targetSecond": 20,
+          "total": 619,
+          "queued": 99,
+          "processing": 1,
+          "outstanding": 100,
+          "succeeded": 519,
+          "failed": 0,
+          "elapsedMs": 20017.616504000034,
+          "queryMs": 0.8588140000356361,
+          "phase": "periodic"
+        },
+        {
+          "targetSecond": 25,
+          "total": 624,
+          "queued": 99,
+          "processing": 1,
+          "outstanding": 100,
+          "succeeded": 524,
+          "failed": 0,
+          "elapsedMs": 25021.009076999966,
+          "queryMs": 1.2752040000632405,
+          "phase": "periodic"
+        },
+        {
+          "targetSecond": 30,
+          "total": 629,
+          "queued": 99,
+          "processing": 1,
+          "outstanding": 100,
+          "succeeded": 529,
+          "failed": 0,
+          "elapsedMs": 30000.77558300004,
+          "queryMs": 1.3269709999440238,
+          "phase": "load-end"
+        }
+      ],
+      "metrics": {
+        "async_job_enqueued_total": 129,
+        "async_job_enqueue_rejected_total": 171,
+        "async_job_queue_depth": 0,
+        "async_job_ready_queue_depth": 0,
+        "async_job_processing_jobs": 0,
+        "async_job_claimed_total": 129,
+        "async_job_succeeded_total": 129,
+        "async_job_failed_total": 0,
+        "async_job_retry_scheduled_total": 0,
+        "async_job_recovered_total": 0
+      },
+      "targets": [
+        {
+          "discoveredLabels": {
+            "__address__": "api:3000",
+            "__always_scrape_classic_histograms__": "false",
+            "__convert_classic_histograms_to_nhcb__": "false",
+            "__metrics_path__": "/metrics",
+            "__scheme__": "http",
+            "__scrape_interval__": "15s",
+            "__scrape_native_histograms__": "false",
+            "__scrape_timeout__": "5s",
+            "job": "api"
+          },
+          "labels": {
+            "instance": "api:3000",
+            "job": "api"
+          },
+          "scrapePool": "api",
+          "scrapeUrl": "http://api:3000/metrics",
+          "globalUrl": "http://api:3000/metrics",
+          "lastError": "",
+          "lastScrape": "2026-10-27T14:41:07.670891741Z",
+          "lastScrapeDuration": 0.018429937,
+          "health": "up",
+          "scrapeInterval": "15s",
+          "scrapeTimeout": "5s"
+        },
+        {
+          "discoveredLabels": {
+            "__address__": "172.19.0.4:9464",
+            "__always_scrape_classic_histograms__": "false",
+            "__convert_classic_histograms_to_nhcb__": "false",
+            "__meta_dns_name": "worker",
+            "__metrics_path__": "/metrics",
+            "__scheme__": "http",
+            "__scrape_interval__": "15s",
+            "__scrape_native_histograms__": "false",
+            "__scrape_timeout__": "5s",
+            "job": "worker"
+          },
+          "labels": {
+            "instance": "172.19.0.4:9464",
+            "job": "worker"
+          },
+          "scrapePool": "worker",
+          "scrapeUrl": "http://172.19.0.4:9464/metrics",
+          "globalUrl": "http://172.19.0.4:9464/metrics",
+          "lastError": "",
+          "lastScrape": "2026-10-27T14:41:00.705028583Z",
+          "lastScrapeDuration": 0.002033662,
+          "health": "up",
+          "scrapeInterval": "15s",
+          "scrapeTimeout": "5s"
+        }
+      ],
+      "containers": [
+        {
+          "id": "42e7ecb37a117484a5f30f109d06e4bc74970b61b6b0f0980ba5134ad64e57cb",
+          "service": "api",
+          "imageId": "sha256:a46e0ee2c5540f82788e2786683ae8f79768bf300ccfc8792ce09477bf4b92e6",
+          "startedAt": "2026-10-27T14:38:25.398732613Z",
+          "running": true,
+          "restartCount": 0,
+          "settings": [
+            "LOG_LEVEL=info",
+            "DB_NAME=async_job_backpressure",
+            "MAX_OUTSTANDING_JOBS=100",
+            "ENABLE_BACKPRESSURE=true"
+          ],
+          "limits": {
+            "NanoCpus": 0,
+            "CpuQuota": 0,
+            "CpuPeriod": 0,
+            "CpusetCpus": "",
+            "Memory": 0,
+            "MemorySwap": 0
+          }
+        },
+        {
+          "id": "1e68a29e5d210fc8667c5a0acc59e824010deb6b7d8ec4324296c5d877234fec",
+          "service": "migrate",
+          "imageId": "sha256:a46e0ee2c5540f82788e2786683ae8f79768bf300ccfc8792ce09477bf4b92e6",
+          "startedAt": "2026-10-27T14:29:41.607260972Z",
+          "running": false,
+          "restartCount": 0,
+          "settings": [
+            "LOG_LEVEL=info",
+            "DB_NAME=async_job_backpressure"
+          ],
+          "limits": {
+            "NanoCpus": 0,
+            "CpuQuota": 0,
+            "CpuPeriod": 0,
+            "CpusetCpus": "",
+            "Memory": 0,
+            "MemorySwap": 0
+          }
+        },
+        {
+          "id": "9a02b60f4725850183e7ee0173c1381e3957f2b8ecf7c04f23b86dfca59f6a76",
+          "service": "postgres",
+          "imageId": "sha256:77f585114c32fbca283dc835b0596f4e52b51b4c6662d7810b2f4084f60a1873",
+          "startedAt": "2026-10-27T14:29:38.74417644Z",
+          "running": true,
+          "restartCount": 0,
+          "settings": [],
+          "limits": {
+            "NanoCpus": 0,
+            "CpuQuota": 0,
+            "CpuPeriod": 0,
+            "CpusetCpus": "",
+            "Memory": 0,
+            "MemorySwap": 0
+          }
+        },
+        {
+          "id": "dcd71de80f852a2f4f181e77ea44f4156c3639797377f2d520fe11fa61bddbf9",
+          "service": "prometheus",
+          "imageId": "sha256:87861b8cf91579109319ebc300f3f1060e6da9c05d6ae8ad15a20c879e84e32e",
+          "startedAt": "2026-10-27T14:29:43.124095587Z",
+          "running": true,
+          "restartCount": 0,
+          "settings": [],
+          "limits": {
+            "NanoCpus": 0,
+            "CpuQuota": 0,
+            "CpuPeriod": 0,
+            "CpusetCpus": "",
+            "Memory": 0,
+            "MemorySwap": 0
+          }
+        },
+        {
+          "id": "1dbd54625686800a9d1f72e34f0c8caeecf451b83f729a37e7a3d78fe23074f9",
+          "service": "worker",
+          "imageId": "sha256:a46e0ee2c5540f82788e2786683ae8f79768bf300ccfc8792ce09477bf4b92e6",
+          "startedAt": "2026-10-27T14:38:25.189447622Z",
+          "running": true,
+          "restartCount": 0,
+          "settings": [
+            "LOG_LEVEL=info",
+            "DB_NAME=async_job_backpressure"
+          ],
+          "limits": {
+            "NanoCpus": 0,
+            "CpuQuota": 0,
+            "CpuPeriod": 0,
+            "CpusetCpus": "",
+            "Memory": 0,
+            "MemorySwap": 0
+          }
+        }
+      ],
+      "rawDirectory": "artifacts/backpressure/2026-10-27-default/r2-on",
+      "rawSha256": {
+        "before.json": "3c0fee0ed67c85f31f621cfa15efaaff8c2a284b5753f952adc26cf107cefb6e",
+        "ready.json": "a2efea4d7aee71d2878d1c91010083dc152dc8b77065794fabafd79bdada4e43",
+        "requests.jsonl": "2f31d31122b15fc62b18809e42522e08cd6bf4e888710ce9f31649906370b94f",
+        "accepted-ids.json": "ff9af2f5ed5187ada00f5e1e8485c540d39724d6ed5b75ffe139d81998316d11",
+        "samples.jsonl": "590963cb19feebce8a189aacf3d58091777d3097a560bd6c4814bf2cc9957117",
+        "load-end-jobs.json": "2ba5cd20a85b3c2e72ec578ca6f1e1f19b46849a3a4e75cc9e1ca380da74687a",
+        "jobs.json": "d2e7f39b456ef1305b95c40493159ab6210298d46b50eef4658d61a3eaf10397",
+        "metrics-final.json": "a3a185421d98404378ee91464c1c6849b63ab3cd57b006e398c45c2e58a3586c",
+        "worker.jsonl": "856f663f021d13e9f9f06b2f0168461ceba265671f40a63e68773f4fe2595fca",
+        "result.json": "4be10085a9aad2729871d14f57eeb85d9a37fda12feef0cd6f88fda7c6861621"
+      }
+    },
+    {
+      "name": "r2-off",
+      "mode": "off",
+      "repeat": 2,
+      "valid": true,
+      "initial": {
+        "total": 629,
+        "queued": 0,
+        "processing": 0,
+        "outstanding": 0,
+        "succeeded": 629,
+        "failed": 0
+      },
+      "http": {
+        "planned": 300,
+        "sent": 300,
+        "accepted": 300,
+        "rejected": 0,
+        "otherHttp": 0,
+        "networkOrBodyErrors": 0,
+        "rejectionFraction": 0,
+        "firstSentMs": 3.1524910000152886,
+        "lastSentMs": 29899.565445999964,
+        "dispatchRate": 10.001199824542647,
+        "windowDispatchRate": 10,
+        "maxScheduleLagMs": 3.1524910000152886,
+        "peakInflight": 1,
+        "settledMs": 29999.749689999968
+      },
+      "startedAt": "2026-10-27T14:41:23.248Z",
+      "loadEnd": {
+        "total": 929,
+        "queued": 270,
+        "processing": 1,
+        "outstanding": 271,
+        "succeeded": 658,
+        "failed": 0,
+        "elapsedMs": 30001.270996000036,
+        "queryMs": 0.9209910000208765,
+        "phase": "load-end"
+      },
+      "loadBalance": {
+        "elapsedMs": 30001.270996000036,
+        "accepted": 300,
+        "completed": 29,
+        "acceptedPerSecond": 9.999576352615126,
+        "completedPerSecond": 0.9666257140861289,
+        "deltaOutstanding": 271
+      },
+      "completed": {
+        "total": 929,
+        "queued": 0,
+        "processing": 0,
+        "outstanding": 0,
+        "succeeded": 929,
+        "failed": 0,
+        "elapsedMs": 303488.350938,
+        "queryMs": 1.057016000035219,
+        "phase": "completed"
+      },
+      "finalJobs": {
+        "total": 300,
+        "succeeded": 300,
+        "failed": 0,
+        "unfinished": 0,
+        "attempts": [
+          1
+        ],
+        "unknownResponseIds": 0
+      },
+      "sampling": {
+        "count": 306,
+        "observedMaxOutstanding": 271,
+        "maxQueryMs": 12.041953000007197,
+        "meanQueryMs": 1.3041277516361636,
+        "maxActualIntervalMs": 1012.1029789999593
+      },
+      "metricsVerified": true,
+      "timeline": [
+        {
+          "targetSecond": 0,
+          "total": 629,
+          "queued": 0,
+          "processing": 0,
+          "outstanding": 0,
+          "succeeded": 629,
+          "failed": 0,
+          "elapsedMs": 0.0031029999954625964,
+          "queryMs": 1.4180649999761954,
+          "phase": "start"
+        },
+        {
+          "targetSecond": 5,
+          "total": 680,
+          "queued": 46,
+          "processing": 1,
+          "outstanding": 47,
+          "succeeded": 633,
+          "failed": 0,
+          "elapsedMs": 5004.53160300001,
+          "queryMs": 1.277057999977842,
+          "phase": "periodic"
+        },
+        {
+          "targetSecond": 10,
+          "total": 730,
+          "queued": 91,
+          "processing": 1,
+          "outstanding": 92,
+          "succeeded": 638,
+          "failed": 0,
+          "elapsedMs": 10009.278293000069,
+          "queryMs": 1.463448999915272,
+          "phase": "periodic"
+        },
+        {
+          "targetSecond": 15,
+          "total": 780,
+          "queued": 136,
+          "processing": 1,
+          "outstanding": 137,
+          "succeeded": 643,
+          "failed": 0,
+          "elapsedMs": 15014.626414000057,
+          "queryMs": 1.4201190000167117,
+          "phase": "periodic"
+        },
+        {
+          "targetSecond": 20,
+          "total": 830,
+          "queued": 181,
+          "processing": 1,
+          "outstanding": 182,
+          "succeeded": 648,
+          "failed": 0,
+          "elapsedMs": 20021.741196000017,
+          "queryMs": 1.0449279999593273,
+          "phase": "periodic"
+        },
+        {
+          "targetSecond": 25,
+          "total": 880,
+          "queued": 226,
+          "processing": 1,
+          "outstanding": 227,
+          "succeeded": 653,
+          "failed": 0,
+          "elapsedMs": 25025.652942999965,
+          "queryMs": 1.8431850000051782,
+          "phase": "periodic"
+        },
+        {
+          "targetSecond": 30,
+          "total": 929,
+          "queued": 270,
+          "processing": 1,
+          "outstanding": 271,
+          "succeeded": 658,
+          "failed": 0,
+          "elapsedMs": 30001.270996000036,
+          "queryMs": 0.9209910000208765,
+          "phase": "load-end"
+        }
+      ],
+      "metrics": {
+        "async_job_enqueued_total": 300,
+        "async_job_enqueue_rejected_total": 0,
+        "async_job_queue_depth": 0,
+        "async_job_ready_queue_depth": 0,
+        "async_job_processing_jobs": 0,
+        "async_job_claimed_total": 300,
+        "async_job_succeeded_total": 300,
+        "async_job_failed_total": 0,
+        "async_job_retry_scheduled_total": 0,
+        "async_job_recovered_total": 0
+      },
+      "targets": [
+        {
+          "discoveredLabels": {
+            "__address__": "api:3000",
+            "__always_scrape_classic_histograms__": "false",
+            "__convert_classic_histograms_to_nhcb__": "false",
+            "__metrics_path__": "/metrics",
+            "__scheme__": "http",
+            "__scrape_interval__": "15s",
+            "__scrape_native_histograms__": "false",
+            "__scrape_timeout__": "5s",
+            "job": "api"
+          },
+          "labels": {
+            "instance": "api:3000",
+            "job": "api"
+          },
+          "scrapePool": "api",
+          "scrapeUrl": "http://api:3000/metrics",
+          "globalUrl": "http://api:3000/metrics",
+          "lastError": "",
+          "lastScrape": "2026-10-27T14:46:39.51340816Z",
+          "lastScrapeDuration": 0.019603203,
+          "health": "up",
+          "scrapeInterval": "15s",
+          "scrapeTimeout": "5s"
+        },
+        {
+          "discoveredLabels": {
+            "__address__": "172.19.0.4:9464",
+            "__always_scrape_classic_histograms__": "false",
+            "__convert_classic_histograms_to_nhcb__": "false",
+            "__meta_dns_name": "worker",
+            "__metrics_path__": "/metrics",
+            "__scheme__": "http",
+            "__scrape_interval__": "15s",
+            "__scrape_native_histograms__": "false",
+            "__scrape_timeout__": "5s",
+            "job": "worker"
+          },
+          "labels": {
+            "instance": "172.19.0.4:9464",
+            "job": "worker"
+          },
+          "scrapePool": "worker",
+          "scrapeUrl": "http://172.19.0.4:9464/metrics",
+          "globalUrl": "http://172.19.0.4:9464/metrics",
+          "lastError": "",
+          "lastScrape": "2026-10-27T14:46:32.547992965Z",
+          "lastScrapeDuration": 0.00192892,
+          "health": "up",
+          "scrapeInterval": "15s",
+          "scrapeTimeout": "5s"
+        }
+      ],
+      "containers": [
+        {
+          "id": "f05c76af33c8a0581766f9b1efa354facbb72278b522fba0483ba5835d2b195b",
+          "service": "api",
+          "imageId": "sha256:a46e0ee2c5540f82788e2786683ae8f79768bf300ccfc8792ce09477bf4b92e6",
+          "startedAt": "2026-10-27T14:41:09.842982147Z",
+          "running": true,
+          "restartCount": 0,
+          "settings": [
+            "ENABLE_BACKPRESSURE=false",
+            "DB_NAME=async_job_backpressure",
+            "LOG_LEVEL=info",
+            "MAX_OUTSTANDING_JOBS=100"
+          ],
+          "limits": {
+            "NanoCpus": 0,
+            "CpuQuota": 0,
+            "CpuPeriod": 0,
+            "CpusetCpus": "",
+            "Memory": 0,
+            "MemorySwap": 0
+          }
+        },
+        {
+          "id": "1e68a29e5d210fc8667c5a0acc59e824010deb6b7d8ec4324296c5d877234fec",
+          "service": "migrate",
+          "imageId": "sha256:a46e0ee2c5540f82788e2786683ae8f79768bf300ccfc8792ce09477bf4b92e6",
+          "startedAt": "2026-10-27T14:29:41.607260972Z",
+          "running": false,
+          "restartCount": 0,
+          "settings": [
+            "LOG_LEVEL=info",
+            "DB_NAME=async_job_backpressure"
+          ],
+          "limits": {
+            "NanoCpus": 0,
+            "CpuQuota": 0,
+            "CpuPeriod": 0,
+            "CpusetCpus": "",
+            "Memory": 0,
+            "MemorySwap": 0
+          }
+        },
+        {
+          "id": "9a02b60f4725850183e7ee0173c1381e3957f2b8ecf7c04f23b86dfca59f6a76",
+          "service": "postgres",
+          "imageId": "sha256:77f585114c32fbca283dc835b0596f4e52b51b4c6662d7810b2f4084f60a1873",
+          "startedAt": "2026-10-27T14:29:38.74417644Z",
+          "running": true,
+          "restartCount": 0,
+          "settings": [],
+          "limits": {
+            "NanoCpus": 0,
+            "CpuQuota": 0,
+            "CpuPeriod": 0,
+            "CpusetCpus": "",
+            "Memory": 0,
+            "MemorySwap": 0
+          }
+        },
+        {
+          "id": "dcd71de80f852a2f4f181e77ea44f4156c3639797377f2d520fe11fa61bddbf9",
+          "service": "prometheus",
+          "imageId": "sha256:87861b8cf91579109319ebc300f3f1060e6da9c05d6ae8ad15a20c879e84e32e",
+          "startedAt": "2026-10-27T14:29:43.124095587Z",
+          "running": true,
+          "restartCount": 0,
+          "settings": [],
+          "limits": {
+            "NanoCpus": 0,
+            "CpuQuota": 0,
+            "CpuPeriod": 0,
+            "CpusetCpus": "",
+            "Memory": 0,
+            "MemorySwap": 0
+          }
+        },
+        {
+          "id": "19199d92c1a31230ba5813b6b1ff34f2c7cd7e5dbdd70a20992a538b0984c7c1",
+          "service": "worker",
+          "imageId": "sha256:a46e0ee2c5540f82788e2786683ae8f79768bf300ccfc8792ce09477bf4b92e6",
+          "startedAt": "2026-10-27T14:41:09.692813867Z",
+          "running": true,
+          "restartCount": 0,
+          "settings": [
+            "LOG_LEVEL=info",
+            "DB_NAME=async_job_backpressure"
+          ],
+          "limits": {
+            "NanoCpus": 0,
+            "CpuQuota": 0,
+            "CpuPeriod": 0,
+            "CpusetCpus": "",
+            "Memory": 0,
+            "MemorySwap": 0
+          }
+        }
+      ],
+      "rawDirectory": "artifacts/backpressure/2026-10-27-default/r2-off",
+      "rawSha256": {
+        "before.json": "eb7a72ed3c7202a930dcd937e51870783954a683cddbaab88876603f22b873bb",
+        "ready.json": "1f6dd34bf34842d1f3aa9d2f2f8328a4d35b97ad2bb6dac924e8c0439d0e5245",
+        "requests.jsonl": "11f914544d6a3de5cb867e97452c7b0ab584895a38224c84a33917c62fed3d87",
+        "accepted-ids.json": "58f91fb50fd692b8e53804285507cc38e88f184384d123b941ee5134f4c031b7",
+        "samples.jsonl": "0d2d88d497eb3d4e5cd7ebfb3fbf694f86b5262c443f505da72ac1e7e1d907b1",
+        "load-end-jobs.json": "fe21608857f31d23631f893dec33a51051b26e35c0b0e07f12975f368f1f1326",
+        "jobs.json": "79c7f2952fa9c95801f47f39389a64d327b516883fd5dfdefdeeecea441acb73",
+        "metrics-final.json": "bbd5f786f0b428fbb71fd69249ad0fcf608662f7405a6cd40212226782779d3e",
+        "worker.jsonl": "9ac2a16e85008a6dc16711edd6963663d3ffea73617454ae90466b442b3d0f2c",
+        "result.json": "ac680679c43bc5922e008660611cab43d66b96c33ebe88af3d90ab4687dacde1"
+      }
+    }
+  ],
+  "finalGlobal": {
+    "total": 929,
+    "queued": 0,
+    "processing": 0,
+    "outstanding": 0,
+    "succeeded": 929,
+    "failed": 0
+  },
+  "verification": {
+    "typecheck": "passed",
+    "unitAndHttpTests": 3,
+    "composeSmokeTests": 1,
+    "smokeAssertions": [
+      "정상 ON/OFF",
+      "기존 프로젝트 무간섭",
+      "Ready·Stale 전체 행 보존",
+      "Worker 생성 전 거부",
+      "SIGTERM 후 요청 정산·자료·미완료 보존",
+      "볼륨 보존·컨테이너 정리"
+    ],
+    "smokeRawDirectory": "artifacts/backpressure/smoke-2026-10-27T14-27-04.013Z"
+  },
+  "limitations": [
+    "DB 표본 사이 순간의 상한 보장은 별도 동시성 Integration Test 근거이다",
+    "Prometheus는 기존 15초 Scrape의 보조 관측이다",
+    "OFF→ON→ON→OFF 순서와 완료 행 누적·캐시·관찰 쿼리·로그 부하의 효과는 통제하지 않았다",
+    "정밀 TPS·서버 지연·Speedup·병목·최적 Worker 수·다른 부하 패턴의 성능은 확정하지 않는다",
+    "이 정책은 순간 요청 폭주를 제한하지 않고 완료 행을 포함한 전체 저장량도 제한하지 않는다"
+  ]
+}

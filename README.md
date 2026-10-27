@@ -184,4 +184,6 @@ npm run test:multi-worker
 
 Worker 수 1·2·4·8에 따른 Batch 처리량·Handler 시간·Queue 추세·CPU·메모리·DB 연결 비교는 [Worker 부하 실험 안내](experiments/worker-load/README.md)를 따른다. 기존 데이터와 분리한 Compose 프로젝트에서 API 사전 등록과 반복 측정을 수행한다. 기존 기본 Batch 480개를 사전 등록하려면 실행 환경에서 `ENABLE_BACKPRESSURE=false`를 지정해야 한다.
 
+Worker 처리 중 Producer의 지속 유입과 Admission Control ON/OFF에 따른 미완료 누적·503 거부 비교는 [지속 유입 실험 안내](experiments/backpressure/README.md)를 따른다. 같은 이미지의 전용 Compose 환경에서 요청별 HTTP 결과·Monotonic 시각·DB 상태 표본과 최종 Job 상태를 보존한다.
+
 Job Lifecycle Logging, PostgreSQL Gauge·프로세스별 Counter·Handler Duration Histogram과 Compose의 다중 Worker 실행·Prometheus DNS Target Discovery를 제공한다. 기존 상태 전이·Retry·Crash Recovery·실행 소유권 보호를 유지하며, 관측 기록의 원자적 저장·재집계는 제공하지 않는다.
