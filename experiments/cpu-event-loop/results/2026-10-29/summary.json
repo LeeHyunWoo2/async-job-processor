@@ -1,0 +1,2084 @@
+{
+  "rawDirectory": "artifacts/cpu-event-loop/2026-10-29-default",
+  "measuredAt": "2026-10-29T05:53:05.892Z",
+  "revision": "36728af478babae90b6d3905e5c403f0b58db106",
+  "branch": "feature/cpu-check",
+  "sourceState": "미커밋 구현 포함; 실행 소스와 SHA-256은 원자료 source/ 및 environment.json에 보존",
+  "postMeasurementChange": "최종 요약 파일 자체의 저장 실패를 cleanup=false로 보존하는 처리와 해당 Smoke 추가. 실측 구간 코드는 동일",
+  "imageId": "sha256:0b6cbc17f308dad26842bbb2cf7a20cc653d7d4b53a13ab344738d7ff190d394",
+  "host": {
+    "platform": "linux",
+    "release": "6.18.54.1-microsoft-standard-WSL2",
+    "logicalCpus": 8,
+    "cpuModel": "Intel(R) Core(TM) i7-7700K CPU @ 4.20GHz",
+    "memoryBytes": 8329560064
+  },
+  "docker": {
+    "version": "29.8.2",
+    "operatingSystem": "Docker Desktop (containerized)",
+    "kernel": "6.18.54.1-microsoft-standard-WSL2",
+    "logicalCpus": 8,
+    "memoryBytes": 8329560064
+  },
+  "clientNode": "v24.21.0",
+  "applicationNode": "v24.21.0",
+  "parameters": {
+    "modes": [
+      "co-located",
+      "separated"
+    ],
+    "conditions": [
+      "idle",
+      "slow",
+      "cpu"
+    ],
+    "repeats": 3,
+    "durationMs": 2000,
+    "windowMs": 2000,
+    "intervalMs": 100,
+    "timeoutMs": 10000,
+    "maxInflight": 64,
+    "out": "artifacts/cpu-event-loop/2026-10-29-default"
+  },
+  "order": [
+    {
+      "repeat": 1,
+      "mode": "co-located",
+      "condition": "idle"
+    },
+    {
+      "repeat": 1,
+      "mode": "co-located",
+      "condition": "slow"
+    },
+    {
+      "repeat": 1,
+      "mode": "co-located",
+      "condition": "cpu"
+    },
+    {
+      "repeat": 1,
+      "mode": "separated",
+      "condition": "idle"
+    },
+    {
+      "repeat": 1,
+      "mode": "separated",
+      "condition": "slow"
+    },
+    {
+      "repeat": 1,
+      "mode": "separated",
+      "condition": "cpu"
+    },
+    {
+      "repeat": 2,
+      "mode": "separated",
+      "condition": "idle"
+    },
+    {
+      "repeat": 2,
+      "mode": "separated",
+      "condition": "slow"
+    },
+    {
+      "repeat": 2,
+      "mode": "separated",
+      "condition": "cpu"
+    },
+    {
+      "repeat": 2,
+      "mode": "co-located",
+      "condition": "idle"
+    },
+    {
+      "repeat": 2,
+      "mode": "co-located",
+      "condition": "slow"
+    },
+    {
+      "repeat": 2,
+      "mode": "co-located",
+      "condition": "cpu"
+    },
+    {
+      "repeat": 3,
+      "mode": "co-located",
+      "condition": "idle"
+    },
+    {
+      "repeat": 3,
+      "mode": "co-located",
+      "condition": "slow"
+    },
+    {
+      "repeat": 3,
+      "mode": "co-located",
+      "condition": "cpu"
+    },
+    {
+      "repeat": 3,
+      "mode": "separated",
+      "condition": "idle"
+    },
+    {
+      "repeat": 3,
+      "mode": "separated",
+      "condition": "slow"
+    },
+    {
+      "repeat": 3,
+      "mode": "separated",
+      "condition": "cpu"
+    }
+  ],
+  "cpuConstraints": {
+    "NanoCpus": 0,
+    "CpuQuota": 0,
+    "CpuPeriod": 0,
+    "CpusetCpus": "",
+    "cgroupCpuMax": "max 100000",
+    "cgroupEffectiveCpuset": "0-7"
+  },
+  "histogramScope": "프로세스 계측 활성화 이후 누적; 준비 포함; Co-located는 shared 하나",
+  "validRuns": 18,
+  "totalRuns": 18,
+  "sentProbes": 2312,
+  "addedJobs": 12,
+  "clockAlignment": "프로세스 간 Wall Clock 추정; offset/정렬 오차 상한 미측정",
+  "runs": [
+    {
+      "name": "r1-co-located-idle",
+      "mode": "co-located",
+      "condition": "idle",
+      "repeat": 1,
+      "valid": true,
+      "reasons": [],
+      "jobs": {
+        "added": 0,
+        "succeeded": 0,
+        "attempt": null
+      },
+      "clock": {
+        "monotonicElapsedMs": 7065.894252000001,
+        "wallElapsedMs": 7066,
+        "differenceMs": 0.10574799999903917,
+        "maxAbsBoundaryDifferenceMs": 0.30121500000041124
+      },
+      "cleanup": {
+        "succeeded": true,
+        "errors": []
+      },
+      "http": {
+        "api": {
+          "planned": 61,
+          "sent": 61,
+          "skipped": 0,
+          "success": 61,
+          "timeouts": 0,
+          "errors": 0,
+          "otherHttp": 0,
+          "durationMs": {
+            "count": 61,
+            "min": 1.5519179999992048,
+            "p50": 2.326560999999856,
+            "p95": 3.5225579999996626,
+            "p99": 6.838646000000153,
+            "max": 6.838646000000153,
+            "mean": 2.472305901639316
+          },
+          "maxScheduleLagMs": 6.710051000000021
+        },
+        "worker": {
+          "planned": 61,
+          "sent": 61,
+          "skipped": 0,
+          "success": 61,
+          "timeouts": 0,
+          "errors": 0,
+          "otherHttp": 0,
+          "durationMs": {
+            "count": 61,
+            "min": 1.8090739999988728,
+            "p50": 2.6911500000005617,
+            "p95": 4.477281999999832,
+            "p99": 6.664010000000417,
+            "max": 6.664010000000417,
+            "mean": 2.8883011475408105
+          },
+          "maxScheduleLagMs": 9.428397000000587
+        }
+      },
+      "finalHistograms": {
+        "shared": {
+          "maxMs": 14.016511000000001,
+          "p99Ms": 10.960895,
+          "meanMs": 10.133157087667161,
+          "count": 673
+        }
+      },
+      "sampleCounts": {
+        "baseline": {
+          "shared": 78
+        },
+        "before-load": {
+          "shared": 276
+        },
+        "completion": {
+          "shared": 475
+        },
+        "final": {
+          "shared": 673
+        }
+      },
+      "resources": {
+        "co-located": {
+          "samples": 4,
+          "observedMaxCpuPercent": 9.56,
+          "observedMaxMemoryBytesApprox": 73987523
+        }
+      }
+    },
+    {
+      "name": "r1-co-located-slow",
+      "mode": "co-located",
+      "condition": "slow",
+      "repeat": 1,
+      "valid": true,
+      "reasons": [],
+      "jobs": {
+        "added": 1,
+        "succeeded": 1,
+        "attempt": 1
+      },
+      "clock": {
+        "monotonicElapsedMs": 7080.190342999998,
+        "wallElapsedMs": 7080,
+        "differenceMs": -0.19034299999839277,
+        "maxAbsBoundaryDifferenceMs": 0.5507529999995313
+      },
+      "cleanup": {
+        "succeeded": true,
+        "errors": []
+      },
+      "http": {
+        "api": {
+          "planned": 64,
+          "sent": 64,
+          "skipped": 0,
+          "success": 64,
+          "timeouts": 0,
+          "errors": 0,
+          "otherHttp": 0,
+          "durationMs": {
+            "count": 64,
+            "min": 1.379308999999921,
+            "p50": 2.1458700000002864,
+            "p95": 3.366414000000077,
+            "p99": 4.165866999999707,
+            "max": 4.165866999999707,
+            "mean": 2.204610781249869
+          },
+          "maxScheduleLagMs": 4.716331999999966
+        },
+        "worker": {
+          "planned": 64,
+          "sent": 64,
+          "skipped": 0,
+          "success": 64,
+          "timeouts": 0,
+          "errors": 0,
+          "otherHttp": 0,
+          "durationMs": {
+            "count": 64,
+            "min": 1.659827999999834,
+            "p50": 2.5240089999970223,
+            "p95": 4.280647999999928,
+            "p99": 5.171390999999858,
+            "max": 5.171390999999858,
+            "mean": 2.6978726874999097
+          },
+          "maxScheduleLagMs": 5.044600999997783
+        }
+      },
+      "finalHistograms": {
+        "shared": {
+          "maxMs": 42.401791,
+          "p99Ms": 12.066815,
+          "meanMs": 10.242274909090908,
+          "count": 704
+        }
+      },
+      "sampleCounts": {
+        "baseline": {
+          "shared": 90
+        },
+        "before-load": {
+          "shared": 288
+        },
+        "completion": {
+          "shared": 506
+        },
+        "final": {
+          "shared": 704
+        }
+      },
+      "resources": {
+        "co-located": {
+          "samples": 4,
+          "observedMaxCpuPercent": 17.04,
+          "observedMaxMemoryBytesApprox": 74281124
+        }
+      },
+      "handlerElapsedMs": 2000.1099319999996,
+      "overlap": {
+        "api": {
+          "sent": 20,
+          "scheduled": 20
+        },
+        "worker": {
+          "sent": 20,
+          "scheduled": 20
+        }
+      }
+    },
+    {
+      "name": "r1-co-located-cpu",
+      "mode": "co-located",
+      "condition": "cpu",
+      "repeat": 1,
+      "valid": true,
+      "reasons": [],
+      "jobs": {
+        "added": 1,
+        "succeeded": 1,
+        "attempt": 1
+      },
+      "clock": {
+        "monotonicElapsedMs": 7064.401509000003,
+        "wallElapsedMs": 7064,
+        "differenceMs": -0.4015090000029886,
+        "maxAbsBoundaryDifferenceMs": 0.5996489999997721
+      },
+      "cleanup": {
+        "succeeded": true,
+        "errors": []
+      },
+      "http": {
+        "api": {
+          "planned": 65,
+          "sent": 65,
+          "skipped": 0,
+          "success": 65,
+          "timeouts": 0,
+          "errors": 0,
+          "otherHttp": 0,
+          "durationMs": {
+            "count": 65,
+            "min": 1.4668279999968945,
+            "p50": 2.0969640000002983,
+            "p95": 1624.6914980000001,
+            "p99": 1919.2523969999966,
+            "max": 1919.2523969999966,
+            "mean": 311.40269224615406
+          },
+          "maxScheduleLagMs": 2.709061000001384
+        },
+        "worker": {
+          "planned": 65,
+          "sent": 65,
+          "skipped": 0,
+          "success": 65,
+          "timeouts": 0,
+          "errors": 0,
+          "otherHttp": 0,
+          "durationMs": {
+            "count": 65,
+            "min": 1.4899390000064159,
+            "p50": 2.6305609999981243,
+            "p95": 1624.7082999999984,
+            "p99": 1919.703252000003,
+            "max": 1919.703252000003,
+            "mean": 311.9513918307693
+          },
+          "maxScheduleLagMs": 2.9713320000009844
+        }
+      },
+      "finalHistograms": {
+        "shared": {
+          "maxMs": 2009.0716149999998,
+          "p99Ms": 11.870207,
+          "meanMs": 14.1381267009901,
+          "count": 505
+        }
+      },
+      "sampleCounts": {
+        "baseline": {
+          "shared": 67
+        },
+        "before-load": {
+          "shared": 265
+        },
+        "completion": {
+          "shared": 307
+        },
+        "final": {
+          "shared": 505
+        }
+      },
+      "resources": {
+        "co-located": {
+          "samples": 4,
+          "observedMaxCpuPercent": 66.03,
+          "observedMaxMemoryBytesApprox": 85773517
+        }
+      },
+      "handlerElapsedMs": 2000.175037,
+      "overlap": {
+        "api": {
+          "sent": 20,
+          "scheduled": 20
+        },
+        "worker": {
+          "sent": 20,
+          "scheduled": 20
+        }
+      }
+    },
+    {
+      "name": "r1-separated-idle",
+      "mode": "separated",
+      "condition": "idle",
+      "repeat": 1,
+      "valid": true,
+      "reasons": [],
+      "jobs": {
+        "added": 0,
+        "succeeded": 0,
+        "attempt": null
+      },
+      "clock": {
+        "monotonicElapsedMs": 8080.866313999999,
+        "wallElapsedMs": 8091,
+        "differenceMs": 10.133686000001035,
+        "maxAbsBoundaryDifferenceMs": 10.133686000001035
+      },
+      "cleanup": {
+        "succeeded": true,
+        "errors": []
+      },
+      "http": {
+        "api": {
+          "planned": 61,
+          "sent": 61,
+          "skipped": 0,
+          "success": 61,
+          "timeouts": 0,
+          "errors": 0,
+          "otherHttp": 0,
+          "durationMs": {
+            "count": 61,
+            "min": 1.582166000000143,
+            "p50": 2.2105630000005476,
+            "p95": 2.7432580000022426,
+            "p99": 6.830175999995845,
+            "max": 6.830175999995845,
+            "mean": 2.2655148852460774
+          },
+          "maxScheduleLagMs": 2.597015999999712
+        },
+        "worker": {
+          "planned": 61,
+          "sent": 61,
+          "skipped": 0,
+          "success": 61,
+          "timeouts": 0,
+          "errors": 0,
+          "otherHttp": 0,
+          "durationMs": {
+            "count": 61,
+            "min": 1.4589360000027227,
+            "p50": 2.0403969999970286,
+            "p95": 2.491901000001235,
+            "p99": 6.0765360000004875,
+            "max": 6.0765360000004875,
+            "mean": 2.0992685573776235
+          },
+          "maxScheduleLagMs": 2.833399000002828
+        }
+      },
+      "finalHistograms": {
+        "api": {
+          "maxMs": 25.247743,
+          "p99Ms": 10.838014999999999,
+          "meanMs": 10.153182608695653,
+          "count": 690
+        },
+        "worker": {
+          "maxMs": 25.280510999999997,
+          "p99Ms": 10.911743,
+          "meanMs": 10.163307112970712,
+          "count": 717
+        }
+      },
+      "sampleCounts": {
+        "baseline": {
+          "api": 95,
+          "worker": 124
+        },
+        "before-load": {
+          "api": 293,
+          "worker": 322
+        },
+        "completion": {
+          "api": 491,
+          "worker": 519
+        },
+        "final": {
+          "api": 690,
+          "worker": 717
+        }
+      },
+      "resources": {
+        "api": {
+          "samples": 4,
+          "observedMaxCpuPercent": 3.06,
+          "observedMaxMemoryBytesApprox": 66060288
+        },
+        "worker": {
+          "samples": 4,
+          "observedMaxCpuPercent": 2.8,
+          "observedMaxMemoryBytesApprox": 62222500
+        }
+      }
+    },
+    {
+      "name": "r1-separated-slow",
+      "mode": "separated",
+      "condition": "slow",
+      "repeat": 1,
+      "valid": true,
+      "reasons": [],
+      "jobs": {
+        "added": 1,
+        "succeeded": 1,
+        "attempt": 1
+      },
+      "clock": {
+        "monotonicElapsedMs": 8118.175951000005,
+        "wallElapsedMs": 8119,
+        "differenceMs": 0.8240489999952842,
+        "maxAbsBoundaryDifferenceMs": 0.8240489999952842
+      },
+      "cleanup": {
+        "succeeded": true,
+        "errors": []
+      },
+      "http": {
+        "api": {
+          "planned": 65,
+          "sent": 65,
+          "skipped": 0,
+          "success": 65,
+          "timeouts": 0,
+          "errors": 0,
+          "otherHttp": 0,
+          "durationMs": {
+            "count": 65,
+            "min": 1.5356689999971422,
+            "p50": 2.117160000001604,
+            "p95": 2.8722600000037346,
+            "p99": 7.870646000003035,
+            "max": 7.870646000003035,
+            "mean": 2.2722005692303915
+          },
+          "maxScheduleLagMs": 7.09824700000172
+        },
+        "worker": {
+          "planned": 65,
+          "sent": 65,
+          "skipped": 0,
+          "success": 65,
+          "timeouts": 0,
+          "errors": 0,
+          "otherHttp": 0,
+          "durationMs": {
+            "count": 65,
+            "min": 1.420337000003201,
+            "p50": 2.050482999999076,
+            "p95": 2.6548339999935706,
+            "p99": 5.637581000002683,
+            "max": 5.637581000002683,
+            "mean": 2.1317624923074616
+          },
+          "maxScheduleLagMs": 7.471292000001995
+        }
+      },
+      "finalHistograms": {
+        "api": {
+          "maxMs": 37.421055,
+          "p99Ms": 11.952126999999999,
+          "meanMs": 10.245676346456694,
+          "count": 762
+        },
+        "worker": {
+          "maxMs": 16.662527,
+          "p99Ms": 10.993663000000002,
+          "meanMs": 10.16105659627329,
+          "count": 805
+        }
+      },
+      "sampleCounts": {
+        "baseline": {
+          "api": 136,
+          "worker": 175
+        },
+        "before-load": {
+          "api": 334,
+          "worker": 373
+        },
+        "completion": {
+          "api": 563,
+          "worker": 607
+        },
+        "final": {
+          "api": 762,
+          "worker": 805
+        }
+      },
+      "resources": {
+        "api": {
+          "samples": 4,
+          "observedMaxCpuPercent": 3.16,
+          "observedMaxMemoryBytesApprox": 69206016
+        },
+        "worker": {
+          "samples": 4,
+          "observedMaxCpuPercent": 2.75,
+          "observedMaxMemoryBytesApprox": 62159585
+        }
+      },
+      "handlerElapsedMs": 2000.0892270000006,
+      "overlap": {
+        "api": {
+          "sent": 20,
+          "scheduled": 20
+        },
+        "worker": {
+          "sent": 20,
+          "scheduled": 20
+        }
+      }
+    },
+    {
+      "name": "r1-separated-cpu",
+      "mode": "separated",
+      "condition": "cpu",
+      "repeat": 1,
+      "valid": true,
+      "reasons": [],
+      "jobs": {
+        "added": 1,
+        "succeeded": 1,
+        "attempt": 1
+      },
+      "clock": {
+        "monotonicElapsedMs": 8096.000098999997,
+        "wallElapsedMs": 8096,
+        "differenceMs": -9.899999713525176e-05,
+        "maxAbsBoundaryDifferenceMs": 0.6324710000044433
+      },
+      "cleanup": {
+        "succeeded": true,
+        "errors": []
+      },
+      "http": {
+        "api": {
+          "planned": 68,
+          "sent": 68,
+          "skipped": 0,
+          "success": 68,
+          "timeouts": 0,
+          "errors": 0,
+          "otherHttp": 0,
+          "durationMs": {
+            "count": 68,
+            "min": 1.4636690000043018,
+            "p50": 2.079289000001154,
+            "p95": 3.035845000005793,
+            "p99": 3.9983869999996386,
+            "max": 3.9983869999996386,
+            "mean": 2.1807903823537345
+          },
+          "maxScheduleLagMs": 5.139183999999659
+        },
+        "worker": {
+          "planned": 68,
+          "sent": 68,
+          "skipped": 0,
+          "success": 68,
+          "timeouts": 0,
+          "errors": 0,
+          "otherHttp": 0,
+          "durationMs": {
+            "count": 68,
+            "min": 1.611456000013277,
+            "p50": 2.1610039999941364,
+            "p95": 1678.4293080000061,
+            "p99": 1971.489281000002,
+            "max": 1971.489281000002,
+            "mean": 307.3723741617655
+          },
+          "maxScheduleLagMs": 5.441794999991544
+        }
+      },
+      "finalHistograms": {
+        "api": {
+          "maxMs": 37.224447,
+          "p99Ms": 12.460031,
+          "meanMs": 10.225445580928483,
+          "count": 797
+        },
+        "worker": {
+          "maxMs": 2011.1687670000001,
+          "p99Ms": 11.436031,
+          "meanMs": 13.462587044481054,
+          "count": 607
+        }
+      },
+      "sampleCounts": {
+        "baseline": {
+          "api": 134,
+          "worker": 139
+        },
+        "before-load": {
+          "api": 333,
+          "worker": 337
+        },
+        "completion": {
+          "api": 598,
+          "worker": 409
+        },
+        "final": {
+          "api": 797,
+          "worker": 607
+        }
+      },
+      "resources": {
+        "api": {
+          "samples": 4,
+          "observedMaxCpuPercent": 3.12,
+          "observedMaxMemoryBytesApprox": 68199383
+        },
+        "worker": {
+          "samples": 4,
+          "observedMaxCpuPercent": 98.73,
+          "observedMaxMemoryBytesApprox": 73138176
+        }
+      },
+      "handlerElapsedMs": 2000.298415,
+      "overlap": {
+        "api": {
+          "sent": 20,
+          "scheduled": 20
+        },
+        "worker": {
+          "sent": 20,
+          "scheduled": 20
+        }
+      }
+    },
+    {
+      "name": "r2-separated-idle",
+      "mode": "separated",
+      "condition": "idle",
+      "repeat": 2,
+      "valid": true,
+      "reasons": [],
+      "jobs": {
+        "added": 0,
+        "succeeded": 0,
+        "attempt": null
+      },
+      "clock": {
+        "monotonicElapsedMs": 8095.135442999992,
+        "wallElapsedMs": 8095,
+        "differenceMs": -0.13544299999193754,
+        "maxAbsBoundaryDifferenceMs": 0.6830289999925299
+      },
+      "cleanup": {
+        "succeeded": true,
+        "errors": []
+      },
+      "http": {
+        "api": {
+          "planned": 61,
+          "sent": 61,
+          "skipped": 0,
+          "success": 61,
+          "timeouts": 0,
+          "errors": 0,
+          "otherHttp": 0,
+          "durationMs": {
+            "count": 61,
+            "min": 1.4700040000025183,
+            "p50": 2.1095990000030724,
+            "p95": 3.338270000007469,
+            "p99": 4.345593000005465,
+            "max": 4.345593000005465,
+            "mean": 2.2630839508194303
+          },
+          "maxScheduleLagMs": 4.9801729999890085
+        },
+        "worker": {
+          "planned": 61,
+          "sent": 61,
+          "skipped": 0,
+          "success": 61,
+          "timeouts": 0,
+          "errors": 0,
+          "otherHttp": 0,
+          "durationMs": {
+            "count": 61,
+            "min": 1.182494000007864,
+            "p50": 1.9843809999874793,
+            "p95": 3.1147110000019893,
+            "p99": 8.334861999988789,
+            "max": 8.334861999988789,
+            "mean": 2.1807170983608604
+          },
+          "maxScheduleLagMs": 5.342292999994243
+        }
+      },
+      "finalHistograms": {
+        "api": {
+          "maxMs": 28.016638999999998,
+          "p99Ms": 10.977279,
+          "meanMs": 10.184315928077456,
+          "count": 723
+        },
+        "worker": {
+          "maxMs": 12.713983,
+          "p99Ms": 10.772479,
+          "meanMs": 10.145189963254593,
+          "count": 762
+        }
+      },
+      "sampleCounts": {
+        "baseline": {
+          "api": 129,
+          "worker": 168
+        },
+        "before-load": {
+          "api": 327,
+          "worker": 365
+        },
+        "completion": {
+          "api": 525,
+          "worker": 563
+        },
+        "final": {
+          "api": 723,
+          "worker": 762
+        }
+      },
+      "resources": {
+        "api": {
+          "samples": 4,
+          "observedMaxCpuPercent": 3.45,
+          "observedMaxMemoryBytesApprox": 66332918
+        },
+        "worker": {
+          "samples": 4,
+          "observedMaxCpuPercent": 2.75,
+          "observedMaxMemoryBytesApprox": 61792584
+        }
+      }
+    },
+    {
+      "name": "r2-separated-slow",
+      "mode": "separated",
+      "condition": "slow",
+      "repeat": 2,
+      "valid": true,
+      "reasons": [],
+      "jobs": {
+        "added": 1,
+        "succeeded": 1,
+        "attempt": 1
+      },
+      "clock": {
+        "monotonicElapsedMs": 8091.001934,
+        "wallElapsedMs": 8091,
+        "differenceMs": -0.0019339999998919666,
+        "maxAbsBoundaryDifferenceMs": 0.7297740000067279
+      },
+      "cleanup": {
+        "succeeded": true,
+        "errors": []
+      },
+      "http": {
+        "api": {
+          "planned": 65,
+          "sent": 65,
+          "skipped": 0,
+          "success": 65,
+          "timeouts": 0,
+          "errors": 0,
+          "otherHttp": 0,
+          "durationMs": {
+            "count": 65,
+            "min": 1.464521000001696,
+            "p50": 2.1000309999944875,
+            "p95": 2.7658620000001974,
+            "p99": 3.579188999996404,
+            "max": 3.579188999996404,
+            "mean": 2.1557350461552582
+          },
+          "maxScheduleLagMs": 3.9473629999993136
+        },
+        "worker": {
+          "planned": 65,
+          "sent": 65,
+          "skipped": 0,
+          "success": 65,
+          "timeouts": 0,
+          "errors": 0,
+          "otherHttp": 0,
+          "durationMs": {
+            "count": 65,
+            "min": 1.3540519999951357,
+            "p50": 2.033817999996245,
+            "p95": 2.8306960000045365,
+            "p99": 3.3214550000120653,
+            "max": 3.3214550000120653,
+            "mean": 2.075588769231959
+          },
+          "maxScheduleLagMs": 4.1844249999994645
+        }
+      },
+      "finalHistograms": {
+        "api": {
+          "maxMs": 34.340863,
+          "p99Ms": 10.985471,
+          "meanMs": 10.212956724409448,
+          "count": 762
+        },
+        "worker": {
+          "maxMs": 18.431999,
+          "p99Ms": 10.854399,
+          "meanMs": 10.142322626865672,
+          "count": 804
+        }
+      },
+      "sampleCounts": {
+        "baseline": {
+          "api": 126,
+          "worker": 165
+        },
+        "before-load": {
+          "api": 324,
+          "worker": 363
+        },
+        "completion": {
+          "api": 564,
+          "worker": 606
+        },
+        "final": {
+          "api": 762,
+          "worker": 804
+        }
+      },
+      "resources": {
+        "api": {
+          "samples": 4,
+          "observedMaxCpuPercent": 4.52,
+          "observedMaxMemoryBytesApprox": 68566385
+        },
+        "worker": {
+          "samples": 4,
+          "observedMaxCpuPercent": 2.71,
+          "observedMaxMemoryBytesApprox": 63008932
+        }
+      },
+      "handlerElapsedMs": 2000.2612000000006,
+      "overlap": {
+        "api": {
+          "sent": 20,
+          "scheduled": 20
+        },
+        "worker": {
+          "sent": 20,
+          "scheduled": 20
+        }
+      }
+    },
+    {
+      "name": "r2-separated-cpu",
+      "mode": "separated",
+      "condition": "cpu",
+      "repeat": 2,
+      "valid": true,
+      "reasons": [],
+      "jobs": {
+        "added": 1,
+        "succeeded": 1,
+        "attempt": 1
+      },
+      "clock": {
+        "monotonicElapsedMs": 8096.969480999993,
+        "wallElapsedMs": 8097,
+        "differenceMs": 0.03051900000718888,
+        "maxAbsBoundaryDifferenceMs": 0.39658800000324845
+      },
+      "cleanup": {
+        "succeeded": true,
+        "errors": []
+      },
+      "http": {
+        "api": {
+          "planned": 68,
+          "sent": 68,
+          "skipped": 0,
+          "success": 68,
+          "timeouts": 0,
+          "errors": 0,
+          "otherHttp": 0,
+          "durationMs": {
+            "count": 68,
+            "min": 1.279381000000285,
+            "p50": 1.6541790000046603,
+            "p95": 3.1435009999986505,
+            "p99": 18.08123300000443,
+            "max": 18.08123300000443,
+            "mean": 2.155483455881468
+          },
+          "maxScheduleLagMs": 4.734809999994468
+        },
+        "worker": {
+          "planned": 68,
+          "sent": 68,
+          "skipped": 0,
+          "success": 68,
+          "timeouts": 0,
+          "errors": 0,
+          "otherHttp": 0,
+          "durationMs": {
+            "count": 68,
+            "min": 1.4275530000013532,
+            "p50": 2.09670300000289,
+            "p95": 1691.519769000006,
+            "p99": 1984.7573949999933,
+            "max": 1984.7573949999933,
+            "mean": 310.37538817647084
+          },
+          "maxScheduleLagMs": 5.042138999997405
+        }
+      },
+      "finalHistograms": {
+        "api": {
+          "maxMs": 37.388287,
+          "p99Ms": 11.263999,
+          "meanMs": 10.22408781772152,
+          "count": 790
+        },
+        "worker": {
+          "maxMs": 2004.877311,
+          "p99Ms": 11.132927,
+          "meanMs": 13.472131184079602,
+          "count": 603
+        }
+      },
+      "sampleCounts": {
+        "baseline": {
+          "api": 130,
+          "worker": 136
+        },
+        "before-load": {
+          "api": 327,
+          "worker": 334
+        },
+        "completion": {
+          "api": 592,
+          "worker": 404
+        },
+        "final": {
+          "api": 790,
+          "worker": 603
+        }
+      },
+      "resources": {
+        "api": {
+          "samples": 4,
+          "observedMaxCpuPercent": 4.54,
+          "observedMaxMemoryBytesApprox": 66888663
+        },
+        "worker": {
+          "samples": 4,
+          "observedMaxCpuPercent": 97.67,
+          "observedMaxMemoryBytesApprox": 76871107
+        }
+      },
+      "handlerElapsedMs": 2000.2205240000003,
+      "overlap": {
+        "api": {
+          "sent": 20,
+          "scheduled": 20
+        },
+        "worker": {
+          "sent": 20,
+          "scheduled": 20
+        }
+      }
+    },
+    {
+      "name": "r2-co-located-idle",
+      "mode": "co-located",
+      "condition": "idle",
+      "repeat": 2,
+      "valid": true,
+      "reasons": [],
+      "jobs": {
+        "added": 0,
+        "succeeded": 0,
+        "attempt": null
+      },
+      "clock": {
+        "monotonicElapsedMs": 7063.500989000007,
+        "wallElapsedMs": 7063,
+        "differenceMs": -0.5009890000073938,
+        "maxAbsBoundaryDifferenceMs": 0.5009890000073938
+      },
+      "cleanup": {
+        "succeeded": true,
+        "errors": []
+      },
+      "http": {
+        "api": {
+          "planned": 61,
+          "sent": 61,
+          "skipped": 0,
+          "success": 61,
+          "timeouts": 0,
+          "errors": 0,
+          "otherHttp": 0,
+          "durationMs": {
+            "count": 61,
+            "min": 1.3994959999981802,
+            "p50": 1.8699889999988955,
+            "p95": 2.4555160000018077,
+            "p99": 3.096145000003162,
+            "max": 3.096145000003162,
+            "mean": 1.8865326229508177
+          },
+          "maxScheduleLagMs": 3.6584830000065267
+        },
+        "worker": {
+          "planned": 61,
+          "sent": 61,
+          "skipped": 0,
+          "success": 61,
+          "timeouts": 0,
+          "errors": 0,
+          "otherHttp": 0,
+          "durationMs": {
+            "count": 61,
+            "min": 1.6273240000009537,
+            "p50": 2.3554839999997057,
+            "p95": 3.17110499998671,
+            "p99": 5.259262999999919,
+            "max": 5.259262999999919,
+            "mean": 2.413794655736906
+          },
+          "maxScheduleLagMs": 3.8326390000001993
+        }
+      },
+      "finalHistograms": {
+        "shared": {
+          "maxMs": 15.212543,
+          "p99Ms": 10.993663000000002,
+          "meanMs": 10.145214036809815,
+          "count": 652
+        }
+      },
+      "sampleCounts": {
+        "baseline": {
+          "shared": 58
+        },
+        "before-load": {
+          "shared": 256
+        },
+        "completion": {
+          "shared": 454
+        },
+        "final": {
+          "shared": 652
+        }
+      },
+      "resources": {
+        "co-located": {
+          "samples": 4,
+          "observedMaxCpuPercent": 4.57,
+          "observedMaxMemoryBytesApprox": 73998008
+        }
+      }
+    },
+    {
+      "name": "r2-co-located-slow",
+      "mode": "co-located",
+      "condition": "slow",
+      "repeat": 2,
+      "valid": true,
+      "reasons": [],
+      "jobs": {
+        "added": 1,
+        "succeeded": 1,
+        "attempt": 1
+      },
+      "clock": {
+        "monotonicElapsedMs": 7078.92368800001,
+        "wallElapsedMs": 7095,
+        "differenceMs": 16.07631199999014,
+        "maxAbsBoundaryDifferenceMs": 16.440322999987984
+      },
+      "cleanup": {
+        "succeeded": true,
+        "errors": []
+      },
+      "http": {
+        "api": {
+          "planned": 63,
+          "sent": 63,
+          "skipped": 0,
+          "success": 63,
+          "timeouts": 0,
+          "errors": 0,
+          "otherHttp": 0,
+          "durationMs": {
+            "count": 63,
+            "min": 1.3826180000032764,
+            "p50": 2.08016700000735,
+            "p95": 2.837139000010211,
+            "p99": 5.464871000003768,
+            "max": 5.464871000003768,
+            "mean": 2.1035448730168382
+          },
+          "maxScheduleLagMs": 4.618577999994159
+        },
+        "worker": {
+          "planned": 63,
+          "sent": 63,
+          "skipped": 0,
+          "success": 63,
+          "timeouts": 0,
+          "errors": 0,
+          "otherHttp": 0,
+          "durationMs": {
+            "count": 63,
+            "min": 1.7446690000069793,
+            "p50": 2.4915920000057667,
+            "p95": 3.8117809999966994,
+            "p99": 7.295811999996658,
+            "max": 7.295811999996658,
+            "mean": 2.682697317460441
+          },
+          "maxScheduleLagMs": 4.906963999994332
+        }
+      },
+      "finalHistograms": {
+        "shared": {
+          "maxMs": 28.311551,
+          "p99Ms": 11.067390999999999,
+          "meanMs": 10.20423876923077,
+          "count": 702
+        }
+      },
+      "sampleCounts": {
+        "baseline": {
+          "shared": 88
+        },
+        "before-load": {
+          "shared": 287
+        },
+        "completion": {
+          "shared": 504
+        },
+        "final": {
+          "shared": 702
+        }
+      },
+      "resources": {
+        "co-located": {
+          "samples": 4,
+          "observedMaxCpuPercent": 9.44,
+          "observedMaxMemoryBytesApprox": 75140956
+        }
+      },
+      "handlerElapsedMs": 2000.084105,
+      "overlap": {
+        "api": {
+          "sent": 20,
+          "scheduled": 20
+        },
+        "worker": {
+          "sent": 20,
+          "scheduled": 20
+        }
+      }
+    },
+    {
+      "name": "r2-co-located-cpu",
+      "mode": "co-located",
+      "condition": "cpu",
+      "repeat": 2,
+      "valid": true,
+      "reasons": [],
+      "jobs": {
+        "added": 1,
+        "succeeded": 1,
+        "attempt": 1
+      },
+      "clock": {
+        "monotonicElapsedMs": 7059.8837269999785,
+        "wallElapsedMs": 7060,
+        "differenceMs": 0.11627300002146512,
+        "maxAbsBoundaryDifferenceMs": 0.3934679999947548
+      },
+      "cleanup": {
+        "succeeded": true,
+        "errors": []
+      },
+      "http": {
+        "api": {
+          "planned": 65,
+          "sent": 65,
+          "skipped": 0,
+          "success": 65,
+          "timeouts": 0,
+          "errors": 0,
+          "otherHttp": 0,
+          "durationMs": {
+            "count": 65,
+            "min": 1.3179820000077598,
+            "p50": 2.0922389999905135,
+            "p95": 1700.7605259999982,
+            "p99": 1994.4000570000208,
+            "max": 1994.4000570000208,
+            "mean": 328.7717377076915
+          },
+          "maxScheduleLagMs": 3.7496419999806676
+        },
+        "worker": {
+          "planned": 65,
+          "sent": 65,
+          "skipped": 0,
+          "success": 65,
+          "timeouts": 0,
+          "errors": 0,
+          "otherHttp": 0,
+          "durationMs": {
+            "count": 65,
+            "min": 1.6175170000060461,
+            "p50": 2.7038590000011027,
+            "p95": 1702.0393809999805,
+            "p99": 1995.2577839999867,
+            "max": 1995.2577839999867,
+            "mean": 329.3187741076923
+          },
+          "maxScheduleLagMs": 4.1463589999766555
+        }
+      },
+      "finalHistograms": {
+        "shared": {
+          "maxMs": 2002.780159,
+          "p99Ms": 11.976703,
+          "meanMs": 14.09439233005894,
+          "count": 509
+        }
+      },
+      "sampleCounts": {
+        "baseline": {
+          "shared": 71
+        },
+        "before-load": {
+          "shared": 269
+        },
+        "completion": {
+          "shared": 311
+        },
+        "final": {
+          "shared": 509
+        }
+      },
+      "resources": {
+        "co-located": {
+          "samples": 4,
+          "observedMaxCpuPercent": 68.57,
+          "observedMaxMemoryBytesApprox": 84766884
+        }
+      },
+      "handlerElapsedMs": 2000.2753530000002,
+      "overlap": {
+        "api": {
+          "sent": 20,
+          "scheduled": 20
+        },
+        "worker": {
+          "sent": 20,
+          "scheduled": 20
+        }
+      }
+    },
+    {
+      "name": "r3-co-located-idle",
+      "mode": "co-located",
+      "condition": "idle",
+      "repeat": 3,
+      "valid": true,
+      "reasons": [],
+      "jobs": {
+        "added": 0,
+        "succeeded": 0,
+        "attempt": null
+      },
+      "clock": {
+        "monotonicElapsedMs": 7055.688155999989,
+        "wallElapsedMs": 7056,
+        "differenceMs": 0.3118440000107512,
+        "maxAbsBoundaryDifferenceMs": 0.5380069999955595
+      },
+      "cleanup": {
+        "succeeded": true,
+        "errors": []
+      },
+      "http": {
+        "api": {
+          "planned": 61,
+          "sent": 61,
+          "skipped": 0,
+          "success": 61,
+          "timeouts": 0,
+          "errors": 0,
+          "otherHttp": 0,
+          "durationMs": {
+            "count": 61,
+            "min": 1.2462660000019241,
+            "p50": 1.5172850000089966,
+            "p95": 2.065476999996463,
+            "p99": 2.4895459999970626,
+            "max": 2.4895459999970626,
+            "mean": 1.5947425573778942
+          },
+          "maxScheduleLagMs": 3.6697279999789316
+        },
+        "worker": {
+          "planned": 61,
+          "sent": 61,
+          "skipped": 0,
+          "success": 61,
+          "timeouts": 0,
+          "errors": 0,
+          "otherHttp": 0,
+          "durationMs": {
+            "count": 61,
+            "min": 1.3985260000044946,
+            "p50": 2.00316899997415,
+            "p95": 2.764255000016419,
+            "p99": 6.105127999995602,
+            "max": 6.105127999995602,
+            "mean": 2.1407301639341254
+          },
+          "maxScheduleLagMs": 3.8926440000068396
+        }
+      },
+      "finalHistograms": {
+        "shared": {
+          "maxMs": 17.448959,
+          "p99Ms": 10.928127,
+          "meanMs": 10.129713485540334,
+          "count": 657
+        }
+      },
+      "sampleCounts": {
+        "baseline": {
+          "shared": 61
+        },
+        "before-load": {
+          "shared": 260
+        },
+        "completion": {
+          "shared": 458
+        },
+        "final": {
+          "shared": 657
+        }
+      },
+      "resources": {
+        "co-located": {
+          "samples": 4,
+          "observedMaxCpuPercent": 3.6,
+          "observedMaxMemoryBytesApprox": 73903636
+        }
+      }
+    },
+    {
+      "name": "r3-co-located-slow",
+      "mode": "co-located",
+      "condition": "slow",
+      "repeat": 3,
+      "valid": true,
+      "reasons": [],
+      "jobs": {
+        "added": 1,
+        "succeeded": 1,
+        "attempt": 1
+      },
+      "clock": {
+        "monotonicElapsedMs": 7058.91786300001,
+        "wallElapsedMs": 7077,
+        "differenceMs": 18.082136999990325,
+        "maxAbsBoundaryDifferenceMs": 18.082136999990325
+      },
+      "cleanup": {
+        "succeeded": true,
+        "errors": []
+      },
+      "http": {
+        "api": {
+          "planned": 66,
+          "sent": 66,
+          "skipped": 0,
+          "success": 66,
+          "timeouts": 0,
+          "errors": 0,
+          "otherHttp": 0,
+          "durationMs": {
+            "count": 66,
+            "min": 1.2731839999905787,
+            "p50": 1.5434879999957047,
+            "p95": 2.346977000008337,
+            "p99": 8.646519000001717,
+            "max": 8.646519000001717,
+            "mean": 1.7555102424256885
+          },
+          "maxScheduleLagMs": 2.843754000001354
+        },
+        "worker": {
+          "planned": 66,
+          "sent": 66,
+          "skipped": 0,
+          "success": 66,
+          "timeouts": 0,
+          "errors": 0,
+          "otherHttp": 0,
+          "durationMs": {
+            "count": 66,
+            "min": 1.3617930000182241,
+            "p50": 2.0468580000160728,
+            "p95": 3.5440230000240263,
+            "p99": 9.431079000001773,
+            "max": 9.431079000001773,
+            "mean": 2.35253174242142
+          },
+          "maxScheduleLagMs": 3.0783379999920726
+        }
+      },
+      "finalHistograms": {
+        "shared": {
+          "maxMs": 23.117822999999998,
+          "p99Ms": 10.928127,
+          "meanMs": 10.141246723646722,
+          "count": 702
+        }
+      },
+      "sampleCounts": {
+        "baseline": {
+          "shared": 63
+        },
+        "before-load": {
+          "shared": 261
+        },
+        "completion": {
+          "shared": 504
+        },
+        "final": {
+          "shared": 702
+        }
+      },
+      "resources": {
+        "co-located": {
+          "samples": 4,
+          "observedMaxCpuPercent": 6.72,
+          "observedMaxMemoryBytesApprox": 75403100
+        }
+      },
+      "handlerElapsedMs": 1999.7955720000004,
+      "overlap": {
+        "api": {
+          "sent": 20,
+          "scheduled": 20
+        },
+        "worker": {
+          "sent": 20,
+          "scheduled": 20
+        }
+      }
+    },
+    {
+      "name": "r3-co-located-cpu",
+      "mode": "co-located",
+      "condition": "cpu",
+      "repeat": 3,
+      "valid": true,
+      "reasons": [],
+      "jobs": {
+        "added": 1,
+        "succeeded": 1,
+        "attempt": 1
+      },
+      "clock": {
+        "monotonicElapsedMs": 7080.597857999994,
+        "wallElapsedMs": 7081,
+        "differenceMs": 0.402142000006279,
+        "maxAbsBoundaryDifferenceMs": 0.402142000006279
+      },
+      "cleanup": {
+        "succeeded": true,
+        "errors": []
+      },
+      "http": {
+        "api": {
+          "planned": 64,
+          "sent": 64,
+          "skipped": 0,
+          "success": 64,
+          "timeouts": 0,
+          "errors": 0,
+          "otherHttp": 0,
+          "durationMs": {
+            "count": 64,
+            "min": 1.406036000000313,
+            "p50": 2.2706450000114273,
+            "p95": 1657.6812199999986,
+            "p99": 1946.3102409999992,
+            "max": 1946.3102409999992,
+            "mean": 326.1326620312507
+          },
+          "maxScheduleLagMs": 4.151319999975385
+        },
+        "worker": {
+          "planned": 64,
+          "sent": 64,
+          "skipped": 0,
+          "success": 64,
+          "timeouts": 0,
+          "errors": 0,
+          "otherHttp": 0,
+          "durationMs": {
+            "count": 64,
+            "min": 1.525789999985136,
+            "p50": 3.1192940000037197,
+            "p95": 1657.6415890000062,
+            "p99": 1948.237036000006,
+            "max": 1948.237036000006,
+            "mean": 326.94291839062225
+          },
+          "maxScheduleLagMs": 4.381359999999404
+        }
+      },
+      "finalHistograms": {
+        "shared": {
+          "maxMs": 2008.0230389999997,
+          "p99Ms": 13.574143000000001,
+          "meanMs": 14.182016252465482,
+          "count": 507
+        }
+      },
+      "sampleCounts": {
+        "baseline": {
+          "shared": 84
+        },
+        "before-load": {
+          "shared": 282
+        },
+        "completion": {
+          "shared": 308
+        },
+        "final": {
+          "shared": 507
+        }
+      },
+      "resources": {
+        "co-located": {
+          "samples": 4,
+          "observedMaxCpuPercent": 83.59,
+          "observedMaxMemoryBytesApprox": 82533417
+        }
+      },
+      "handlerElapsedMs": 2000.2875600000002,
+      "overlap": {
+        "api": {
+          "sent": 20,
+          "scheduled": 20
+        },
+        "worker": {
+          "sent": 20,
+          "scheduled": 20
+        }
+      }
+    },
+    {
+      "name": "r3-separated-idle",
+      "mode": "separated",
+      "condition": "idle",
+      "repeat": 3,
+      "valid": true,
+      "reasons": [],
+      "jobs": {
+        "added": 0,
+        "succeeded": 0,
+        "attempt": null
+      },
+      "clock": {
+        "monotonicElapsedMs": 8098.421807000006,
+        "wallElapsedMs": 8099,
+        "differenceMs": 0.5781929999939166,
+        "maxAbsBoundaryDifferenceMs": 0.5781929999939166
+      },
+      "cleanup": {
+        "succeeded": true,
+        "errors": []
+      },
+      "http": {
+        "api": {
+          "planned": 61,
+          "sent": 61,
+          "skipped": 0,
+          "success": 61,
+          "timeouts": 0,
+          "errors": 0,
+          "otherHttp": 0,
+          "durationMs": {
+            "count": 61,
+            "min": 1.459474000002956,
+            "p50": 2.0599680000159424,
+            "p95": 2.9592919999849983,
+            "p99": 3.9364500000083353,
+            "max": 3.9364500000083353,
+            "mean": 2.17721252459422
+          },
+          "maxScheduleLagMs": 3.9369989999977406
+        },
+        "worker": {
+          "planned": 61,
+          "sent": 61,
+          "skipped": 0,
+          "success": 61,
+          "timeouts": 0,
+          "errors": 0,
+          "otherHttp": 0,
+          "durationMs": {
+            "count": 61,
+            "min": 1.2234880000178237,
+            "p50": 1.8826049999915995,
+            "p95": 3.1107299999857787,
+            "p99": 4.133147000015015,
+            "max": 4.133147000015015,
+            "mean": 2.0070414262276035
+          },
+          "maxScheduleLagMs": 4.224993000010727
+        }
+      },
+      "finalHistograms": {
+        "api": {
+          "maxMs": 24.100863,
+          "p99Ms": 11.001854999999999,
+          "meanMs": 10.194853978021978,
+          "count": 728
+        },
+        "worker": {
+          "maxMs": 12.337150999999999,
+          "p99Ms": 10.797055,
+          "meanMs": 10.14460368677792,
+          "count": 779
+        }
+      },
+      "sampleCounts": {
+        "baseline": {
+          "api": 134,
+          "worker": 185
+        },
+        "before-load": {
+          "api": 332,
+          "worker": 383
+        },
+        "completion": {
+          "api": 530,
+          "worker": 581
+        },
+        "final": {
+          "api": 728,
+          "worker": 779
+        }
+      },
+      "resources": {
+        "api": {
+          "samples": 4,
+          "observedMaxCpuPercent": 3.13,
+          "observedMaxMemoryBytesApprox": 66249032
+        },
+        "worker": {
+          "samples": 4,
+          "observedMaxCpuPercent": 2.92,
+          "observedMaxMemoryBytesApprox": 61886956
+        }
+      }
+    },
+    {
+      "name": "r3-separated-slow",
+      "mode": "separated",
+      "condition": "slow",
+      "repeat": 3,
+      "valid": true,
+      "reasons": [],
+      "jobs": {
+        "added": 1,
+        "succeeded": 1,
+        "attempt": 1
+      },
+      "clock": {
+        "monotonicElapsedMs": 8093.879486999998,
+        "wallElapsedMs": 8094,
+        "differenceMs": 0.1205130000016652,
+        "maxAbsBoundaryDifferenceMs": 0.30666599998949096
+      },
+      "cleanup": {
+        "succeeded": true,
+        "errors": []
+      },
+      "http": {
+        "api": {
+          "planned": 68,
+          "sent": 68,
+          "skipped": 0,
+          "success": 68,
+          "timeouts": 0,
+          "errors": 0,
+          "otherHttp": 0,
+          "durationMs": {
+            "count": 68,
+            "min": 1.5165080000006128,
+            "p50": 2.0785460000042804,
+            "p95": 3.1069510000234004,
+            "p99": 4.7582300000067335,
+            "max": 4.7582300000067335,
+            "mean": 2.169034735292799
+          },
+          "maxScheduleLagMs": 4.575638000009349
+        },
+        "worker": {
+          "planned": 68,
+          "sent": 68,
+          "skipped": 0,
+          "success": 68,
+          "timeouts": 0,
+          "errors": 0,
+          "otherHttp": 0,
+          "durationMs": {
+            "count": 68,
+            "min": 1.2614590000011958,
+            "p50": 1.9027310000092257,
+            "p95": 2.4736730000004172,
+            "p99": 4.027938000013819,
+            "max": 4.027938000013819,
+            "mean": 1.9680221176450312
+          },
+          "maxScheduleLagMs": 4.866582000016933
+        }
+      },
+      "finalHistograms": {
+        "api": {
+          "maxMs": 36.077566999999995,
+          "p99Ms": 11.960319,
+          "meanMs": 10.272876060301508,
+          "count": 796
+        },
+        "worker": {
+          "maxMs": 21.692415,
+          "p99Ms": 10.846207,
+          "meanMs": 10.154182439751553,
+          "count": 805
+        }
+      },
+      "sampleCounts": {
+        "baseline": {
+          "api": 134,
+          "worker": 138
+        },
+        "before-load": {
+          "api": 333,
+          "worker": 336
+        },
+        "completion": {
+          "api": 598,
+          "worker": 607
+        },
+        "final": {
+          "api": 796,
+          "worker": 805
+        }
+      },
+      "resources": {
+        "api": {
+          "samples": 4,
+          "observedMaxCpuPercent": 2.96,
+          "observedMaxMemoryBytesApprox": 66846720
+        },
+        "worker": {
+          "samples": 4,
+          "observedMaxCpuPercent": 2.73,
+          "observedMaxMemoryBytesApprox": 61635297
+        }
+      },
+      "handlerElapsedMs": 2001.171239,
+      "overlap": {
+        "api": {
+          "sent": 20,
+          "scheduled": 20
+        },
+        "worker": {
+          "sent": 20,
+          "scheduled": 20
+        }
+      }
+    },
+    {
+      "name": "r3-separated-cpu",
+      "mode": "separated",
+      "condition": "cpu",
+      "repeat": 3,
+      "valid": true,
+      "reasons": [],
+      "jobs": {
+        "added": 1,
+        "succeeded": 1,
+        "attempt": 1
+      },
+      "clock": {
+        "monotonicElapsedMs": 8080.483532000013,
+        "wallElapsedMs": 8080,
+        "differenceMs": -0.4835320000129286,
+        "maxAbsBoundaryDifferenceMs": 0.7047780000139028
+      },
+      "cleanup": {
+        "succeeded": true,
+        "errors": []
+      },
+      "http": {
+        "api": {
+          "planned": 69,
+          "sent": 69,
+          "skipped": 0,
+          "success": 69,
+          "timeouts": 0,
+          "errors": 0,
+          "otherHttp": 0,
+          "durationMs": {
+            "count": 69,
+            "min": 1.2707440000085626,
+            "p50": 1.56940300000133,
+            "p95": 2.3509699999995064,
+            "p99": 3.03777400002582,
+            "max": 3.03777400002582,
+            "mean": 1.6692378115949922
+          },
+          "maxScheduleLagMs": 3.6220050000119954
+        },
+        "worker": {
+          "planned": 69,
+          "sent": 69,
+          "skipped": 0,
+          "success": 69,
+          "timeouts": 0,
+          "errors": 0,
+          "otherHttp": 0,
+          "durationMs": {
+            "count": 69,
+            "min": 1.2576629999966826,
+            "p50": 1.7504379999882076,
+            "p95": 1642.747732000018,
+            "p99": 1938.2513159999799,
+            "max": 1938.2513159999799,
+            "mean": 290.60947936231713
+          },
+          "maxScheduleLagMs": 4.001297000009799
+        }
+      },
+      "finalHistograms": {
+        "api": {
+          "maxMs": 24.575999,
+          "p99Ms": 10.846207,
+          "meanMs": 10.146073932467534,
+          "count": 770
+        },
+        "worker": {
+          "maxMs": 2003.8287349999998,
+          "p99Ms": 10.772479,
+          "meanMs": 13.403290023140496,
+          "count": 605
+        }
+      },
+      "sampleCounts": {
+        "baseline": {
+          "api": 100,
+          "worker": 130
+        },
+        "before-load": {
+          "api": 298,
+          "worker": 329
+        },
+        "completion": {
+          "api": 572,
+          "worker": 407
+        },
+        "final": {
+          "api": 770,
+          "worker": 605
+        }
+      },
+      "resources": {
+        "api": {
+          "samples": 4,
+          "observedMaxCpuPercent": 2.57,
+          "observedMaxMemoryBytesApprox": 67077407
+        },
+        "worker": {
+          "samples": 4,
+          "observedMaxCpuPercent": 96.68,
+          "observedMaxMemoryBytesApprox": 72760689
+        }
+      },
+      "handlerElapsedMs": 2000.2481180000004,
+      "overlap": {
+        "api": {
+          "sent": 20,
+          "scheduled": 20
+        },
+        "worker": {
+          "sent": 20,
+          "scheduled": 20
+        }
+      }
+    }
+  ],
+  "validation": {
+    "typecheck": "passed",
+    "aggregateAndProbeTests": 6,
+    "observabilityTests": 6,
+    "composeSmokeTests": 2,
+    "postgresqlTests": 64,
+    "smokeDirectory": "artifacts/cpu-event-loop/smoke-1793253425797",
+    "databaseVerificationDirectory": "artifacts/cpu-event-loop/2026-10-29-verification-final",
+    "preservedRowsAfterRegression": 18
+  }
+}

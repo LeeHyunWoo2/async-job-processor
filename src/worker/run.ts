@@ -23,6 +23,10 @@ export async function processJob(orm: MikroORM, job: ClaimedJob, handler: JobHan
     let handlerError: unknown;
 
     try {
+        // 실험의 Wall Clock 사건 경계. Handler 경과 시간은 별도 Monotonic Clock으로 잰다.
+        recordObservation(() => logger?.info({
+            event: 'job.handler_started', jobId: job.id, attempt: job.attempt, jobType: job.type,
+        }, 'Job Handler 실행 시작'));
         const startedAt = performance.now();
         let result: JsonValue;
         try {
@@ -30,6 +34,10 @@ export async function processJob(orm: MikroORM, job: ClaimedJob, handler: JobHan
         } finally {
             const duration = (performance.now() - startedAt) / 1_000;
             recordObservation(() => metrics?.handlerDuration.observe(duration));
+            recordObservation(() => logger?.info({
+                event: 'job.handler_finished', jobId: job.id, attempt: job.attempt, jobType: job.type,
+                handlerElapsedMs: duration * 1_000,
+            }, 'Job Handler 실행 종료'));
         }
         outcome = { status: 'succeeded', result };
     } catch (error) {

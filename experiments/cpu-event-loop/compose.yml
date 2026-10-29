@@ -1,0 +1,37 @@
+# 별도 프로젝트에서만 사용한다. 개발 이미지·포트·DB·볼륨과 분리한다.
+x-experiment-environment: &experiment-environment
+  DB_HOST: postgres
+  DB_PORT: 5432
+  DB_USER: ${DB_USER}
+  DB_PASSWORD: ${DB_PASSWORD}
+  DB_NAME: async_job_cpu_event_loop
+  LOG_LEVEL: info
+  API_HOST: 0.0.0.0
+  API_PORT: 3000
+  WORKER_METRICS_HOST: 0.0.0.0
+  WORKER_METRICS_PORT: 9464
+  ENABLE_BACKPRESSURE: 'true'
+  MAX_OUTSTANDING_JOBS: 100
+
+services:
+  postgres:
+    environment:
+      POSTGRES_DB: async_job_cpu_event_loop
+    ports: !override ["127.0.0.1::5432"]
+  migrate:
+    image: async-job-cpu-event-loop:local
+    environment: *experiment-environment
+  api:
+    image: async-job-cpu-event-loop:local
+    environment: *experiment-environment
+    ports: !override ["127.0.0.1::3000"]
+  worker:
+    image: async-job-cpu-event-loop:local
+    environment: *experiment-environment
+    ports: ["127.0.0.1::9464"]
+  co-located:
+    image: async-job-cpu-event-loop:local
+    command: ["node", "experiments/cpu-event-loop/co-located.ts"]
+    stop_grace_period: 30s
+    environment: *experiment-environment
+    ports: ["127.0.0.1::3000", "127.0.0.1::9464"]
