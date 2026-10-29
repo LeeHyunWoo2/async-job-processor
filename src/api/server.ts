@@ -1,4 +1,6 @@
 import { createLogger } from '../observability/logger.ts';
+import { createEventLoopMetrics } from '../observability/event-loop.ts';
+import { createMetricsRegistry } from '../observability/metrics.ts';
 import { createApp } from './app.ts';
 
 const logger = createLogger('api');
@@ -7,7 +9,10 @@ async function start() {
     const { env } = await import('../config/env.ts');
     const { createOrm } = await import('../db/orm.ts');
     const orm = await createOrm();
-    const app = createApp(orm, logger, undefined, env.api.enqueue);
+    const registry = createMetricsRegistry();
+    const eventLoop = createEventLoopMetrics(registry);
+    const app = createApp(orm, logger, registry, env.api.enqueue);
+    app.addHook('onClose', async () => { eventLoop.disable(); });
     let closing = false;
 
     async function shutdown(signal: NodeJS.Signals) {

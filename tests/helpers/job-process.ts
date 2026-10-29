@@ -21,14 +21,16 @@ export async function waitFor<T>(
     throw new Error('검증할 상태를 제한 시간 안에 확인하지 못했습니다');
 }
 
-type JobProcessEntry = 'api/server.ts' | 'worker/main.ts' | 'crash-worker';
+type JobProcessEntry = 'api/server.ts' | 'worker/main.ts' | 'crash-worker' | 'co-located';
 type CrashPhase = 'after-claim' | 'in-handler';
 
 function startJobProcess(entry: JobProcessEntry, schema: string, signal: AbortSignal, crashPhase?: CrashPhase) {
     signal.throwIfAborted();
     const entryUrl = entry === 'crash-worker'
         ? new URL('./crash-worker.ts', import.meta.url)
-        : new URL(`../../src/${entry}`, import.meta.url);
+        : entry === 'co-located'
+            ? new URL('../../experiments/cpu-event-loop/co-located.ts', import.meta.url)
+            : new URL(`../../src/${entry}`, import.meta.url);
     const bootstrap = `
         const { createOrm } = await import(${JSON.stringify(new URL('../../src/db/orm.ts', import.meta.url).href)});
         const orm = await createOrm();

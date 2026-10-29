@@ -4,6 +4,7 @@ import { once } from 'node:events';
 import { executeHandler } from '../jobs/handlers.ts';
 import { recordObservation } from '../observability/best-effort.ts';
 import { createLogger } from '../observability/logger.ts';
+import { createEventLoopMetrics } from '../observability/event-loop.ts';
 import { createMetricsRegistry, createWorkerMetrics } from '../observability/metrics.ts';
 import { createWorkerMetricsServer } from './metrics-server.ts';
 import { runWorker } from './run.ts';
@@ -31,6 +32,7 @@ async function main() {
         const registry = createMetricsRegistry();
         const metrics = createWorkerMetrics(registry);
         const metricsServer = createWorkerMetricsServer(registry, logger);
+        const eventLoop = createEventLoopMetrics(registry);
         try {
             metricsServer.listen({ host: env.worker.metricsHost, port: env.worker.metricsPort });
             await once(metricsServer, 'listening');
@@ -38,6 +40,7 @@ async function main() {
             recordObservation(() => logger.info({ event: 'worker.started', metricsPort: typeof address === 'object' ? address?.port : undefined }, 'Worker 시작'));
             await runWorker(orm, workerId, executeHandler, controller.signal, { logger, metrics });
         } finally {
+            eventLoop.disable();
             try {
                 if (metricsServer.listening) {
                     await new Promise<void>((resolve, reject) => {

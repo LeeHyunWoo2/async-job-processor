@@ -34,7 +34,7 @@
 - Job Lifecycle Observability 및 Compose 통합 실행 환경 구축 완료
   - 공통 Pino JSON Logger로 Job Lifecycle·등록 거부 및 Worker Event 기록
   - API의 Request ID·jobId와 Worker의 jobId·workerId·attempt로 요청과 실행을 추적하며 Recovery 수행 Worker와 이전 Claim 소유자를 구분
-  - 독립 Registry와 API·Worker `/metrics`에서 Gauge 3개·Counter 7개·Histogram 1개 제공
+  - 독립 Registry와 API·Worker `/metrics`에서 Job 상태·Lifecycle Counter·Handler Duration 제공
   - Scrape마다 단일 PostgreSQL 집계로 Queue·Ready Queue·Processing 수 조회, 조회 오류는 응답 실패로 구분
   - Retry와 Recovery·최종 실패를 구분해 집계하며 Handler 시간은 DB 결과 저장과 분리
   - 계측 오류를 Job 처리에서 격리하고 기존 Graceful Shutdown·오류 종료에 맞춰 Metrics 서버 정리
@@ -60,6 +60,12 @@
   - 기본 조건 ON/OFF 각각 두 번에서 OFF의 미완료 누적과 ON의 503 거부·관측 상한 유지, 모든 수락 Job의 첫 시도 성공 확인
   - 측정 유효성과 종료 처리 결과를 구분하고 시작 조건 거부·중단·로그 저장 실패 시 자료·기존 행 보존 검증, 재현 도구·선별한 실측 요약과 원자료 분리
 
+- CPU Job과 Event Loop 관측 기반 구현 완료
+  - 기존 Job 경로에서 Monotonic 경과 시간 목표의 동기 산술 계산과 JSON 결과 저장 지원
+  - 프로세스당 Native Event Loop 지연 계측 및 Max·p99·Mean(초)·표본 수 Gauge, 초기화·종료 지원
+  - 기존 분리 실행과 동일 API·Worker 코드를 사용하는 실험용 통합 진입점 제공
+  - 통합 프로세스는 Worker Metrics를 단일 계측 출처로 사용하며 별도 API·Worker ORM을 현재 Job 완료 후 정리
+
 - 검증 완료
   - 실제 PostgreSQL에서 schema·기본값·제약, API 입력·등록·조회, Handler와 Retry / Backoff 확인
   - 서로 다른 DB 연결과 실제 Row Lock으로 동시 Claim·Recovery, 결과 저장과 Recovery 경합 및 소유권 보호 확인
@@ -79,6 +85,8 @@
   - 실험 집계 산식·비정상 Batch 제외와 실제 잔여 Ready·Stale Job의 Worker 시작 전 거부·행 보존 확인
   - Admission의 상태 집계·슬롯 유지와 반환·ON/OFF·입력 검증 우선순위, 서로 다른 10개 연결의 실제 잠금 경합에서 잔여 1개 슬롯만 수락함을 확인
   - COUNT·INSERT·Commit 오류의 Rollback·잠금 해제·관측 정확성과 거부 계측 오류 격리, 독립 API의 환경변수 적용 확인
+  - cpu 입력 경계·동기 계산·첫 시도 성공, Event Loop 실제 표본·단위 변환·Registry 격리·초기화·종료 확인
+  - 분리·통합 진입점의 실제 HTTP·Job·Metrics, 통합 실행의 처리 중 정상 종료·DB 오류 정리와 기존 전체 DB 회귀 확인
 
 ## 현재 범위
 
@@ -89,7 +97,8 @@
 - PostgreSQL이 Job 상태의 기준이며 로그·Metrics는 상태 변경과 원자적이지 않은 Best-effort 관측이다. 강제 종료 시 기록이 누락될 수 있고 Counter는 프로세스 재시작 시 초기화됨
 - Admission 상한은 동일 DB에서 모든 API가 ON·동일 제한값·공통 잠금 키를 사용하는 등록 경로에 한정되며 OFF·직접 INSERT는 우회 가능함. COUNT·잠금 대기·거부 로그 비용은 남으며 순간 요청 폭주나 완료 행을 포함한 전체 저장량은 제한하지 않음
 - 지속 유입 실측의 DB 표본과 기존 동시성 테스트의 상한 보장은 별도 근거이며, 반복 순서·완료 행 누적·관측 및 로그 부하의 영향은 통제하지 않음
-- 기본 실험은 Timer 기반 대기에 한정하며, 관측된 시각 변동을 고려한 처리량의 정밀 해석·병목 원인·최적 Worker 수는 확정하지 않음
+- 기존 반복 실측은 Timer 기반 대기에 한정하며, 관측된 시각 변동을 고려한 처리량의 정밀 해석·병목 원인·최적 Worker 수는 확정하지 않음
+- CPU·Event Loop 비교는 실행·계측 기반까지 구현했으며 반복 측정·HTTP Probe·시계 비교·실측 보고서는 후속 범위임
 
 ## 막힌 문제
 

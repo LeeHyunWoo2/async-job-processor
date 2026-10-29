@@ -4,6 +4,7 @@ import { defineEntity, type InferEntity, p } from '@mikro-orm/core';
 
 export const jobTypes = [
     'slow',
+    'cpu',
     'fail',
     'flaky',
 ] as const;
