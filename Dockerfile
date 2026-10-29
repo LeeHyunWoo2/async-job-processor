@@ -4,6 +4,7 @@ WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm ci --omit=dev
 COPY src ./src
+COPY experiments/cpu-event-loop ./experiments/cpu-event-loop
 
 USER node
 CMD ["node", "src/api/server.ts"]

@@ -2,13 +2,16 @@ import assert from 'node:assert/strict';
 import { spawnSync } from 'node:child_process';
 import { once } from 'node:events';
 import test from 'node:test';
+import { setTimeout as delay } from 'node:timers/promises';
 import { fileURLToPath } from 'node:url';
 
 import { Counter, Gauge, Histogram, register } from '@prometheus-io/client';
 
 import { createLogger } from '../src/observability/logger.ts';
+import { createEventLoopMetrics } from '../src/observability/event-loop.ts';
 import { createApiMetrics, createMetricsRegistry, createWorkerMetrics } from '../src/observability/metrics.ts';
 import { createWorkerMetricsServer } from '../src/worker/metrics-server.ts';
+import { metricValue } from './helpers/observability.ts';
 
 test('공통 Logger는 component와 Error를 JSON으로 출력하고 LOG_LEVEL을 적용한다', () => {
     const previous = process.env.LOG_LEVEL;
@@ -72,23 +75,30 @@ test('API와 Worker의 초기 설정 오류도 공통 JSON Logger로 출력된�
     }
 });
 
-test('Job Metric 11개는 필요한 프로세스 Registry에만 등록하고 실행별 Label을 사용하지 않는다', async () => {
+test('분리 프로세스의 Job·Event Loop Metric 19개는 Registry를 격리하고 실행별 Label을 사용하지 않는다', async () => {
     const api = createMetricsRegistry();
     const worker = createMetricsRegistry();
     createApiMetrics(api);
     createWorkerMetrics(worker);
-    const metrics = [...await api.getMetricsAsJSON(), ...await worker.getMetricsAsJSON()];
-    assert.equal(metrics.length, 11);
-    assert.equal(metrics.filter((metric) => metric.type === 'counter').length, 7);
-    assert.equal(metrics.filter((metric) => metric.type === 'gauge').length, 3);
-    assert.equal(metrics.filter((metric) => metric.type === 'histogram').length, 1);
-    assert.equal(api.getMetricsAsArray().length, 5);
-    assert.equal(worker.getMetricsAsArray().length, 6);
-    for (const metric of metrics) {
-        assert.equal(register.getSingleMetric(metric.name), undefined);
-        for (const sample of metric.values) {
-            assert.ok(Object.keys(sample.labels).every((label) => label === 'le'));
+    const apiLoop = createEventLoopMetrics(api);
+    const workerLoop = createEventLoopMetrics(worker);
+    try {
+        const metrics = [...await api.getMetricsAsJSON(), ...await worker.getMetricsAsJSON()];
+        assert.equal(metrics.length, 19);
+        assert.equal(metrics.filter((metric) => metric.type === 'counter').length, 7);
+        assert.equal(metrics.filter((metric) => metric.type === 'gauge').length, 11);
+        assert.equal(metrics.filter((metric) => metric.type === 'histogram').length, 1);
+        assert.equal(api.getMetricsAsArray().length, 9);
+        assert.equal(worker.getMetricsAsArray().length, 10);
+        for (const metric of metrics) {
+            assert.equal(register.getSingleMetric(metric.name), undefined);
+            for (const sample of metric.values) {
+                assert.ok(Object.keys(sample.labels).every((label) => label === 'le'));
+            }
         }
+    } finally {
+        apiLoop.disable();
+        workerLoop.disable();
     }
 });
 
@@ -121,4 +131,39 @@ test('Worker HTTP는 지정 Registry를 사용하며 조회 실패 후에도 응
         await new Promise<void>((resolve, reject) => server.close((error) => error ? reject(error) : resolve()));
     }
     await assert.rejects(fetch(`${url}/metrics`));
+});
+
+test('Event Loop Gauge는 실제 표본을 초로 변환하며 reset·종료와 Registry 격리를 지원한다', { timeout: 5_000 }, async (t) => {
+    const registry = createMetricsRegistry();
+    const isolated = createMetricsRegistry();
+    const histogram = createEventLoopMetrics(registry);
+    const names = ['max_seconds', 'p99_seconds', 'mean_seconds', 'samples'].map((suffix) => `nodejs_event_loop_delay_${suffix}`);
+    try {
+        assert.equal(histogram.count, 0);
+        for (const name of names) assert.equal(await metricValue(registry, name), 0);
+        const deadline = Date.now() + 2_000;
+        while (histogram.count === 0 && Date.now() < deadline) await delay(20, undefined, { signal: t.signal });
+        assert.ok(histogram.count > 0, 'Event Loop 지연 표본이 수집되어야 합니다');
+        assert.equal(histogram.disable(), true, '활성화된 계측을 종료해야 합니다');
+        assert.equal(await metricValue(registry, names[0]!), histogram.max / 1e9);
+        assert.equal(await metricValue(registry, names[1]!), histogram.percentile(99) / 1e9);
+        assert.equal(await metricValue(registry, names[2]!), histogram.mean / 1e9);
+        assert.equal(await metricValue(registry, names[3]!), histogram.count);
+        const count = histogram.count;
+        await delay(30, undefined, { signal: t.signal });
+        assert.equal(histogram.count, count, '종료 후 새 표본이 생기지 않아야 합니다');
+        const metrics = await registry.getMetricsAsJSON();
+        assert.equal(metrics.length, 4);
+        assert.ok(metrics.every((metric) => metric.type === 'gauge'));
+        for (const metric of metrics) {
+            assert.equal(register.getSingleMetric(metric.name), undefined);
+            assert.ok(metric.values.every((sample) => Object.keys(sample.labels).length === 0));
+        }
+        assert.equal((await isolated.metrics()).trim(), '');
+        histogram.reset();
+        for (const name of names) assert.equal(await metricValue(registry, name), 0);
+        assert.equal(histogram.enable(), true);
+    } finally {
+        histogram.disable();
+    }
 });

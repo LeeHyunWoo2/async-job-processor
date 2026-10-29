@@ -4,4 +4,7 @@ node_modules
 .env.*
 tests
 artifacts
-experiments
+experiments/*
+!experiments/cpu-event-loop
+experiments/cpu-event-loop/*
+!experiments/cpu-event-loop/co-located.ts

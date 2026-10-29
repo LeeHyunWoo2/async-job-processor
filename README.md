@@ -93,6 +93,10 @@ npm run start:worker
 
 Compose에서 API·Worker를 이미 실행 중이라면 먼저 `docker compose stop api worker`로 중지한다. 로컬 프로세스는 `.env`를 읽으며 API와 Worker Metrics는 기본적으로 `127.0.0.1:3000`, `127.0.0.1:9464`에서 응답한다. Worker Metrics 주소는 `WORKER_METRICS_HOST`, `WORKER_METRICS_PORT`로 변경할 수 있다. Compose의 Prometheus 설정은 컨테이너 API·Worker를 수집 대상으로 한다.
 
+### CPU Job과 Event Loop 관측
+
+`cpu` Job은 `slow`와 같은 정수 `durationMs` 1~10,000ms를 받으며 현재 JavaScript 스레드에서 동기 산술 계산을 수행한다. 기존 분리 실행에 더해 `npm run start:co-located`로 API와 Worker를 한 프로세스에 배치할 수 있다. 프로세스별 Event Loop 지연은 Max·p99·Mean(초)·표본 수 Gauge로 제공하며, 통합 실행의 단일 관측 출처는 Worker `/metrics`다. 계산 방식·지표의 누적 및 초기화 의미·종료 정책은 [실행 안내](experiments/cpu-event-loop/README.md)를 참고한다.
+
 ## Enqueue Admission Control
 
 `POST /jobs`는 기본적으로 미완료 Job인 `queued + processing`을 최대 100개까지 받는다. Retry·미래 실행 대기와 Stale Processing도 포함하며 `succeeded/failed`는 제외한다. 입력 오류는 용량 검사보다 먼저 HTTP 400으로 응답한다. 용량이 가득 차면 INSERT 없이 HTTP 503과 다음 본문을 반환하며 `Retry-After`는 제공하지 않는다.
@@ -171,7 +175,7 @@ npm run test:observability
 npm run test:db
 ```
 
-관측 테스트는 JSON Event·Request ID·실행 정보, 11개 Metric과 Registry 격리, 실제 DB Gauge·저장 실패·소유권 상실·동시 Recovery의 계측, 결과 저장과 분리된 Handler Duration, 계측 오류의 격리와 독립 Worker의 종료 Event·서버 정리를 확인한다. PostgreSQL 테스트는 Claim·Retry·Recovery·실행 소유권·DB 오류 중단·Graceful Shutdown에 더해 Admission의 상태 집계·ON/OFF·실제 10개 연결의 잠금 경합·COUNT/INSERT/COMMIT 오류와 거부 계측을 검증한다.
+관측 테스트는 JSON Event·Request ID·실행 정보, Job Metric 11개와 프로세스별 Event Loop Gauge 4개의 Registry 격리, 실제 DB Gauge·저장 실패·소유권 상실·동시 Recovery의 계측, 결과 저장과 분리된 Handler Duration, 계측 오류의 격리와 독립 Worker의 종료 Event·서버 정리를 확인한다. PostgreSQL 테스트는 Claim·Retry·Recovery·실행 소유권·DB 오류 중단·Graceful Shutdown에 더해 Admission의 상태 집계·ON/OFF·실제 10개 연결의 잠금 경합·COUNT/INSERT/COMMIT 오류와 거부 계측, cpu 입력·성공과 두 프로세스 배치의 실제 HTTP·종료를 검증한다.
 
 실제 Compose Worker 3개의 정상 분담, 단일 Worker의 SIGKILL 중 처리 지속과 자연 Timeout Recovery, 1→3→1 Scale 변경·SIGTERM·Prometheus 개별 수집은 선택 실행으로 확인한다. 개발용 데이터와 포트를 공유하지 않는 별도 프로젝트를 사용하며, 실행·관찰·정리는 [다중 Worker 검증 안내](tests/compose/README.md)를 따른다.
 

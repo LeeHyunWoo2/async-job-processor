@@ -14,7 +14,8 @@
     "db:migration:up": "node --env-file=.env src/db/migrate.ts up",
     "dev:api": "node --env-file=.env --watch src/api/server.ts",
     "start:api": "node --env-file=.env src/api/server.ts",
-    "start:worker": "node --env-file=.env src/worker/main.ts"
+    "start:worker": "node --env-file=.env src/worker/main.ts",
+    "start:co-located": "node --env-file=.env experiments/cpu-event-loop/co-located.ts"
   },
   "repository": {
     "type": "git",

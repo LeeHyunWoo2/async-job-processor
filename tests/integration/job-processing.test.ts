@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
 import { randomUUID } from 'node:crypto';
+import { performance } from 'node:perf_hooks';
 import test from 'node:test';
 
 import type { MikroORM } from '@mikro-orm/postgresql';
@@ -74,6 +75,52 @@ test('PostgreSQL 기본 Job 처리', { timeout: 60_000 }, async (t) => {
                 assert.equal((await post({ type: 'slow', payload: { durationMs: 10_000 } })).statusCode, 201);
                 assert.equal((await post({ type: 'fail', payload: {} })).statusCode, 201);
                 assert.equal((await post({ type: 'flaky', payload: {} })).statusCode, 201);
+            });
+
+            await t.test('cpu 입력은 정수 경계값만 등록하고 잘못된 입력은 행을 만들지 않는다', async () => {
+                for (const durationMs of [1, 10_000]) {
+                    const created = await post({ type: 'cpu', payload: { durationMs } });
+                    assert.equal(created.statusCode, 201);
+                    const found = (await get(created.json().id)).json();
+                    assert.equal(found.type, 'cpu');
+                    assert.deepEqual(found.payload, { durationMs });
+                    assert.equal(found.status, JobStatus.queued);
+                    assert.equal(found.attempt, 0);
+                }
+                const invalid = [
+                    { type: 'cpu' }, { type: 'cpu', payload: null },
+                    { type: 'cpu', payload: [] }, { type: 'cpu', payload: {} },
+                    ...['1', 1.5, 0, -1, 10_001, true, null].map((durationMs) => ({ type: 'cpu', payload: { durationMs } })),
+                    { type: 'cpu', payload: { durationMs: 1, extra: true } },
+                    { type: 'cpu', payload: { durationMs: 1 }, extra: true },
+                ];
+                for (const input of invalid) assert.equal((await post(input)).statusCode, 400, JSON.stringify(input));
+                assert.equal(await orm.em.fork().count(Job), 2, '잘못된 cpu 요청은 Job을 생성하지 않아야 합니다');
+            });
+
+            await t.test('cpu는 기존 Worker 경로에서 실제 계산 결과를 첫 시도 성공으로 저장한다', async (t) => {
+                const created = await post({ type: 'cpu', payload: { durationMs: 20 } });
+                assert.equal(created.statusCode, 201);
+                const controller = new AbortController();
+                await runWorker(orm, 'cpu-worker', async (job) => {
+                    try {
+                        const startedAt = performance.now();
+                        const result = executeHandler(job);
+                        assert.ok(performance.now() - startedAt >= 20, 'cpu 계산은 Promise 반환 전에 동기적으로 목표 경과 시간만큼 실행되어야 합니다');
+                        return await result;
+                    } finally {
+                        controller.abort();
+                    }
+                }, AbortSignal.any([controller.signal, t.signal]));
+                const saved = (await get(created.json().id)).json();
+                assert.equal(saved.status, JobStatus.succeeded);
+                assert.equal(saved.attempt, 1);
+                assert.equal(saved.workerId, 'cpu-worker');
+                assert.equal(saved.lastError, null);
+                assert.equal(saved.result.durationMs, 20);
+                assert.ok(saved.result.iterations >= 1_000);
+                assert.ok(Number.isSafeInteger(saved.result.checksum));
+                assert.ok(saved.result.checksum >= 0 && saved.result.checksum <= 0xffff_ffff);
             });
 
             await t.test('Claim 잠금 해제 후 실제 Handler를 실행하고 실패에 이어 다음 Job의 성공 결과를 조회한다', async (t) => {
