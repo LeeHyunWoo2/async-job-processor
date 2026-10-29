@@ -95,7 +95,7 @@ Compose에서 API·Worker를 이미 실행 중이라면 먼저 `docker compose s
 
 ### CPU Job과 Event Loop 관측
 
-`cpu` Job은 `slow`와 같은 정수 `durationMs` 1~10,000ms를 받으며 현재 JavaScript 스레드에서 동기 산술 계산을 수행한다. 기존 분리 실행에 더해 `npm run start:co-located`로 API와 Worker를 한 프로세스에 배치할 수 있다. 프로세스별 Event Loop 지연은 Max·p99·Mean(초)·표본 수 Gauge로 제공하며, 통합 실행의 단일 관측 출처는 Worker `/metrics`다. 계산 방식·지표의 누적 및 초기화 의미·종료 정책은 [실행 안내](experiments/cpu-event-loop/README.md)를 참고한다.
+`cpu` Job은 `slow`와 같은 정수 `durationMs` 1~10,000ms를 받으며 현재 JavaScript 스레드에서 동기 산술 계산을 수행한다. 기존 분리 실행에 더해 `npm run start:co-located`로 API와 Worker를 한 프로세스에 배치할 수 있다. 프로세스별 Event Loop 지연은 Max·p99·Mean(초)·표본 수 Gauge로 제공하며, 통합 실행의 단일 관측 출처는 Worker `/metrics`다. 전용 Compose에서 Idle·slow·cpu를 두 실행 구조로 각 3회 비교하고 독립 HTTP Probe·프로세스 Histogram·자원·시계 원자료를 보존할 수 있다. 실행법·유효성 기준·누적 계측 의미는 [실험 안내](experiments/cpu-event-loop/README.md), 기본 18회 실측은 [결과 보고서](experiments/cpu-event-loop/results/2026-10-29/report.md)를 참고한다.
 
 ## Enqueue Admission Control
 

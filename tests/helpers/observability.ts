@@ -14,6 +14,7 @@ export interface LogEntry {
     previousWorkerId?: string | null;
     attempt?: number;
     jobType?: string;
+    handlerElapsedMs?: number;
     status?: string;
     reqId?: string;
     err?: { type?: string; name?: string; message: string; stack?: string };

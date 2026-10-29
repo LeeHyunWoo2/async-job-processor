@@ -9,6 +9,7 @@ node_modules/
 # Raw experiment artifacts
 /artifacts/worker-load/
 /artifacts/backpressure/
+/artifacts/cpu-event-loop/
 
 # Experiment results: only selected files
 /experiments/worker-load/results/**
@@ -23,3 +24,8 @@ node_modules/
 !/experiments/backpressure/results/2026-10-27/
 !/experiments/backpressure/results/2026-10-27/report.md
 !/experiments/backpressure/results/2026-10-27/summary.json
+
+/experiments/cpu-event-loop/results/**
+!/experiments/cpu-event-loop/results/2026-10-29/
+!/experiments/cpu-event-loop/results/2026-10-29/report.md
+!/experiments/cpu-event-loop/results/2026-10-29/summary.json

@@ -171,7 +171,8 @@ test('Job Lifecycle 계측은 실제 PostgreSQL 상태 전이와 Handler 실행�
             const observation = captureWorkerObservability('lifecycle-worker');
             const controller = new AbortController();
             await runWorker(orm, 'lifecycle-worker', async (job) => {
-                const claimed = observation.logs.at(-1)!;
+                assert.equal(observation.logs.at(-1)?.event, 'job.handler_started');
+                const claimed = observation.logs.at(-2)!;
                 assert.equal(claimed.event, 'job.claimed');
                 assert.equal(claimed.jobId, job.id);
                 assert.equal(claimed.attempt, job.attempt);
@@ -180,15 +181,24 @@ test('Job Lifecycle 계측은 실제 PostgreSQL 상태 전이와 Handler 실행�
                 return executeHandler(job);
             }, AbortSignal.any([controller.signal, t.signal]), observation);
             const events = (id: string) => observation.logs.filter((log) => log.jobId === id).map((log) => log.event);
-            assert.deepEqual(events(slow.id), ['job.claimed', 'job.succeeded']);
-            assert.deepEqual(events(fail.id), ['job.claimed', 'job.failed']);
-            assert.deepEqual(events(flaky.id), ['job.claimed', 'job.retry_scheduled', 'job.claimed', 'job.retry_scheduled', 'job.claimed', 'job.succeeded']);
+            assert.deepEqual(events(slow.id), ['job.claimed', 'job.handler_started', 'job.handler_finished', 'job.succeeded']);
+            assert.deepEqual(events(fail.id), ['job.claimed', 'job.handler_started', 'job.handler_finished', 'job.failed']);
+            assert.deepEqual(events(flaky.id), [
+                'job.claimed', 'job.handler_started', 'job.handler_finished', 'job.retry_scheduled',
+                'job.claimed', 'job.handler_started', 'job.handler_finished', 'job.retry_scheduled',
+                'job.claimed', 'job.handler_started', 'job.handler_finished', 'job.succeeded',
+            ]);
             for (const log of observation.logs) {
                 assert.equal(log.component, 'worker');
                 assert.equal(log.workerId, 'lifecycle-worker');
                 assert.ok(log.attempt! >= 1);
                 assert.equal(log.level, log.event === 'job.failed' || log.event === 'job.retry_scheduled' ? 40 : 30);
-                assert.equal(log.status, log.event === 'job.claimed' ? 'processing' : log.event === 'job.retry_scheduled' ? 'queued' : log.event === 'job.failed' ? 'failed' : 'succeeded');
+                if (log.event === 'job.handler_started' || log.event === 'job.handler_finished') {
+                    assert.equal(log.status, undefined, 'Handler 종료 Marker는 DB 결과 저장을 뜻하지 않습니다');
+                    if (log.event === 'job.handler_finished') assert.ok(Number.isFinite(log.handlerElapsedMs) && log.handlerElapsedMs! >= 0);
+                } else {
+                    assert.equal(log.status, log.event === 'job.claimed' ? 'processing' : log.event === 'job.retry_scheduled' ? 'queued' : log.event === 'job.failed' ? 'failed' : 'succeeded');
+                }
                 assert.ok(!Object.hasOwn(log, 'payload') && !Object.hasOwn(log, 'result'));
             }
             const retries = observation.logs.filter((log) => log.event === 'job.retry_scheduled');
@@ -222,7 +232,7 @@ test('Job Lifecycle 계측은 실제 PostgreSQL 상태 전이와 Handler 실행�
                         return { completed: true };
                     }, t.signal, observation), /검증용 계측 결과 저장 오류/);
                     assert.equal((await saved(job.id)).status, JobStatus.processing);
-                    assert.deepEqual(observation.logs.map((log) => log.event), ['job.claimed']);
+                    assert.deepEqual(observation.logs.map((log) => log.event), ['job.claimed', 'job.handler_started', 'job.handler_finished']);
                     assert.equal(await metricValue(observation.registry, 'async_job_claimed_total'), 1);
                     for (const counter of ['succeeded', 'failed', 'retry_scheduled']) {
                         assert.equal(await metricValue(observation.registry, `async_job_${counter}_total`), 0);
@@ -256,12 +266,12 @@ test('Job Lifecycle 계측은 실제 PostgreSQL 상태 전이와 Handler 실행�
                     duration = await metricValue(observation.registry, 'async_job_handler_duration_seconds_sum');
                     assert.ok(duration > 0);
                     assert.equal(await metricValue(observation.registry, 'async_job_succeeded_total'), 0);
-                    assert.deepEqual(observation.logs, []);
+                    assert.deepEqual(observation.logs.map((log) => log.event), ['job.handler_started', 'job.handler_finished']);
                 });
                 await pending;
                 assert.equal(await metricValue(observation.registry, 'async_job_handler_duration_seconds_sum'), duration);
                 assert.equal(await metricValue(observation.registry, 'async_job_succeeded_total'), 1);
-                assert.equal(observation.logs[0]?.event, 'job.succeeded');
+                assert.deepEqual(observation.logs.map((log) => log.event), ['job.handler_started', 'job.handler_finished', 'job.succeeded']);
             } finally {
                 await Promise.allSettled([pending]);
             }

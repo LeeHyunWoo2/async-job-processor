@@ -203,7 +203,10 @@ test('PostgreSQL Crash Recovery / At-least-once', { timeout: 100_000 }, async (t
                     await assert.rejects(processJob(orm, previous, async () => {
                         throw new Error('이전 실행의 최종 실패');
                     }, observation), /실행 상태가 변경되었습니다/);
-                    assert.deepEqual(observation.logs, []);
+                    // Handler 실행 Marker는 남지만 거부된 DB 상태 전이를 성공으로 기록하면 안 된다.
+                    assert.deepEqual(observation.logs.map((log) => log.event), Array.from({ length: 3 },
+                        () => ['job.handler_started', 'job.handler_finished']).flat());
+                    assert.ok(observation.logs.every((log) => log.jobId === previous.id && log.workerId === 'worker-a' && log.attempt === previous.attempt));
                     for (const name of ['succeeded', 'failed', 'retry_scheduled']) {
                         assert.equal(await metricValue(observation.registry, `async_job_${name}_total`), 0);
                     }

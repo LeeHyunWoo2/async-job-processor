@@ -60,11 +60,11 @@
   - 기본 조건 ON/OFF 각각 두 번에서 OFF의 미완료 누적과 ON의 503 거부·관측 상한 유지, 모든 수락 Job의 첫 시도 성공 확인
   - 측정 유효성과 종료 처리 결과를 구분하고 시작 조건 거부·중단·로그 저장 실패 시 자료·기존 행 보존 검증, 재현 도구·선별한 실측 요약과 원자료 분리
 
-- CPU Job과 Event Loop 관측 기반 구현 완료
-  - 기존 Job 경로에서 Monotonic 경과 시간 목표의 동기 산술 계산과 JSON 결과 저장 지원
-  - 프로세스당 Native Event Loop 지연 계측 및 Max·p99·Mean(초)·표본 수 Gauge, 초기화·종료 지원
-  - 기존 분리 실행과 동일 API·Worker 코드를 사용하는 실험용 통합 진입점 제공
-  - 통합 프로세스는 Worker Metrics를 단일 계측 출처로 사용하며 별도 API·Worker ORM을 현재 Job 완료 후 정리
+- CPU Job / Event Loop 비교 실험 구현·기본 실측 완료
+  - 기존 동기 산술 Handler와 프로세스별 Native 지연 계측, 동일 API·Worker 코드를 사용하는 통합·분리 실행 제공
+  - 전용 Compose에서 Idle·slow·cpu를 구조별 3회 측정하고 독립 HTTP Probe·누적 Histogram·Docker 자원·시계 진단·실제 Job 결과 보존
+  - 기본 18회 모두 유효하며 CPU 조건의 통합 API·Worker Metrics 지연과 분리 실행 API 응답성을 직접 관측
+  - 측정 유효성·자료 저장/정리를 구분하고 기존 행·로그·원자료와 선별 보고서를 분리 보존
 
 - 검증 완료
   - 실제 PostgreSQL에서 schema·기본값·제약, API 입력·등록·조회, Handler와 Retry / Backoff 확인
@@ -87,6 +87,7 @@
   - COUNT·INSERT·Commit 오류의 Rollback·잠금 해제·관측 정확성과 거부 계측 오류 격리, 독립 API의 환경변수 적용 확인
   - cpu 입력 경계·동기 계산·첫 시도 성공, Event Loop 실제 표본·단위 변환·Registry 격리·초기화·종료 확인
   - 분리·통합 진입점의 실제 HTTP·Job·Metrics, 통합 실행의 처리 중 정상 종료·DB 오류 정리와 기존 전체 DB 회귀 확인
+  - Probe 독립 예약·Timeout/오류/누락 정산, 실제 Compose 두 구조의 cpu 성공·행 보존·정상 종료와 저장 실패·중단 시 자료/정리 분리 확인
 
 ## 현재 범위
 
@@ -98,7 +99,7 @@
 - Admission 상한은 동일 DB에서 모든 API가 ON·동일 제한값·공통 잠금 키를 사용하는 등록 경로에 한정되며 OFF·직접 INSERT는 우회 가능함. COUNT·잠금 대기·거부 로그 비용은 남으며 순간 요청 폭주나 완료 행을 포함한 전체 저장량은 제한하지 않음
 - 지속 유입 실측의 DB 표본과 기존 동시성 테스트의 상한 보장은 별도 근거이며, 반복 순서·완료 행 누적·관측 및 로그 부하의 영향은 통제하지 않음
 - 기존 반복 실측은 Timer 기반 대기에 한정하며, 관측된 시각 변동을 고려한 처리량의 정밀 해석·병목 원인·최적 Worker 수는 확정하지 않음
-- CPU·Event Loop 비교는 실행·계측 기반까지 구현했으며 반복 측정·HTTP Probe·시계 비교·실측 보고서는 후속 범위임
+- CPU·Event Loop 실측은 한 환경의 짧은 부하·누적 Histogram과 Wall Clock 사건 정렬에 한정하며, OS 자원 경합·시계 변동 원인·보편적 응답시간 보장이나 정밀 성능 우위는 확정하지 않음
 
 ## 막힌 문제
 
