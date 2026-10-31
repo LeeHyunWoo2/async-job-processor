@@ -1,0 +1,34 @@
+# 기존 프로젝트·이미지·DB·포트·Named Volume과 분리한다.
+x-environment: &environment
+  DB_HOST: postgres
+  DB_PORT: 5432
+  DB_USER: ${DB_USER}
+  DB_PASSWORD: ${DB_PASSWORD}
+  DB_NAME: async_job_failure_load
+  LOG_LEVEL: info
+  ENABLE_BACKPRESSURE: 'true'
+  MAX_OUTSTANDING_JOBS: ${FAILURE_LOAD_LIMIT:-30}
+  API_HOST: 0.0.0.0
+  API_PORT: 3000
+  WORKER_METRICS_HOST: 0.0.0.0
+  WORKER_METRICS_PORT: 9464
+
+services:
+  postgres:
+    environment:
+      POSTGRES_DB: async_job_failure_load
+    ports: !override ["127.0.0.1::5432"]
+  migrate:
+    image: async-job-failure-load:local
+    environment: *environment
+  api:
+    image: async-job-failure-load:local
+    environment: *environment
+    ports: !override ["127.0.0.1::3000"]
+    restart: 'no'
+  worker:
+    image: async-job-failure-load:local
+    environment: *environment
+    restart: 'no'
+  prometheus:
+    ports: !override ["127.0.0.1::9090"]
