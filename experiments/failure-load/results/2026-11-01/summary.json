@@ -1,0 +1,351 @@
+{
+  "date": "2026-11-01",
+  "scope": "Failure / Load 리뷰 보완 및 작은 실제 Compose 검증. PR 2 Pilot·120초 기본 4회 실측 미수행.",
+  "rawRoot": "artifacts/failure-load/smoke-1793459290363",
+  "environment": {
+    "node": "v24.21.0",
+    "revision": "4b33907e26e076c73f1f79adc1d2d6d3d0bd4c94",
+    "branch": "feature/failure-load",
+    "imageId": "sha256:c0ce0a1e8a322189cf1e387318ce8500d6ebc59c867aa7d7bb60ce9e4f70435a",
+    "docker": "29.8.2",
+    "compose": "5.5.1"
+  },
+  "hashes": {
+    "experiments/failure-load/experiment.ts": "869f2e76a619a909e4ed19f969b88b7a04ce5b0b6a8f8274fe1fd1bcfa89266d",
+    "experiments/failure-load/run.ts": "072a8890319645a2a48ec8672c73e34c0a114715d38baca566275e92ccd26d79",
+    "experiments/failure-load/experiment.test.ts": "aaa50f850e5e4569ada842c858b4ff29a7d503f2662c5f36fcbe052f7e0ca92e",
+    "experiments/failure-load/smoke.test.ts": "3ba846c65c8311c96777e1fdb2b1d773e089e3cc3faee9846bbe8b56d7bddb59"
+  },
+  "approvedNormalThreeRules": {
+    "afterTargetCompletion": true,
+    "windowMs": 10000,
+    "saturatedConsecutiveWindows": 2,
+    "growingConsecutiveWindows": 3,
+    "minMeanOutstandingIncrease": 3,
+    "minFullWindowsForSuitable": 3,
+    "minDbSamplesPerWindow": 2,
+    "insufficient": "inconclusive",
+    "mainAndPilotThreeRequireUserDecision": true,
+    "pilotTwoIsObservationOnly": true
+  },
+  "verification": {
+    "typecheck": "passed",
+    "unitAndExperimentTests": 18,
+    "newToolTests": 12,
+    "composeTests": 3,
+    "existingRowsPreserved": true,
+    "existingContainerStatesUnchanged": true
+  },
+  "runs": [
+    {
+      "source": "artifacts/failure-load/smoke-1793459290363/paths/r1-normal",
+      "mode": "normal",
+      "purpose": "smoke",
+      "parameters": {
+        "workers": 3,
+        "rate": 6,
+        "seconds": 12,
+        "targetAtSeconds": 1,
+        "limit": 8
+      },
+      "scenario": {
+        "valid": true,
+        "reasons": [],
+        "suitability": {
+          "purpose": "smoke",
+          "criterion": "tool-or-failure-path",
+          "status": "observation-only",
+          "requiresUserDecision": false
+        }
+      },
+      "functional": "passed",
+      "measurement": true,
+      "cleanup": {
+        "succeeded": true,
+        "errors": []
+      },
+      "regular": {
+        "sent": 72,
+        "accepted": 30,
+        "rejected": 42,
+        "rttMsByOutcome": {
+          "accepted201": {
+            "count": 30,
+            "min": 4.433614999994461,
+            "p50": 5.803352999995695,
+            "p95": 9.584611999998742,
+            "p99": 50.40435399999842,
+            "max": 50.40435399999842,
+            "mean": 7.503026233332639
+          },
+          "policyRejected503": {
+            "count": 42,
+            "min": 2.9956590000001597,
+            "p50": 3.7064439999958267,
+            "p95": 5.98513400000229,
+            "p99": 6.764746000000741,
+            "max": 6.764746000000741,
+            "mean": 4.019828547619302
+          },
+          "otherHttp": {
+            "count": 0,
+            "min": null,
+            "p50": null,
+            "p95": null,
+            "p99": null,
+            "max": null,
+            "mean": null
+          },
+          "networkOrBodyErrors": {
+            "count": 0,
+            "min": null,
+            "p50": null,
+            "p95": null,
+            "p99": null,
+            "max": null,
+            "mean": null
+          }
+        }
+      },
+      "targetAccepted": 1,
+      "observedMaxOutstanding": 8,
+      "survivorProof": null,
+      "firstClaimAgeMsAtRecoveryConfirmation": null,
+      "completion": {
+        "basis": "log-observed",
+        "dbSucceededDelta": 31,
+        "logObservedSucceeded": 31,
+        "matches": true
+      },
+      "phaseDbCrossChecks": [
+        {
+          "from": "load-start",
+          "to": "handler-started",
+          "dbSucceededDelta": 4,
+          "logObservedSucceeded": 4,
+          "difference": 0
+        },
+        {
+          "from": "control-confirmed",
+          "to": "load-end",
+          "dbSucceededDelta": 17,
+          "logObservedSucceeded": 17,
+          "difference": 0
+        },
+        {
+          "from": "load-end",
+          "to": "target-succeeded",
+          "dbSucceededDelta": 1,
+          "logObservedSucceeded": 1,
+          "difference": 0
+        },
+        {
+          "from": "target-succeeded",
+          "to": "drain-end",
+          "dbSucceededDelta": 3,
+          "logObservedSucceeded": 3,
+          "difference": 0
+        }
+      ]
+    },
+    {
+      "source": "artifacts/failure-load/smoke-1793459290363/paths/r1-failure",
+      "mode": "failure",
+      "purpose": "smoke",
+      "parameters": {
+        "workers": 3,
+        "rate": 6,
+        "seconds": 12,
+        "targetAtSeconds": 1,
+        "limit": 8
+      },
+      "scenario": {
+        "valid": true,
+        "reasons": [],
+        "suitability": {
+          "purpose": "smoke",
+          "criterion": "tool-or-failure-path",
+          "status": "observation-only",
+          "requiresUserDecision": false
+        }
+      },
+      "functional": "passed",
+      "measurement": true,
+      "cleanup": {
+        "succeeded": true,
+        "errors": []
+      },
+      "regular": {
+        "sent": 72,
+        "accepted": 31,
+        "rejected": 41,
+        "rttMsByOutcome": {
+          "accepted201": {
+            "count": 31,
+            "min": 4.058726000002935,
+            "p50": 5.334963000001153,
+            "p95": 25.230177000004915,
+            "p99": 42.885948999988614,
+            "max": 42.885948999988614,
+            "mean": 7.389906903227036
+          },
+          "policyRejected503": {
+            "count": 41,
+            "min": 2.718888000003062,
+            "p50": 4.104760000001988,
+            "p95": 5.5207940000109375,
+            "p99": 6.991179999997257,
+            "max": 6.991179999997257,
+            "mean": 4.199209365852833
+          },
+          "otherHttp": {
+            "count": 0,
+            "min": null,
+            "p50": null,
+            "p95": null,
+            "p99": null,
+            "max": null,
+            "mean": null
+          },
+          "networkOrBodyErrors": {
+            "count": 0,
+            "min": null,
+            "p50": null,
+            "p95": null,
+            "p99": null,
+            "max": null,
+            "mean": null
+          }
+        }
+      },
+      "targetAccepted": 1,
+      "observedMaxOutstanding": 8,
+      "survivorProof": {
+        "requestId": "db9d371d-53fb-45a1-ad91-d488afd3f115",
+        "sentMs": 3500.241802000004,
+        "acceptedMs": 3505.516220999998,
+        "killConfirmedMs": 3268.0021280000074,
+        "successObservedMs": 6801.460823999994,
+        "proofConfirmedMs": 6862.953613999998,
+        "workerId": "621c160a-39c8-4a5e-8b74-356265d4a5ae",
+        "containerId": "1526882df02cb71a8212603114d7d253a2ce152919ee2791116f99411e547a17",
+        "completedStatus": "succeeded",
+        "targetStatus": "processing",
+        "targetAttempt": 1
+      },
+      "firstClaimAgeMsAtRecoveryConfirmation": 32357.213,
+      "completion": {
+        "basis": "log-observed",
+        "dbSucceededDelta": 32,
+        "logObservedSucceeded": 32,
+        "matches": true
+      },
+      "phaseDbCrossChecks": [
+        {
+          "from": "load-start",
+          "to": "handler-started",
+          "dbSucceededDelta": 3,
+          "logObservedSucceeded": 3,
+          "difference": 0
+        },
+        {
+          "from": "handler-started",
+          "to": "kill-confirmed",
+          "dbSucceededDelta": 1,
+          "logObservedSucceeded": 1,
+          "difference": 0
+        },
+        {
+          "from": "kill-confirmed",
+          "to": "load-end",
+          "dbSucceededDelta": 16,
+          "logObservedSucceeded": 16,
+          "difference": 0
+        },
+        {
+          "from": "load-end",
+          "to": "recovered",
+          "dbSucceededDelta": 7,
+          "logObservedSucceeded": 7,
+          "difference": 0
+        },
+        {
+          "from": "second-claim",
+          "to": "target-succeeded",
+          "dbSucceededDelta": 0,
+          "logObservedSucceeded": 0,
+          "difference": 0
+        }
+      ]
+    }
+  ],
+  "mainGate": {
+    "source": "artifacts/failure-load/smoke-1793459290363/main-gate",
+    "configuredModes": [
+      "normal",
+      "failure"
+    ],
+    "executedModes": [
+      "normal"
+    ],
+    "scenario": {
+      "valid": false,
+      "reasons": [
+        "대상 완료 후 요청·DB 표본이 있는 온전한 10초 구간 3개 부족"
+      ],
+      "suitability": {
+        "purpose": "main",
+        "criterion": "normal-three-stable",
+        "status": "inconclusive",
+        "requiresUserDecision": true
+      }
+    },
+    "functional": "passed",
+    "measurement": true,
+    "cleanup": {
+      "succeeded": true,
+      "errors": []
+    },
+    "finalCleanup": {
+      "succeeded": true,
+      "errors": []
+    }
+  },
+  "faults": {
+    "saveFailure": {
+      "source": "artifacts/failure-load/smoke-1793459290363/save-failure",
+      "functional": "passed",
+      "measurement": true,
+      "cleanup": {
+        "succeeded": false,
+        "errors": [
+          "서비스 로그 저장: Error: EISDIR: illegal operation on a directory, open '/home/lhw/projects/async-job-processor/artifacts/failure-load/smoke-1793459290363/save-failure/r1-normal/services.log'",
+          "반복 결과 저장: Error: EISDIR: illegal operation on a directory, open '/home/lhw/projects/async-job-processor/artifacts/failure-load/smoke-1793459290363/save-failure/r1-normal/result.json'"
+        ]
+      },
+      "finalCleanup": {
+        "succeeded": true,
+        "errors": []
+      }
+    },
+    "interrupt": {
+      "source": "artifacts/failure-load/smoke-1793459290363/interrupt",
+      "functional": "incomplete",
+      "measurement": false,
+      "cleanup": {
+        "succeeded": true,
+        "errors": []
+      },
+      "finalCleanup": {
+        "succeeded": true,
+        "errors": []
+      }
+    }
+  },
+  "limitations": [
+    "정상 3개 장시간 안정성·Worker 2/3 실제 Pilot은 PR 2에서 확인",
+    "Recovery 확인 시점의 DB 경과는 Recovery 트랜잭션의 정확한 시각과 다름",
+    "로그 관측 완료율과 내부 DB 표본 구간의 비교는 정밀 서버 TPS 측정이 아님",
+    "초기 2026-10-31 검증 기록은 당시 판정 기준의 역사적 결과로 보존"
+  ]
+}

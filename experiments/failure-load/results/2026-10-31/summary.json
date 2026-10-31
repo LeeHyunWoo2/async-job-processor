@@ -1,0 +1,811 @@
+{
+  "date": "2026-10-31",
+  "scope": "PR 1 도구·실제 작은 Smoke 검증. 기본 120초 4회 실측·Pilot 미수행.",
+  "environment": {
+    "revision": "4b33907e26e076c73f1f79adc1d2d6d3d0bd4c94",
+    "branch": "feature/failure-load",
+    "node": "v24.21.0",
+    "host": {
+      "platform": "linux",
+      "release": "6.18.54.1-microsoft-standard-WSL2",
+      "cpu": "Intel(R) Core(TM) i7-7700K CPU @ 4.20GHz",
+      "logicalCpus": 8,
+      "memoryBytes": 8329551872
+    },
+    "docker": {
+      "version": "29.8.2",
+      "os": "Docker Desktop (containerized)",
+      "kernel": "6.18.54.1-microsoft-standard-WSL2",
+      "logicalCpus": 8,
+      "memoryBytes": 8329551872
+    },
+    "compose": "5.5.1",
+    "imageId": "sha256:c0ce0a1e8a322189cf1e387318ce8500d6ebc59c867aa7d7bb60ce9e4f70435a"
+  },
+  "aggregationSourceHash": "5aedb18791067806ba7ab7f8c73d9067c7370dd947af16798b832aab112c16b9",
+  "rawRoot": "artifacts/failure-load/smoke-1793456575759",
+  "recheck": "artifacts/failure-load/smoke-1793456575759/recheck-final.json",
+  "validations": {
+    "typecheck": "passed",
+    "unitAndExperimentRegression": {
+      "passed": 14,
+      "newToolTests": 8
+    },
+    "observability": {
+      "passed": 6
+    },
+    "postgresql": {
+      "passed": 64
+    },
+    "composeSmoke": {
+      "passed": 3,
+      "root": "artifacts/failure-load/smoke-1793456575759"
+    },
+    "earlyPreflightMetadata": {
+      "passed": 1,
+      "root": "artifacts/failure-load/smoke-1793456870701/preflight"
+    },
+    "fractionalComposeSmoke": {
+      "exitCode": 0,
+      "root": "artifacts/failure-load/fractional-smoke-final"
+    },
+    "dbPreservation": {
+      "preservedPublicRows": 35,
+      "unchanged": true,
+      "remainingTestSchemas": 0
+    }
+  },
+  "runs": [
+    {
+      "source": "artifacts/failure-load/smoke-1793456575759/paths/r1-normal",
+      "parameters": {
+        "mode": "normal",
+        "workers": 3,
+        "seconds": 12,
+        "rate": 6,
+        "durationMs": 1000,
+        "targetAtSeconds": 1,
+        "targetDurationMs": 10000,
+        "limit": 8
+      },
+      "scenario": {
+        "valid": true,
+        "reasons": []
+      },
+      "functional": {
+        "status": "passed",
+        "failures": [],
+        "missing": []
+      },
+      "measurement": {
+        "valid": true,
+        "reasons": [],
+        "timing": {
+          "valid": true,
+          "reasons": []
+        },
+        "wallAlignment": {
+          "valid": true,
+          "reasons": []
+        }
+      },
+      "http": {
+        "regular": {
+          "planned": 72,
+          "sent": 72,
+          "unsent": 0,
+          "accepted": 31,
+          "rejected": 41,
+          "otherHttp": 0,
+          "networkOrBodyErrors": 0,
+          "acceptanceFraction": 0.4305555555555556,
+          "dispatchRate": 6.01862398768281,
+          "rttMs": {
+            "count": 72,
+            "min": 2.868004000003566,
+            "p50": 4.187730999998166,
+            "p95": 8.793151999998372,
+            "p99": 31.0716539999994,
+            "max": 31.0716539999994,
+            "mean": 4.978765666666833
+          },
+          "scheduleLagMs": {
+            "count": 72,
+            "min": 0.0995296666651484,
+            "p50": 0.6319143333325883,
+            "p95": 1.2871790000026522,
+            "p99": 37.89780400000018,
+            "max": 37.89780400000018,
+            "mean": 1.206286277776839
+          }
+        },
+        "target": {
+          "planned": 1,
+          "sent": 1,
+          "unsent": 0,
+          "accepted": 1,
+          "rejected": 0,
+          "otherHttp": 0,
+          "networkOrBodyErrors": 0,
+          "acceptanceFraction": 1,
+          "dispatchRate": null,
+          "rttMs": {
+            "count": 1,
+            "min": 26.587352999995346,
+            "p50": 26.587352999995346,
+            "p95": 26.587352999995346,
+            "p99": 26.587352999995346,
+            "max": 26.587352999995346,
+            "mean": 26.587352999995346
+          },
+          "scheduleLagMs": {
+            "count": 1,
+            "min": 1.0478130000010424,
+            "p50": 1.0478130000010424,
+            "p95": 1.0478130000010424,
+            "p99": 1.0478130000010424,
+            "max": 1.0478130000010424,
+            "mean": 1.0478130000010424
+          }
+        }
+      },
+      "sampling": {
+        "count": 32,
+        "observedMaxOutstanding": 8,
+        "observedMaxQueued": 5,
+        "queryMs": {
+          "count": 32,
+          "min": 1.9945020000013756,
+          "p50": 2.7724679999955697,
+          "p95": 7.745605000003707,
+          "p99": 13.509558999998262,
+          "max": 13.509558999998262,
+          "mean": 3.473834999999326
+        },
+        "actualIntervalMs": {
+          "count": 31,
+          "min": 112.64161400000012,
+          "p50": 503.02205200000026,
+          "p95": 508.5730340000009,
+          "p99": 521.5739579999972,
+          "max": 521.5739579999972,
+          "mean": 476.78441567741925
+        },
+        "maxAbsClockDifferenceMs": 12.359380999998393
+      },
+      "reconciliation": {
+        "newRows": 32,
+        "unknownResponseRows": 0,
+        "absentIds": 0
+      },
+      "targetId": "1dea8be6-7020-4921-ba7f-5b3b7e2a5bc6",
+      "targetAttempt": 1,
+      "observedMs": {
+        "handler-started": 2402.8856140000025,
+        "target-succeeded": 12438.361203999997,
+        "load-end": 12000.773102000003,
+        "drain-end": 14498.442743999996
+      },
+      "firstClaimAgeMsAtRecoveryConfirmation": null,
+      "retainedAtSurvivorCompletion": null,
+      "victimExitCode": null,
+      "cleanup": {
+        "succeeded": true,
+        "errors": []
+      },
+      "finalCleanup": {
+        "succeeded": true,
+        "errors": []
+      }
+    },
+    {
+      "source": "artifacts/failure-load/smoke-1793456575759/paths/r1-failure",
+      "parameters": {
+        "mode": "failure",
+        "workers": 3,
+        "seconds": 12,
+        "rate": 6,
+        "durationMs": 1000,
+        "targetAtSeconds": 1,
+        "targetDurationMs": 10000,
+        "limit": 8
+      },
+      "scenario": {
+        "valid": true,
+        "reasons": []
+      },
+      "functional": {
+        "status": "passed",
+        "failures": [],
+        "missing": []
+      },
+      "measurement": {
+        "valid": true,
+        "reasons": [],
+        "timing": {
+          "valid": true,
+          "reasons": []
+        },
+        "wallAlignment": {
+          "valid": true,
+          "reasons": []
+        }
+      },
+      "http": {
+        "regular": {
+          "planned": 72,
+          "sent": 72,
+          "unsent": 0,
+          "accepted": 30,
+          "rejected": 42,
+          "otherHttp": 0,
+          "networkOrBodyErrors": 0,
+          "acceptanceFraction": 0.4166666666666667,
+          "dispatchRate": 6.008764641213096,
+          "rttMs": {
+            "count": 72,
+            "min": 2.7647430000070017,
+            "p50": 4.746882000006735,
+            "p95": 9.00135799999407,
+            "p99": 34.77022200000647,
+            "max": 34.77022200000647,
+            "mean": 5.247402388887975
+          },
+          "scheduleLagMs": {
+            "count": 72,
+            "min": 0.02959900000860216,
+            "p50": 0.6281289999969886,
+            "p95": 1.2374293333386959,
+            "p99": 17.46316200000001,
+            "max": 17.46316200000001,
+            "mean": 0.8813704027813986
+          }
+        },
+        "target": {
+          "planned": 1,
+          "sent": 1,
+          "unsent": 0,
+          "accepted": 1,
+          "rejected": 0,
+          "otherHttp": 0,
+          "networkOrBodyErrors": 0,
+          "acceptanceFraction": 1,
+          "dispatchRate": null,
+          "rttMs": {
+            "count": 1,
+            "min": 18.59476999999606,
+            "p50": 18.59476999999606,
+            "p95": 18.59476999999606,
+            "p99": 18.59476999999606,
+            "max": 18.59476999999606,
+            "mean": 18.59476999999606
+          },
+          "scheduleLagMs": {
+            "count": 1,
+            "min": 0.9141520000048331,
+            "p50": 0.9141520000048331,
+            "p95": 0.9141520000048331,
+            "p99": 0.9141520000048331,
+            "max": 0.9141520000048331,
+            "mean": 0.9141520000048331
+          }
+        }
+      },
+      "sampling": {
+        "count": 102,
+        "observedMaxOutstanding": 8,
+        "observedMaxQueued": 5,
+        "queryMs": {
+          "count": 102,
+          "min": 1.9040039999963483,
+          "p50": 2.6157319999911124,
+          "p95": 4.45465700000932,
+          "p99": 10.201293999998597,
+          "max": 22.077867999993032,
+          "mean": 3.074897088235208
+        },
+        "actualIntervalMs": {
+          "count": 101,
+          "min": 110.09681499999715,
+          "p50": 503.3481960000063,
+          "p95": 505.42089199999464,
+          "p99": 512.1459539999996,
+          "max": 522.124576999995,
+          "mean": 496.50621262376234
+        },
+        "maxAbsClockDifferenceMs": 83.42206699999952
+      },
+      "reconciliation": {
+        "newRows": 31,
+        "unknownResponseRows": 0,
+        "absentIds": 0
+      },
+      "targetId": "835e8638-b5aa-4c40-b2fa-92d96b954d0e",
+      "targetAttempt": 2,
+      "observedMs": {
+        "handler-started": 2659.5642730000036,
+        "kill-confirmed": 3495.338311000007,
+        "survivor-before-recovery": 3835.3745290000006,
+        "recovered": 39587.29978000001,
+        "second-claim": 39590.83730800001,
+        "second-processing": 39674.360701000005,
+        "target-succeeded": 49605.54995200001,
+        "load-end": 12000.233079999998,
+        "drain-end": 49878.36774400001
+      },
+      "firstClaimAgeMsAtRecoveryConfirmation": 37096.863,
+      "retainedAtSurvivorCompletion": "processing",
+      "victimExitCode": 137,
+      "cleanup": {
+        "succeeded": true,
+        "errors": []
+      },
+      "finalCleanup": {
+        "succeeded": true,
+        "errors": []
+      }
+    },
+    {
+      "source": "artifacts/failure-load/fractional-smoke-final/r1-failure",
+      "parameters": {
+        "mode": "failure",
+        "workers": 3,
+        "seconds": 12,
+        "rate": 2.4,
+        "durationMs": 1000,
+        "targetAtSeconds": 1,
+        "targetDurationMs": 10000,
+        "limit": 4
+      },
+      "scenario": {
+        "valid": true,
+        "reasons": []
+      },
+      "functional": {
+        "status": "passed",
+        "failures": [],
+        "missing": []
+      },
+      "measurement": {
+        "valid": true,
+        "reasons": [],
+        "timing": {
+          "valid": true,
+          "reasons": []
+        },
+        "wallAlignment": {
+          "valid": true,
+          "reasons": []
+        }
+      },
+      "http": {
+        "regular": {
+          "planned": 29,
+          "sent": 29,
+          "unsent": 0,
+          "accepted": 24,
+          "rejected": 5,
+          "otherHttp": 0,
+          "networkOrBodyErrors": 0,
+          "acceptanceFraction": 0.8275862068965517,
+          "dispatchRate": 2.407734191668581,
+          "rttMs": {
+            "count": 29,
+            "min": 3.9716060000064317,
+            "p50": 6.041779999999562,
+            "p95": 19.096739000000525,
+            "p99": 59.41322500000388,
+            "max": 59.41322500000388,
+            "mean": 8.549905586207199
+          },
+          "scheduleLagMs": {
+            "count": 29,
+            "min": 0.03781800000433577,
+            "p50": 0.6359803333361924,
+            "p95": 1.8208140000060666,
+            "p99": 37.69836000000214,
+            "max": 37.69836000000214,
+            "mean": 1.9738322183935386
+          }
+        },
+        "target": {
+          "planned": 1,
+          "sent": 1,
+          "unsent": 0,
+          "accepted": 1,
+          "rejected": 0,
+          "otherHttp": 0,
+          "networkOrBodyErrors": 0,
+          "acceptanceFraction": 1,
+          "dispatchRate": null,
+          "rttMs": {
+            "count": 1,
+            "min": 5.403119000002334,
+            "p50": 5.403119000002334,
+            "p95": 5.403119000002334,
+            "p99": 5.403119000002334,
+            "max": 5.403119000002334,
+            "mean": 5.403119000002334
+          },
+          "scheduleLagMs": {
+            "count": 1,
+            "min": 0.8134449999997742,
+            "p50": 0.8134449999997742,
+            "p95": 0.8134449999997742,
+            "p99": 0.8134449999997742,
+            "max": 0.8134449999997742,
+            "mean": 0.8134449999997742
+          }
+        }
+      },
+      "sampling": {
+        "count": 92,
+        "observedMaxOutstanding": 4,
+        "observedMaxQueued": 2,
+        "queryMs": {
+          "count": 92,
+          "min": 2.073326999998244,
+          "p50": 2.7893699999985984,
+          "p95": 4.956559999998717,
+          "p99": 13.999062000002596,
+          "max": 13.999062000002596,
+          "mean": 3.179207826086697
+        },
+        "actualIntervalMs": {
+          "count": 91,
+          "min": 104.90299999999115,
+          "p50": 503.3736579999968,
+          "p95": 505.80850899999496,
+          "p99": 523.9042520000003,
+          "max": 523.9042520000003,
+          "mean": 493.99904330769226
+        },
+        "maxAbsClockDifferenceMs": 70.98486499999126
+      },
+      "reconciliation": {
+        "newRows": 25,
+        "unknownResponseRows": 0,
+        "absentIds": 0
+      },
+      "targetId": "9b96dd00-5ba5-4bfa-9238-931d903936a7",
+      "targetAttempt": 2,
+      "observedMs": {
+        "handler-started": 1561.0820940000049,
+        "kill-confirmed": 2482.384794000005,
+        "survivor-before-recovery": 2851.578809000006,
+        "recovered": 34522.002576,
+        "second-claim": 34525.492512,
+        "second-processing": 34691.905667,
+        "target-succeeded": 44542.958903000006,
+        "load-end": 12000.266421,
+        "drain-end": 44640.53828200001
+      },
+      "firstClaimAgeMsAtRecoveryConfirmation": 33160.463,
+      "retainedAtSurvivorCompletion": "processing",
+      "victimExitCode": 137,
+      "cleanup": {
+        "succeeded": true,
+        "errors": []
+      },
+      "finalCleanup": {
+        "succeeded": true,
+        "errors": []
+      }
+    }
+  ],
+  "checks": [
+    {
+      "source": "artifacts/failure-load/smoke-1793456575759/save-failure/r1-normal",
+      "parameters": {
+        "mode": "normal",
+        "workers": 3,
+        "seconds": 4,
+        "rate": 6,
+        "durationMs": 1000,
+        "targetAtSeconds": 1,
+        "targetDurationMs": 10000,
+        "limit": 8
+      },
+      "scenario": {
+        "valid": true,
+        "reasons": []
+      },
+      "functional": {
+        "status": "passed",
+        "failures": [],
+        "missing": []
+      },
+      "measurement": {
+        "valid": true,
+        "reasons": [],
+        "timing": {
+          "valid": true,
+          "reasons": []
+        },
+        "wallAlignment": {
+          "valid": true,
+          "reasons": []
+        }
+      },
+      "http": {
+        "regular": {
+          "planned": 24,
+          "sent": 24,
+          "unsent": 0,
+          "accepted": 15,
+          "rejected": 9,
+          "otherHttp": 0,
+          "networkOrBodyErrors": 0,
+          "acceptanceFraction": 0.625,
+          "dispatchRate": 6.0454956763069605,
+          "rttMs": {
+            "count": 24,
+            "min": 3.4345549999998184,
+            "p50": 6.375710000000254,
+            "p95": 48.195552999997744,
+            "p99": 76.59767600000123,
+            "max": 76.59767600000123,
+            "mean": 11.660193916666534
+          },
+          "scheduleLagMs": {
+            "count": 24,
+            "min": 0.041568333331724716,
+            "p50": 0.7332569999998668,
+            "p95": 1.4171170000008715,
+            "p99": 29.74332299999878,
+            "max": 29.74332299999878,
+            "mean": 1.908220916666476
+          }
+        },
+        "target": {
+          "planned": 1,
+          "sent": 1,
+          "unsent": 0,
+          "accepted": 1,
+          "rejected": 0,
+          "otherHttp": 0,
+          "networkOrBodyErrors": 0,
+          "acceptanceFraction": 1,
+          "dispatchRate": null,
+          "rttMs": {
+            "count": 1,
+            "min": 21.128108000000793,
+            "p50": 21.128108000000793,
+            "p95": 21.128108000000793,
+            "p99": 21.128108000000793,
+            "max": 21.128108000000793,
+            "mean": 21.128108000000793
+          },
+          "scheduleLagMs": {
+            "count": 1,
+            "min": 1.0162180000006629,
+            "p50": 1.0162180000006629,
+            "p95": 1.0162180000006629,
+            "p99": 1.0162180000006629,
+            "max": 1.0162180000006629,
+            "mean": 1.0162180000006629
+          }
+        }
+      },
+      "sampling": {
+        "count": 28,
+        "observedMaxOutstanding": 8,
+        "observedMaxQueued": 5,
+        "queryMs": {
+          "count": 28,
+          "min": 2.256373000003805,
+          "p50": 2.717626999998174,
+          "p95": 8.730413000001136,
+          "p99": 13.12892500000089,
+          "max": 13.12892500000089,
+          "mean": 3.368802714285656
+        },
+        "actualIntervalMs": {
+          "count": 27,
+          "min": 57.93016599999828,
+          "p50": 503.3950499999992,
+          "p95": 508.5873439999996,
+          "p99": 519.2871060000034,
+          "max": 519.2871060000034,
+          "mean": 473.3487169629629
+        },
+        "maxAbsClockDifferenceMs": 0.6343440000018745
+      },
+      "reconciliation": {
+        "newRows": 16,
+        "unknownResponseRows": 0,
+        "absentIds": 0
+      },
+      "targetId": "7b642e33-9831-4981-8210-b4b48352c261",
+      "targetAttempt": 1,
+      "observedMs": {
+        "handler-started": 2449.532342999999,
+        "target-succeeded": 12468.146426000003,
+        "load-end": 4000.143144999998,
+        "drain-end": 12508.951094
+      },
+      "firstClaimAgeMsAtRecoveryConfirmation": null,
+      "retainedAtSurvivorCompletion": null,
+      "victimExitCode": null,
+      "cleanup": {
+        "succeeded": false,
+        "errors": [
+          "서비스 로그 저장: Error: EISDIR: illegal operation on a directory, open '/home/lhw/projects/async-job-processor/artifacts/failure-load/smoke-1793456575759/save-failure/r1-normal/services.log'",
+          "반복 결과 저장: Error: EISDIR: illegal operation on a directory, open '/home/lhw/projects/async-job-processor/artifacts/failure-load/smoke-1793456575759/save-failure/r1-normal/result.json'"
+        ]
+      },
+      "finalCleanup": {
+        "succeeded": true,
+        "errors": []
+      }
+    },
+    {
+      "source": "artifacts/failure-load/smoke-1793456575759/interrupt/r1-normal",
+      "parameters": {
+        "mode": "normal",
+        "workers": 3,
+        "seconds": 12,
+        "rate": 6,
+        "durationMs": 1000,
+        "targetAtSeconds": 1,
+        "targetDurationMs": 10000,
+        "limit": 8
+      },
+      "scenario": {
+        "valid": false,
+        "reasons": [
+          "실제 Worker 구성·프로세스 유지 확인 미완료",
+          "계획한 일반 부하의 발송 수·한 주기 이내 발송 지연 조건 미충족",
+          "별도 대상 Job 1개 수락·Handler 실행 확인 미완료",
+          "정상 대조군의 대상 실행 확인 미완료"
+        ]
+      },
+      "functional": {
+        "status": "incomplete",
+        "failures": [],
+        "missing": [
+          "최종 전역 정산 확인 미완료",
+          "수락 Job 미완료: 4bd6ee86-05db-46b0-b8be-261f14e25af0 (queued, attempt=0)",
+          "수락 Job 미완료: b5b70689-af6f-44f3-85ca-8f61330377f1 (queued, attempt=0)",
+          "수락 Job 미완료: f536da2f-3c33-4d78-b241-bd313ff1c328 (queued, attempt=0)"
+        ]
+      },
+      "measurement": {
+        "valid": false,
+        "reasons": [
+          "요청 예약·발송 누락",
+          "대상 최종 완료 관측 누락",
+          "AssertionError [ERR_ASSERTION]: 대상 Job이 201로 수락되지 않아 조건이 성립하지 않습니다\n+ actual - expected\n\n+ 'unsent'\n- 'accepted'\n"
+        ],
+        "timing": {
+          "valid": true,
+          "reasons": []
+        },
+        "wallAlignment": {
+          "valid": true,
+          "reasons": []
+        }
+      },
+      "http": {
+        "regular": {
+          "planned": 72,
+          "sent": 6,
+          "unsent": 66,
+          "accepted": 6,
+          "rejected": 0,
+          "otherHttp": 0,
+          "networkOrBodyErrors": 0,
+          "acceptanceFraction": 1,
+          "dispatchRate": 6.240593483236028,
+          "rttMs": {
+            "count": 6,
+            "min": 6.591960999998264,
+            "p50": 8.583704000004218,
+            "p95": 36.18317999999999,
+            "p99": 36.18317999999999,
+            "max": 36.18317999999999,
+            "mean": 15.376534833333912
+          },
+          "scheduleLagMs": {
+            "count": 6,
+            "min": 0.058938333333003357,
+            "p50": 0.6947379999983241,
+            "p95": 32.590447999999014,
+            "p99": 32.590447999999014,
+            "max": 32.590447999999014,
+            "mean": 5.993879499999825
+          }
+        },
+        "target": {
+          "planned": 1,
+          "sent": 0,
+          "unsent": 1,
+          "accepted": 0,
+          "rejected": 0,
+          "otherHttp": 0,
+          "networkOrBodyErrors": 0,
+          "acceptanceFraction": null,
+          "dispatchRate": null,
+          "rttMs": {
+            "count": 0,
+            "min": null,
+            "p50": null,
+            "p95": null,
+            "p99": null,
+            "max": null,
+            "mean": null
+          },
+          "scheduleLagMs": {
+            "count": 0,
+            "min": null,
+            "p50": null,
+            "p95": null,
+            "p99": null,
+            "max": null,
+            "mean": null
+          }
+        }
+      },
+      "sampling": {
+        "count": 3,
+        "observedMaxOutstanding": 6,
+        "observedMaxQueued": 4,
+        "queryMs": {
+          "count": 3,
+          "min": 3.2930930000002263,
+          "p50": 3.5035470000002533,
+          "p95": 12.280855000000884,
+          "p99": 12.280855000000884,
+          "max": 12.280855000000884,
+          "mean": 6.359165000000455
+        },
+        "actualIntervalMs": {
+          "count": 2,
+          "min": 404.37090799999714,
+          "p50": 404.37090799999714,
+          "p95": 519.5041390000006,
+          "p99": 519.5041390000006,
+          "max": 519.5041390000006,
+          "mean": 461.93752349999886
+        },
+        "maxAbsClockDifferenceMs": 0.39488599999822327
+      },
+      "reconciliation": {
+        "newRows": 6,
+        "unknownResponseRows": 0,
+        "absentIds": 0
+      },
+      "targetId": null,
+      "targetAttempt": null,
+      "observedMs": {
+        "load-end": 933.868736999997
+      },
+      "firstClaimAgeMsAtRecoveryConfirmation": null,
+      "retainedAtSurvivorCompletion": null,
+      "victimExitCode": null,
+      "cleanup": {
+        "succeeded": true,
+        "errors": []
+      },
+      "finalCleanup": {
+        "succeeded": true,
+        "errors": []
+      }
+    }
+  ],
+  "preflight": {
+    "unfinishedRefusedBeforeWorkerCreation": true,
+    "readyStaleAndCompletedRowsUnchanged": true,
+    "existingProjectUntouched": true,
+    "otherProjectContainerStateUnchanged": true
+  },
+  "remaining": [
+    "PR 2: Worker 2/3 Pilot으로 2.4 jobs/s 후보 검토",
+    "PR 2: 120초 정상→장애→장애→정상 실측과 결과 보고"
+  ],
+  "limitations": [
+    "DB 표본은 순간 상한의 새 증명이 아님",
+    "관측 시각은 사건 발생 시각과 다르며 로그 Flush/전송 지연 상한은 미상",
+    "사망 Worker Counter는 최종 정산 기준이 아님"
+  ]
+}

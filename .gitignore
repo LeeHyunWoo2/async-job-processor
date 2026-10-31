@@ -10,6 +10,7 @@ node_modules/
 /artifacts/worker-load/
 /artifacts/backpressure/
 /artifacts/cpu-event-loop/
+/artifacts/failure-load/
 
 # Experiment results: only selected files
 /experiments/worker-load/results/**
@@ -29,3 +30,8 @@ node_modules/
 !/experiments/cpu-event-loop/results/2026-10-29/
 !/experiments/cpu-event-loop/results/2026-10-29/report.md
 !/experiments/cpu-event-loop/results/2026-10-29/summary.json
+
+/experiments/failure-load/results/**
+!/experiments/failure-load/results/????-??-??/
+!/experiments/failure-load/results/????-??-??/report.md
+!/experiments/failure-load/results/????-??-??/summary.json

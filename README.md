@@ -190,4 +190,6 @@ Worker 수 1·2·4·8에 따른 Batch 처리량·Handler 시간·Queue 추세·C
 
 Worker 처리 중 Producer의 지속 유입과 Admission Control ON/OFF에 따른 미완료 누적·503 거부 비교는 [지속 유입 실험 안내](experiments/backpressure/README.md)를 따른다. 같은 이미지의 전용 Compose 환경에서 요청별 HTTP 결과·Monotonic 시각·DB 상태 표본과 최종 Job 상태를 보존한다.
 
+지속 유입 중 단일 Worker SIGKILL과 생존 처리·Stale Recovery를 함께 검증하는 도구는 [통합 Failure / Load 실험 안내](experiments/failure-load/README.md)를 따른다. 정상·장애 조건의 요청·DB·사건·자원 근거와 시나리오·기능·측정·정리 판정을 분리한다. 본 실측·Pilot·Smoke 목적과 정상 3개 안정성 기준을 구분하고 부적합한 조건에는 사용자 판단을 요구한다. 작은 Compose Smoke까지 검증하며, 120초 기본 4회 실측과 Pilot은 후속 범위다.
+
 Job Lifecycle Logging, PostgreSQL Gauge·프로세스별 Counter·Handler Duration Histogram과 Compose의 다중 Worker 실행·Prometheus DNS Target Discovery를 제공한다. 기존 상태 전이·Retry·Crash Recovery·실행 소유권 보호를 유지하며, 관측 기록의 원자적 저장·재집계는 제공하지 않는다.
