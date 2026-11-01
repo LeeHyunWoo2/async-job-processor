@@ -1,351 +1,5987 @@
 {
   "date": "2026-11-01",
-  "scope": "Failure / Load 리뷰 보완 및 작은 실제 Compose 검증. PR 2 Pilot·120초 기본 4회 실측 미수행.",
-  "rawRoot": "artifacts/failure-load/smoke-1793459290363",
+  "timezone": "Asia/Seoul",
+  "scope": "Worker 2/3 Pilot 및 정상→장애→장애→정상 기본 실측",
+  "rawRoot": "/home/lhw/projects/async-job-processor/artifacts/failure-load/2026-11-01-measurement",
+  "priorToolVerification": {
+    "revision": "968b753d5d7a91a7e9aeeb86b0e3e5a2107e9a6e",
+    "source": "prior-review-record/report.md 및 summary.json; 같은 날짜 PR 1 원문 복사",
+    "sha256": {
+      "report.md": "4fed1f908eeda02482815da18be3f9ae87254345fd34b180057c3144bd9b4a0b",
+      "summary.json": "720969f75f11fe22c607913a28b1640f46138e05b0d58a61627c7a653d4832c1"
+    }
+  },
   "environment": {
+    "revision": "968b753d5d7a91a7e9aeeb86b0e3e5a2107e9a6e",
+    "branch": "feature/failure-check",
+    "workingTree": "",
+    "hashes": {
+      "Dockerfile": "2ef854e0a538939768c415f92d85ca594b54c7ffe83d26cd834b3f953fcf77c4",
+      "package.json": "0746e912fda0401e5e24b9ed6817358e5d133ea1820bf0cdba561946c2647eaf",
+      "package-lock.json": "bbb3ef10d16a2ce3da750c0aa063373fe4a706c4fd7ba68dab3deba9b3a6fabd",
+      "compose.yml": "3a48f45626a60a38cbd72799500f249681ddb44e2f49380e9e7c0576cc0bcd71",
+      "prometheus.yml": "e9a68c26c45c049143efe9e4912b54746b9768bffe54e7ee1f43d5aa68d82e46",
+      "src/worker/main.ts": "dfa8daeb1f53c205867eab020c5c18cafe6af33d4541fca814e6ef152586786e",
+      "src/worker/metrics-server.ts": "76ec6864c06205db87e54e35c5471d7f03931b9d33d4d5d5540c40e1ce0cb715",
+      "src/worker/run.ts": "4e9027f05b09abd8b0f96f75e71ffecc30364deb490ef857c1dcebc1ba88f93c",
+      "src/observability/best-effort.ts": "af92a744297f8018d5ee7dddc96d8980dc864837817ec62f1a7d624ad7e03a74",
+      "src/observability/event-loop.ts": "ffa71269947e67d429385d9a14e3f7a7616ddfd3af77ba17485ddd876d6e9edd",
+      "src/observability/logger.ts": "612be14a2e7fb186a23a169b928bceb5cd5678c184f1cda86660131283933dbc",
+      "src/observability/metrics.ts": "5147554727e91e8d7145939dfb6e9c23074db52c273daa92d1f7466aec2ef240",
+      "src/jobs/handlers.ts": "687fd4f4e15bd2dad0a5b5e2d6147c565e7c0ad5ac73424eb068aa7d30e1f95c",
+      "src/jobs/retry.ts": "b5a1ff2eaaf5b9ef63cb260bcf8df1071ba4e4fa093d849eadd7d4626ac52773",
+      "src/jobs/store.ts": "46192b4f89685b2b96e2970209facce565afa2836d187146cf83d61d7b3f5c77",
+      "src/db/check-connection.ts": "8c8e99df8ac6f8ec263aa3ac73ea1f320b8ad30fc510fd50df96a9b3ff58291f",
+      "src/db/migrate.ts": "4aa2d479b33bc8e4060d9946d502db4015a7f75aaa8f7ee6802cbc7d0135f6de",
+      "src/db/mikro-orm.config.ts": "fc3e888426a4c6b25f75dae95b7de7597843c36839ac4ef80337731e91bcb413",
+      "src/db/orm.ts": "b682dfde7b81a517196918da8712a9bbdcf67093e6563105fa98477e8d71a6e2",
+      "src/db/migrations/Migration20261008041305.ts": "21770dcb9d03776bafe496edded4c1f6a1643f8e2469fef841a6a1b634e90ffd",
+      "src/db/entities/job.ts": "22f165c8b110c67f163105457029b1a1d357f824bae8f1d5f0df5f67c76b1480",
+      "src/config/env.ts": "79cc9a956e940a2d6e291732bc0664a8bc289ac285d8cc93827a898e32af6588",
+      "src/api/app.ts": "fc5dfe8d37a9eca5acf365e9b1590642fa80d4581073f6a7f582c6005fa44156",
+      "src/api/server.ts": "9d1258c65142de1bde554052a0c2e38666aaf584de1824f380b537b201535d53",
+      "experiments/failure-load/compose.yml": "0c8372cd0a237c9cb9ddd9f170ab71b441ccd67c1ebbd13feff227be4c136d7b",
+      "experiments/failure-load/experiment.test.ts": "aaa50f850e5e4569ada842c858b4ff29a7d503f2662c5f36fcbe052f7e0ca92e",
+      "experiments/failure-load/experiment.ts": "869f2e76a619a909e4ed19f969b88b7a04ce5b0b6a8f8274fe1fd1bcfa89266d",
+      "experiments/failure-load/run.ts": "072a8890319645a2a48ec8672c73e34c0a114715d38baca566275e92ccd26d79",
+      "experiments/failure-load/runtime.ts": "6e78711a07b30347cf58ece756e61a9fefd473f8a9b72636141f7eff7d1c4e26",
+      "experiments/failure-load/smoke.test.ts": "3ba846c65c8311c96777e1fdb2b1d773e089e3cc3faee9846bbe8b56d7bddb59"
+    },
+    "imageId": "sha256:feeca08866b4059114abb9bb665ee4c6f272c12378acb67441ffd70510b93d40",
     "node": "v24.21.0",
-    "revision": "4b33907e26e076c73f1f79adc1d2d6d3d0bd4c94",
-    "branch": "feature/failure-load",
-    "imageId": "sha256:c0ce0a1e8a322189cf1e387318ce8500d6ebc59c867aa7d7bb60ce9e4f70435a",
-    "docker": "29.8.2",
-    "compose": "5.5.1"
+    "host": {
+      "platform": "linux",
+      "release": "6.18.54.1-microsoft-standard-WSL2",
+      "cpu": "Intel(R) Core(TM) i7-7700K CPU @ 4.20GHz",
+      "logicalCpus": 8,
+      "memoryBytes": 8329551872
+    },
+    "docker": {
+      "version": "29.8.2",
+      "os": "Docker Desktop (containerized)",
+      "kernel": "6.18.54.1-microsoft-standard-WSL2",
+      "logicalCpus": 8,
+      "memoryBytes": 8329551872
+    },
+    "compose": "5.5.1",
+    "observation": {
+      "observerPoolMax": 4,
+      "dbPollMs": 200,
+      "intervalMs": 1000,
+      "scrapeIntervalMs": 15000,
+      "killMaxClaimAgeMs": 2000,
+      "statementTimeoutMs": 10000
+    },
+    "settings": [
+      {
+        "name": "max_connections",
+        "setting": "100",
+        "unit": null
+      },
+      {
+        "name": "shared_buffers",
+        "setting": "16384",
+        "unit": "8kB"
+      },
+      {
+        "name": "work_mem",
+        "setting": "4096",
+        "unit": "kB"
+      }
+    ]
   },
-  "hashes": {
-    "experiments/failure-load/experiment.ts": "869f2e76a619a909e4ed19f969b88b7a04ce5b0b6a8f8274fe1fd1bcfa89266d",
-    "experiments/failure-load/run.ts": "072a8890319645a2a48ec8672c73e34c0a114715d38baca566275e92ccd26d79",
-    "experiments/failure-load/experiment.test.ts": "aaa50f850e5e4569ada842c858b4ff29a7d503f2662c5f36fcbe052f7e0ca92e",
-    "experiments/failure-load/smoke.test.ts": "3ba846c65c8311c96777e1fdb2b1d773e089e3cc3faee9846bbe8b56d7bddb59"
+  "methods": {
+    "phaseBounds": "실행기 Monotonic: 0→대상 Handler 시작 / 이후 첫 10000ms / 이후 생산 종료 / 생산 종료→정산 완료; 반개구간",
+    "dbObservedCompletionRate": "(last.succeeded-first.succeeded)/(((last.elapsedMs+last.queryMs)-(first.elapsedMs+first.queryMs))/1000); 두 DB 조회 완료 사이의 관측 평균",
+    "dispatchRate": "(sent-1)*1000/(마지막 sentMs - 최초 sentMs)",
+    "rtt": "finishedMs-sentMs; 일반 요청 201과 정책상 503 분리, nearest-rank percentile",
+    "resources": "같은 requestedMs 표본의 role별 CPU%·사용 MiB 합; 구간 안에 요청·수신이 모두 포함된 표본의 비가중 분포",
+    "sources": "각 run.source 아래 result/evidence/requests/samples/events/resources/ready/target-states; SHA-256 포함",
+    "analysisScript": "artifacts/failure-load/2026-11-01-measurement/analyze.py 및 select_results.py"
   },
-  "approvedNormalThreeRules": {
-    "afterTargetCompletion": true,
-    "windowMs": 10000,
-    "saturatedConsecutiveWindows": 2,
-    "growingConsecutiveWindows": 3,
-    "minMeanOutstandingIncrease": 3,
-    "minFullWindowsForSuitable": 3,
-    "minDbSamplesPerWindow": 2,
-    "insufficient": "inconclusive",
-    "mainAndPilotThreeRequireUserDecision": true,
-    "pilotTwoIsObservationOnly": true
+  "pilotDecision": {
+    "rate": 2.4,
+    "decision": "initial-candidate-suitable",
+    "basis": [
+      "Worker 3개 대상 완료 후 5개 온전한 10초 구간, 거부 0, outstanding 평균 4.7→2.7→2.6→2.5→2.6",
+      "Worker 2개 같은 rate에서 지속 Queue 포화·정책상 503 20개; 대상 첫 10초 이후 DB 관측 평균 완료율 약 1.993 jobs/s",
+      "양쪽 실제 216개 발송, 모든 수락 Job 최종 성공, 소스 Hash·이미지 동일"
+    ],
+    "sources": [
+      "pilot-three/summary.json",
+      "pilot-two/summary.json",
+      "analysis.json"
+    ],
+    "mainConditionsChanged": false
+  },
+  "pilots": [
+    {
+      "source": "/home/lhw/projects/async-job-processor/artifacts/failure-load/2026-11-01-measurement/pilot-three/r1-normal",
+      "name": "r1-normal",
+      "mode": "normal",
+      "scenario": {
+        "valid": true,
+        "reasons": [],
+        "suitability": {
+          "purpose": "pilot",
+          "criterion": "normal-three-stable",
+          "status": "suitable",
+          "requiresUserDecision": false
+        }
+      },
+      "functional": {
+        "status": "passed",
+        "failures": [],
+        "missing": []
+      },
+      "measurement": {
+        "valid": true,
+        "reasons": [],
+        "timing": {
+          "valid": true,
+          "reasons": []
+        },
+        "wallAlignment": {
+          "valid": true,
+          "reasons": []
+        }
+      },
+      "cleanup": {
+        "succeeded": true,
+        "errors": []
+      },
+      "http": {
+        "regular": {
+          "planned": 216,
+          "sent": 216,
+          "unsent": 0,
+          "accepted": 216,
+          "rejected": 0,
+          "otherHttp": 0,
+          "networkOrBodyErrors": 0,
+          "acceptanceFraction": 1,
+          "dispatchRate": 2.4008596486433587,
+          "rttMs": {
+            "count": 216,
+            "min": 3.6104420000046957,
+            "p50": 4.835210999997798,
+            "p95": 8.330418999998074,
+            "p99": 18.43931999999768,
+            "max": 79.15604499999972,
+            "mean": 5.5767784999997
+          },
+          "rttMsByOutcome": {
+            "accepted201": {
+              "count": 216,
+              "min": 3.6104420000046957,
+              "p50": 4.835210999997798,
+              "p95": 8.330418999998074,
+              "p99": 18.43931999999768,
+              "max": 79.15604499999972,
+              "mean": 5.5767784999997
+            },
+            "policyRejected503": {
+              "count": 0,
+              "min": null,
+              "p50": null,
+              "p95": null,
+              "p99": null,
+              "max": null,
+              "mean": null
+            },
+            "otherHttp": {
+              "count": 0,
+              "min": null,
+              "p50": null,
+              "p95": null,
+              "p99": null,
+              "max": null,
+              "mean": null
+            },
+            "networkOrBodyErrors": {
+              "count": 0,
+              "min": null,
+              "p50": null,
+              "p95": null,
+              "p99": null,
+              "max": null,
+              "mean": null
+            }
+          },
+          "scheduleLagMs": {
+            "count": 216,
+            "min": 0.010389999995823018,
+            "p50": 0.6330963333311956,
+            "p95": 1.300486666666984,
+            "p99": 1.6002573333244072,
+            "max": 32.0960699999996,
+            "mean": 0.8053526203661561
+          }
+        },
+        "target": {
+          "planned": 1,
+          "sent": 1,
+          "unsent": 0,
+          "accepted": 1,
+          "rejected": 0,
+          "otherHttp": 0,
+          "networkOrBodyErrors": 0,
+          "acceptanceFraction": 1,
+          "dispatchRate": null,
+          "rttMs": {
+            "count": 1,
+            "min": 17.514900000001944,
+            "p50": 17.514900000001944,
+            "p95": 17.514900000001944,
+            "p99": 17.514900000001944,
+            "max": 17.514900000001944,
+            "mean": 17.514900000001944
+          },
+          "rttMsByOutcome": {
+            "accepted201": {
+              "count": 1,
+              "min": 17.514900000001944,
+              "p50": 17.514900000001944,
+              "p95": 17.514900000001944,
+              "p99": 17.514900000001944,
+              "max": 17.514900000001944,
+              "mean": 17.514900000001944
+            },
+            "policyRejected503": {
+              "count": 0,
+              "min": null,
+              "p50": null,
+              "p95": null,
+              "p99": null,
+              "max": null,
+              "mean": null
+            },
+            "otherHttp": {
+              "count": 0,
+              "min": null,
+              "p50": null,
+              "p95": null,
+              "p99": null,
+              "max": null,
+              "mean": null
+            },
+            "networkOrBodyErrors": {
+              "count": 0,
+              "min": null,
+              "p50": null,
+              "p95": null,
+              "p99": null,
+              "max": null,
+              "mean": null
+            }
+          },
+          "scheduleLagMs": {
+            "count": 1,
+            "min": 0.9435929999999644,
+            "p50": 0.9435929999999644,
+            "p95": 0.9435929999999644,
+            "p99": 0.9435929999999644,
+            "max": 0.9435929999999644,
+            "mean": 0.9435929999999644
+          }
+        }
+      },
+      "stability": {
+        "status": "suitable",
+        "reasons": [],
+        "windowMs": 10000,
+        "targetEndMs": 30720.315507000003,
+        "loadEndMs": 90000,
+        "windows": [
+          {
+            "startMs": 30720.315507000003,
+            "endMs": 40720.31550700001,
+            "samples": 10,
+            "meanOutstanding": 4.7,
+            "sent": 24,
+            "rejected": 0
+          },
+          {
+            "startMs": 40720.31550700001,
+            "endMs": 50720.31550700001,
+            "samples": 10,
+            "meanOutstanding": 2.7,
+            "sent": 24,
+            "rejected": 0
+          },
+          {
+            "startMs": 50720.31550700001,
+            "endMs": 60720.31550700001,
+            "samples": 10,
+            "meanOutstanding": 2.6,
+            "sent": 24,
+            "rejected": 0
+          },
+          {
+            "startMs": 60720.31550700001,
+            "endMs": 70720.315507,
+            "samples": 10,
+            "meanOutstanding": 2.5,
+            "sent": 24,
+            "rejected": 0
+          },
+          {
+            "startMs": 70720.315507,
+            "endMs": 80720.315507,
+            "samples": 10,
+            "meanOutstanding": 2.6,
+            "sent": 24,
+            "rejected": 0
+          }
+        ],
+        "saturation": [],
+        "growth": [],
+        "unassessedTailMs": 9279.684492999993,
+        "criterion": "normal-three-stable",
+        "applied": true
+      },
+      "sampling": {
+        "count": 93,
+        "observedMaxOutstanding": 8,
+        "observedMaxQueued": 5,
+        "queryMs": {
+          "count": 93,
+          "min": 2.2365550000031362,
+          "p50": 2.724289999998291,
+          "p95": 3.549739000001864,
+          "p99": 16.342313000001013,
+          "max": 16.342313000001013,
+          "mean": 3.0959582043017506
+        },
+        "actualIntervalMs": {
+          "count": 92,
+          "min": 344.5976590000064,
+          "p50": 1003.3594789999916,
+          "p95": 1004.3628700000045,
+          "p99": 1021.6675959999957,
+          "max": 1021.6675959999957,
+          "mean": 991.796638271739
+        },
+        "maxAbsClockDifferenceMs": 60.15033000000403
+      },
+      "completion": {
+        "basis": "log-observed",
+        "dbSucceededDelta": 217,
+        "logObservedSucceeded": 217,
+        "matches": true
+      },
+      "reconciliation": {
+        "newRows": 217,
+        "unknownResponseRows": [],
+        "absentIds": []
+      },
+      "timeline": {
+        "target-accepted": {
+          "elapsedMs": 20018.922599,
+          "confirmedMs": 20018.930661000002,
+          "firstClaimAgeMsAtConfirmation": null
+        },
+        "handler-started": {
+          "elapsedMs": 20704.756469000004,
+          "confirmedMs": 21085.298627,
+          "firstClaimAgeMsAtConfirmation": null
+        },
+        "target-succeeded": {
+          "elapsedMs": 30720.315507000003,
+          "confirmedMs": 30740.939690000003,
+          "firstClaimAgeMsAtConfirmation": 10038.761
+        },
+        "load-end": {
+          "elapsedMs": 90000.63136099999,
+          "confirmedMs": 90000.64655399999,
+          "firstClaimAgeMsAtConfirmation": null
+        },
+        "drain-end": {
+          "elapsedMs": 90978.643124,
+          "confirmedMs": 90978.6464,
+          "firstClaimAgeMsAtConfirmation": null
+        }
+      },
+      "final": {
+        "newRows": 217,
+        "states": {
+          "succeeded": 217
+        },
+        "attempts": {
+          "1": 217
+        },
+        "target": {
+          "id": "ab759659-b5be-42dd-bf51-594b4bd1c02e",
+          "type": "slow",
+          "result": {
+            "durationMs": 10000
+          },
+          "status": "succeeded",
+          "attempt": 1,
+          "payload": {
+            "durationMs": 10000
+          },
+          "worker_id": "ed5b6a1c-0b49-4aac-8483-bb5df83f38df",
+          "created_at": "2026-11-01T12:06:15.030056+00:00",
+          "last_error": null,
+          "updated_at": "2026-11-01T12:06:25.732781+00:00",
+          "available_at": "2026-11-01T12:06:15.030056+00:00",
+          "max_attempts": 3,
+          "processing_started_at": "2026-11-01T12:06:15.720364+00:00"
+        },
+        "workerSucceeded": {
+          "cbfb0fe2-a355-429d-bf30-bb6a2829e9a1": 90,
+          "ed5b6a1c-0b49-4aac-8483-bb5df83f38df": 60,
+          "382bc91c-7610-437a-a4ec-7972ee1bf63e": 67
+        },
+        "baselineRows": 389,
+        "baselineUnchanged": true,
+        "outstanding": 0,
+        "retries": 0,
+        "recoveries": 0
+      },
+      "rawSha256": {
+        "evidence.json": "97db59d1e98e4bad0aa93c40824db29bd6209a6bbb79c5b713e4ef1e83ff5bea",
+        "requests.json": "1962977b1e0491143db3b1da2a0473da8ec43601faa73f037e29109c9bc8d7cd",
+        "jobs.json": "533841c1ba0898c599bfc3c869d5def3352eb87a3372426519fd1b622342e260",
+        "samples.jsonl": "ac56dd1195bfbc41697c452821cc594f834ff563a2431984463c5e09dc1930d2",
+        "events.json": "97cbd55516cbdfa55ec4041df54159c35ac7742fdd516b5fc4571973ced7c930",
+        "resources.jsonl": "1c5dbd5c47c505266816a0a3b463730957ac27a542cc1d12af3bfdd897c96c83",
+        "result.json": "e2945786c86dc4c154e0b1f9a7952b2717804ab96218423b6b625686835241b0",
+        "ready.json": "e9b401e4a6ef9eb6ec024778746876d39889e2bfcc187fa6fba42d387651928d",
+        "target-states.jsonl": "10430abd4d55e0e4306ce296c4eea255581104ee9012e105f6945de351d87759"
+      },
+      "parameters": {
+        "purpose": "pilot",
+        "modes": [
+          "normal"
+        ],
+        "workers": 3,
+        "seconds": 90,
+        "targetAtSeconds": 20,
+        "targetDurationMs": 10000,
+        "repeats": 1,
+        "rate": 2.4,
+        "durationMs": 1000,
+        "limit": 30,
+        "intervalMs": 1000,
+        "maxInflight": 4,
+        "drainSeconds": 300
+      },
+      "phases": [
+        {
+          "name": "preTarget",
+          "startMs": 0,
+          "endMs": 20704.756469000004,
+          "seconds": 20.704756469000003,
+          "regularSent": 50,
+          "regularAccepted": 50,
+          "regularRejected": 0,
+          "logObservedSucceeded": 48,
+          "logObservedRegularSucceeded": 48,
+          "dbCompletion": {
+            "firstReadMs": 8.599256000001333,
+            "firstQueryMs": 15.883907999999792,
+            "lastReadMs": 20097.711529999997,
+            "lastQueryMs": 3.422321000005468,
+            "seconds": 20.076650687,
+            "succeededDelta": 46,
+            "observedCompletionsPerSecond": 2.2912188251492487
+          },
+          "queued": {
+            "count": 21,
+            "min": 0,
+            "mean": 0.38095238095238093,
+            "p50": 0,
+            "p95": 1,
+            "max": 2
+          },
+          "processing": {
+            "count": 21,
+            "min": 0,
+            "mean": 2.2857142857142856,
+            "p50": 2,
+            "p95": 3,
+            "max": 3
+          },
+          "outstanding": {
+            "count": 21,
+            "min": 0,
+            "mean": 2.6666666666666665,
+            "p50": 3,
+            "p95": 3,
+            "max": 4
+          },
+          "connections": {
+            "count": 21,
+            "min": 4,
+            "mean": 5.0,
+            "p50": 5,
+            "p95": 5,
+            "max": 6
+          },
+          "activeConnections": {
+            "count": 21,
+            "min": 1,
+            "mean": 1.0,
+            "p50": 1,
+            "p95": 1,
+            "max": 1
+          },
+          "resources": {
+            "api": {
+              "processSamples": 10,
+              "cpuPercentSumPerSnapshot": {
+                "count": 10,
+                "min": 0.99,
+                "mean": 1.316,
+                "p50": 1.22,
+                "p95": 2.03,
+                "max": 2.03
+              },
+              "memoryMiBSumPerSnapshot": {
+                "count": 10,
+                "min": 65.07,
+                "mean": 67.79299999999999,
+                "p50": 68.61,
+                "p95": 69.17,
+                "max": 69.17
+              },
+              "collectionMs": {
+                "count": 10,
+                "min": 1522.582856000001,
+                "mean": 1585.7726504000009,
+                "p50": 1526.201866000003,
+                "p95": 2122.3866730000045,
+                "max": 2122.3866730000045
+              }
+            },
+            "worker": {
+              "processSamples": 30,
+              "cpuPercentSumPerSnapshot": {
+                "count": 10,
+                "min": 1.78,
+                "mean": 2.009,
+                "p50": 1.9100000000000001,
+                "p95": 2.57,
+                "max": 2.57
+              },
+              "memoryMiBSumPerSnapshot": {
+                "count": 10,
+                "min": 173.54,
+                "mean": 174.241,
+                "p50": 174.19,
+                "p95": 174.78,
+                "max": 174.78
+              },
+              "collectionMs": {
+                "count": 30,
+                "min": 1523.861742000001,
+                "mean": 1587.541303266668,
+                "p50": 1528.1972000000023,
+                "p95": 2124.038181,
+                "max": 2124.3413340000006
+              }
+            },
+            "postgres": {
+              "processSamples": 10,
+              "cpuPercentSumPerSnapshot": {
+                "count": 10,
+                "min": 4.1,
+                "mean": 5.09,
+                "p50": 4.43,
+                "p95": 10.43,
+                "max": 10.43
+              },
+              "memoryMiBSumPerSnapshot": {
+                "count": 10,
+                "min": 51.83,
+                "mean": 52.74400000000001,
+                "p50": 52.69,
+                "p95": 54.73,
+                "max": 54.73
+              },
+              "collectionMs": {
+                "count": 10,
+                "min": 1523.1174860000028,
+                "mean": 1586.3438740000001,
+                "p50": 1526.909974000002,
+                "p95": 2122.995362999998,
+                "max": 2122.995362999998
+              }
+            }
+          }
+        },
+        {
+          "name": "targetFirst10s",
+          "startMs": 20704.756469000004,
+          "endMs": 30704.756469000004,
+          "seconds": 10.0,
+          "regularSent": 24,
+          "regularAccepted": 24,
+          "regularRejected": 0,
+          "logObservedSucceeded": 19,
+          "logObservedRegularSucceeded": 19,
+          "dbCompletion": {
+            "firstReadMs": 21102.0744,
+            "firstQueryMs": 3.086235000002489,
+            "lastReadMs": 30144.639418000002,
+            "lastQueryMs": 2.41168800000014,
+            "seconds": 9.041890470999999,
+            "succeededDelta": 18,
+            "observedCompletionsPerSecond": 1.990734134386088
+          },
+          "queued": {
+            "count": 10,
+            "min": 1,
+            "mean": 3.0,
+            "p50": 3,
+            "p95": 5,
+            "max": 5
+          },
+          "processing": {
+            "count": 10,
+            "min": 3,
+            "mean": 3.0,
+            "p50": 3,
+            "p95": 3,
+            "max": 3
+          },
+          "outstanding": {
+            "count": 10,
+            "min": 4,
+            "mean": 6.0,
+            "p50": 6,
+            "p95": 8,
+            "max": 8
+          },
+          "connections": {
+            "count": 10,
+            "min": 6,
+            "mean": 6.1,
+            "p50": 6,
+            "p95": 7,
+            "max": 7
+          },
+          "activeConnections": {
+            "count": 10,
+            "min": 1,
+            "mean": 1.0,
+            "p50": 1,
+            "p95": 1,
+            "max": 1
+          },
+          "resources": {
+            "api": {
+              "processSamples": 5,
+              "cpuPercentSumPerSnapshot": {
+                "count": 5,
+                "min": 0.98,
+                "mean": 1.268,
+                "p50": 1.05,
+                "p95": 2.04,
+                "max": 2.04
+              },
+              "memoryMiBSumPerSnapshot": {
+                "count": 5,
+                "min": 69.18,
+                "mean": 69.25800000000001,
+                "p50": 69.25,
+                "p95": 69.38,
+                "max": 69.38
+              },
+              "collectionMs": {
+                "count": 5,
+                "min": 1523.3684529999955,
+                "mean": 1524.457841599996,
+                "p50": 1523.650824999997,
+                "p95": 1527.1172759999972,
+                "max": 1527.1172759999972
+              }
+            },
+            "worker": {
+              "processSamples": 15,
+              "cpuPercentSumPerSnapshot": {
+                "count": 5,
+                "min": 1.75,
+                "mean": 1.954,
+                "p50": 1.94,
+                "p95": 2.12,
+                "max": 2.12
+              },
+              "memoryMiBSumPerSnapshot": {
+                "count": 5,
+                "min": 173.55,
+                "mean": 174.058,
+                "p50": 174.12,
+                "p95": 174.34,
+                "max": 174.34
+              },
+              "collectionMs": {
+                "count": 15,
+                "min": 1524.752121999998,
+                "mean": 1526.3454277333308,
+                "p50": 1526.0864650000003,
+                "p95": 1529.129872999998,
+                "max": 1529.129872999998
+              }
+            },
+            "postgres": {
+              "processSamples": 5,
+              "cpuPercentSumPerSnapshot": {
+                "count": 5,
+                "min": 4.39,
+                "mean": 4.558,
+                "p50": 4.43,
+                "p95": 4.85,
+                "max": 4.85
+              },
+              "memoryMiBSumPerSnapshot": {
+                "count": 5,
+                "min": 54.28,
+                "mean": 54.977999999999994,
+                "p50": 54.76,
+                "p95": 56.39,
+                "max": 56.39
+              },
+              "collectionMs": {
+                "count": 5,
+                "min": 1524.0684669999973,
+                "mean": 1525.0998603999979,
+                "p50": 1524.7759279999955,
+                "p95": 1527.5492499999964,
+                "max": 1527.5492499999964
+              }
+            }
+          }
+        },
+        {
+          "name": "sustainedIngress",
+          "startMs": 30704.756469000004,
+          "endMs": 90000.63136099999,
+          "seconds": 59.29587489199999,
+          "regularSent": 142,
+          "regularAccepted": 142,
+          "regularRejected": 0,
+          "logObservedSucceeded": 147,
+          "logObservedRegularSucceeded": 146,
+          "dbCompletion": {
+            "firstReadMs": 31147.153009999998,
+            "firstQueryMs": 3.470517000001564,
+            "lastReadMs": 89341.514878,
+            "lastQueryMs": 3.6463349999976344,
+            "seconds": 58.194537686000004,
+            "succeededDelta": 144,
+            "observedCompletionsPerSecond": 2.4744590424788684
+          },
+          "queued": {
+            "count": 59,
+            "min": 0,
+            "mean": 0.4576271186440678,
+            "p50": 0,
+            "p95": 3,
+            "max": 4
+          },
+          "processing": {
+            "count": 59,
+            "min": 2,
+            "mean": 2.4915254237288136,
+            "p50": 2,
+            "p95": 3,
+            "max": 3
+          },
+          "outstanding": {
+            "count": 59,
+            "min": 2,
+            "mean": 2.9491525423728815,
+            "p50": 3,
+            "p95": 6,
+            "max": 7
+          },
+          "connections": {
+            "count": 59,
+            "min": 5,
+            "mean": 5.186440677966102,
+            "p50": 5,
+            "p95": 6,
+            "max": 6
+          },
+          "activeConnections": {
+            "count": 59,
+            "min": 1,
+            "mean": 1.0,
+            "p50": 1,
+            "p95": 1,
+            "max": 1
+          },
+          "resources": {
+            "api": {
+              "processSamples": 29,
+              "cpuPercentSumPerSnapshot": {
+                "count": 29,
+                "min": 0.8,
+                "mean": 1.1389655172413793,
+                "p50": 1.12,
+                "p95": 1.5,
+                "max": 1.51
+              },
+              "memoryMiBSumPerSnapshot": {
+                "count": 29,
+                "min": 68.63,
+                "mean": 69.33137931034483,
+                "p50": 69.27,
+                "p95": 69.93,
+                "max": 70.01
+              },
+              "collectionMs": {
+                "count": 29,
+                "min": 1520.2639650000056,
+                "mean": 1524.8407379655175,
+                "p50": 1524.5543550000002,
+                "p95": 1529.7063780000026,
+                "max": 1531.1464209999976
+              }
+            },
+            "worker": {
+              "processSamples": 87,
+              "cpuPercentSumPerSnapshot": {
+                "count": 29,
+                "min": 1.7200000000000002,
+                "mean": 2.236551724137931,
+                "p50": 2.12,
+                "p95": 2.5500000000000003,
+                "max": 5.86
+              },
+              "memoryMiBSumPerSnapshot": {
+                "count": 29,
+                "min": 174.21,
+                "mean": 179.1396551724138,
+                "p50": 179.57,
+                "p95": 182.9,
+                "max": 183.38
+              },
+              "collectionMs": {
+                "count": 87,
+                "min": 1521.487702000013,
+                "mean": 1526.5092157241384,
+                "p50": 1526.1700520000013,
+                "p95": 1532.0019670000038,
+                "max": 1533.2262499999924
+              }
+            },
+            "postgres": {
+              "processSamples": 29,
+              "cpuPercentSumPerSnapshot": {
+                "count": 29,
+                "min": 4.3,
+                "mean": 4.7972413793103446,
+                "p50": 4.72,
+                "p95": 6.17,
+                "max": 6.24
+              },
+              "memoryMiBSumPerSnapshot": {
+                "count": 29,
+                "min": 53.82,
+                "mean": 54.75344827586206,
+                "p50": 54.44,
+                "p95": 56.58,
+                "max": 56.89
+              },
+              "collectionMs": {
+                "count": 29,
+                "min": 1520.6938160000136,
+                "mean": 1525.3081547241395,
+                "p50": 1525.1038629999966,
+                "p95": 1530.1199630000046,
+                "max": 1531.5643929999933
+              }
+            }
+          }
+        },
+        {
+          "name": "settlement",
+          "startMs": 90000.63136099999,
+          "endMs": 90978.643124,
+          "seconds": 0.9780117630000023,
+          "regularSent": 0,
+          "regularAccepted": 0,
+          "regularRejected": 0,
+          "logObservedSucceeded": 3,
+          "logObservedRegularSucceeded": 3,
+          "dbCompletion": {
+            "firstReadMs": 90001.291116,
+            "firstQueryMs": 2.368428000001586,
+            "lastReadMs": 90345.888775,
+            "lastQueryMs": 2.752424999998766,
+            "seconds": 0.3449816560000036,
+            "succeededDelta": 2,
+            "observedCompletionsPerSecond": 5.797409703430664
+          },
+          "queued": {
+            "count": 2,
+            "min": 0,
+            "mean": 0.0,
+            "p50": 0,
+            "p95": 0,
+            "max": 0
+          },
+          "processing": {
+            "count": 2,
+            "min": 1,
+            "mean": 2.0,
+            "p50": 1,
+            "p95": 3,
+            "max": 3
+          },
+          "outstanding": {
+            "count": 2,
+            "min": 1,
+            "mean": 2.0,
+            "p50": 1,
+            "p95": 3,
+            "max": 3
+          },
+          "connections": {
+            "count": 2,
+            "min": 5,
+            "mean": 5.0,
+            "p50": 5,
+            "p95": 5,
+            "max": 5
+          },
+          "activeConnections": {
+            "count": 2,
+            "min": 1,
+            "mean": 1.0,
+            "p50": 1,
+            "p95": 1,
+            "max": 1
+          },
+          "resources": {
+            "api": {
+              "processSamples": 0,
+              "cpuPercentSumPerSnapshot": {
+                "count": 0,
+                "min": null,
+                "mean": null,
+                "p50": null,
+                "p95": null,
+                "max": null
+              },
+              "memoryMiBSumPerSnapshot": {
+                "count": 0,
+                "min": null,
+                "mean": null,
+                "p50": null,
+                "p95": null,
+                "max": null
+              },
+              "collectionMs": {
+                "count": 0,
+                "min": null,
+                "mean": null,
+                "p50": null,
+                "p95": null,
+                "max": null
+              }
+            },
+            "worker": {
+              "processSamples": 0,
+              "cpuPercentSumPerSnapshot": {
+                "count": 0,
+                "min": null,
+                "mean": null,
+                "p50": null,
+                "p95": null,
+                "max": null
+              },
+              "memoryMiBSumPerSnapshot": {
+                "count": 0,
+                "min": null,
+                "mean": null,
+                "p50": null,
+                "p95": null,
+                "max": null
+              },
+              "collectionMs": {
+                "count": 0,
+                "min": null,
+                "mean": null,
+                "p50": null,
+                "p95": null,
+                "max": null
+              }
+            },
+            "postgres": {
+              "processSamples": 0,
+              "cpuPercentSumPerSnapshot": {
+                "count": 0,
+                "min": null,
+                "mean": null,
+                "p50": null,
+                "p95": null,
+                "max": null
+              },
+              "memoryMiBSumPerSnapshot": {
+                "count": 0,
+                "min": null,
+                "mean": null,
+                "p50": null,
+                "p95": null,
+                "max": null
+              },
+              "collectionMs": {
+                "count": 0,
+                "min": null,
+                "mean": null,
+                "p50": null,
+                "p95": null,
+                "max": null
+              }
+            }
+          }
+        }
+      ],
+      "recovery": null
+    },
+    {
+      "source": "/home/lhw/projects/async-job-processor/artifacts/failure-load/2026-11-01-measurement/pilot-two/r1-normal",
+      "name": "r1-normal",
+      "mode": "normal",
+      "scenario": {
+        "valid": true,
+        "reasons": [],
+        "suitability": {
+          "purpose": "pilot",
+          "criterion": "normal-two-capacity",
+          "status": "observation-only",
+          "requiresUserDecision": false
+        }
+      },
+      "functional": {
+        "status": "passed",
+        "failures": [],
+        "missing": []
+      },
+      "measurement": {
+        "valid": true,
+        "reasons": [],
+        "timing": {
+          "valid": true,
+          "reasons": []
+        },
+        "wallAlignment": {
+          "valid": true,
+          "reasons": []
+        }
+      },
+      "cleanup": {
+        "succeeded": true,
+        "errors": []
+      },
+      "http": {
+        "regular": {
+          "planned": 216,
+          "sent": 216,
+          "unsent": 0,
+          "accepted": 196,
+          "rejected": 20,
+          "otherHttp": 0,
+          "networkOrBodyErrors": 0,
+          "acceptanceFraction": 0.9074074074074074,
+          "dispatchRate": 2.4005733034067496,
+          "rttMs": {
+            "count": 216,
+            "min": 2.8798879999958444,
+            "p50": 4.881871000005049,
+            "p95": 8.164303999998083,
+            "p99": 18.084679999999935,
+            "max": 93.05657200000132,
+            "mean": 5.768877819443669
+          },
+          "rttMsByOutcome": {
+            "accepted201": {
+              "count": 196,
+              "min": 3.6613849999994272,
+              "p50": 4.9680479999951785,
+              "p95": 8.611263000006147,
+              "p99": 47.10341199999675,
+              "max": 93.05657200000132,
+              "mean": 5.972995188774692
+            },
+            "policyRejected503": {
+              "count": 20,
+              "min": 2.8798879999958444,
+              "p50": 3.464206999997259,
+              "p95": 4.935773999997764,
+              "p99": 6.248558000006597,
+              "max": 6.248558000006597,
+              "mean": 3.768527599999652
+            },
+            "otherHttp": {
+              "count": 0,
+              "min": null,
+              "p50": null,
+              "p95": null,
+              "p99": null,
+              "max": null,
+              "mean": null
+            },
+            "networkOrBodyErrors": {
+              "count": 0,
+              "min": null,
+              "p50": null,
+              "p95": null,
+              "p99": null,
+              "max": null,
+              "mean": null
+            }
+          },
+          "scheduleLagMs": {
+            "count": 216,
+            "min": 0.0141496666619787,
+            "p50": 0.6596063333308848,
+            "p95": 1.2753986666575656,
+            "p99": 1.5391153333330294,
+            "max": 22.377357999997912,
+            "mean": 0.7557488657386447
+          }
+        },
+        "target": {
+          "planned": 1,
+          "sent": 1,
+          "unsent": 0,
+          "accepted": 1,
+          "rejected": 0,
+          "otherHttp": 0,
+          "networkOrBodyErrors": 0,
+          "acceptanceFraction": 1,
+          "dispatchRate": null,
+          "rttMs": {
+            "count": 1,
+            "min": 21.776379000002635,
+            "p50": 21.776379000002635,
+            "p95": 21.776379000002635,
+            "p99": 21.776379000002635,
+            "max": 21.776379000002635,
+            "mean": 21.776379000002635
+          },
+          "rttMsByOutcome": {
+            "accepted201": {
+              "count": 1,
+              "min": 21.776379000002635,
+              "p50": 21.776379000002635,
+              "p95": 21.776379000002635,
+              "p99": 21.776379000002635,
+              "max": 21.776379000002635,
+              "mean": 21.776379000002635
+            },
+            "policyRejected503": {
+              "count": 0,
+              "min": null,
+              "p50": null,
+              "p95": null,
+              "p99": null,
+              "max": null,
+              "mean": null
+            },
+            "otherHttp": {
+              "count": 0,
+              "min": null,
+              "p50": null,
+              "p95": null,
+              "p99": null,
+              "max": null,
+              "mean": null
+            },
+            "networkOrBodyErrors": {
+              "count": 0,
+              "min": null,
+              "p50": null,
+              "p95": null,
+              "p99": null,
+              "max": null,
+              "mean": null
+            }
+          },
+          "scheduleLagMs": {
+            "count": 1,
+            "min": 0.46077599999989616,
+            "p50": 0.46077599999989616,
+            "p95": 0.46077599999989616,
+            "p99": 0.46077599999989616,
+            "max": 0.46077599999989616,
+            "mean": 0.46077599999989616
+          }
+        }
+      },
+      "stability": {
+        "status": "unsuitable",
+        "reasons": [
+          "대상 완료 후 10초 구간 2개 연속 정책상 503 발생"
+        ],
+        "windowMs": 10000,
+        "targetEndMs": 34823.823267,
+        "loadEndMs": 90000,
+        "windows": [
+          {
+            "startMs": 34823.823267,
+            "endMs": 44823.823267,
+            "samples": 10,
+            "meanOutstanding": 28.4,
+            "sent": 24,
+            "rejected": 2
+          },
+          {
+            "startMs": 44823.823267,
+            "endMs": 54823.823267,
+            "samples": 10,
+            "meanOutstanding": 28.8,
+            "sent": 24,
+            "rejected": 4
+          },
+          {
+            "startMs": 54823.823267,
+            "endMs": 64823.823267,
+            "samples": 10,
+            "meanOutstanding": 28.7,
+            "sent": 24,
+            "rejected": 4
+          },
+          {
+            "startMs": 64823.823267,
+            "endMs": 74823.823267,
+            "samples": 10,
+            "meanOutstanding": 28.8,
+            "sent": 24,
+            "rejected": 4
+          },
+          {
+            "startMs": 74823.823267,
+            "endMs": 84823.823267,
+            "samples": 10,
+            "meanOutstanding": 28.6,
+            "sent": 24,
+            "rejected": 4
+          }
+        ],
+        "saturation": [
+          {
+            "startMs": 34823.823267,
+            "endMs": 54823.823267
+          },
+          {
+            "startMs": 44823.823267,
+            "endMs": 64823.823267
+          },
+          {
+            "startMs": 54823.823267,
+            "endMs": 74823.823267
+          },
+          {
+            "startMs": 64823.823267,
+            "endMs": 84823.823267
+          }
+        ],
+        "growth": [],
+        "unassessedTailMs": 5176.176733,
+        "criterion": "normal-three-stable",
+        "applied": false
+      },
+      "sampling": {
+        "count": 107,
+        "observedMaxOutstanding": 30,
+        "observedMaxQueued": 28,
+        "queryMs": {
+          "count": 107,
+          "min": 1.9540450000058627,
+          "p50": 2.6636859999998705,
+          "p95": 7.0266239999909885,
+          "p99": 20.572900999999547,
+          "max": 20.904679999992368,
+          "mean": 3.354686766354368
+        },
+        "actualIntervalMs": {
+          "count": 106,
+          "min": 82.32494300001417,
+          "p50": 1003.3103289999999,
+          "p95": 1007.7212299999956,
+          "p99": 1021.5249550000008,
+          "max": 1022.9775250000021,
+          "mean": 985.8912195566037
+        },
+        "maxAbsClockDifferenceMs": 74.81392299999425
+      },
+      "completion": {
+        "basis": "log-observed",
+        "dbSucceededDelta": 197,
+        "logObservedSucceeded": 197,
+        "matches": true
+      },
+      "reconciliation": {
+        "newRows": 197,
+        "unknownResponseRows": [],
+        "absentIds": []
+      },
+      "timeline": {
+        "target-accepted": {
+          "elapsedMs": 20022.835492,
+          "confirmedMs": 20022.845995999996,
+          "firstClaimAgeMsAtConfirmation": null
+        },
+        "handler-started": {
+          "elapsedMs": 24807.453220000003,
+          "confirmedMs": 25133.215927999998,
+          "firstClaimAgeMsAtConfirmation": null
+        },
+        "target-succeeded": {
+          "elapsedMs": 34823.823267,
+          "confirmedMs": 34959.699586,
+          "firstClaimAgeMsAtConfirmation": 10154.851
+        },
+        "load-end": {
+          "elapsedMs": 90001.078878,
+          "confirmedMs": 90001.087056,
+          "firstClaimAgeMsAtConfirmation": null
+        },
+        "drain-end": {
+          "elapsedMs": 104241.980329,
+          "confirmedMs": 104241.98607999999,
+          "firstClaimAgeMsAtConfirmation": null
+        }
+      },
+      "final": {
+        "newRows": 197,
+        "states": {
+          "succeeded": 197
+        },
+        "attempts": {
+          "1": 197
+        },
+        "target": {
+          "id": "194d0562-ed77-4ff5-8cb9-f77a58cf018e",
+          "type": "slow",
+          "result": {
+            "durationMs": 10000
+          },
+          "status": "succeeded",
+          "attempt": 1,
+          "payload": {
+            "durationMs": 10000
+          },
+          "worker_id": "64f6de4c-81ef-4f29-9a30-8eb10969a3be",
+          "created_at": "2026-11-01T12:08:33.894549+00:00",
+          "last_error": null,
+          "updated_at": "2026-11-01T12:08:48.698178+00:00",
+          "available_at": "2026-11-01T12:08:33.894549+00:00",
+          "max_attempts": 3,
+          "processing_started_at": "2026-11-01T12:08:38.684834+00:00"
+        },
+        "workerSucceeded": {
+          "115bd869-793f-4519-ac2f-a9a09291b0bc": 103,
+          "64f6de4c-81ef-4f29-9a30-8eb10969a3be": 94
+        },
+        "baselineRows": 606,
+        "baselineUnchanged": true,
+        "outstanding": 0,
+        "retries": 0,
+        "recoveries": 0
+      },
+      "rawSha256": {
+        "evidence.json": "ecbf95bb7b305c2e0e8fad1997efcfb65eeef487bcb3f6384fa3c89fbb31c4cc",
+        "requests.json": "151869ba48e6b51ff88970da647c66a354046fe9f7b70533f214659f920e6d87",
+        "jobs.json": "5cbc858464a579d33a09e5cb7d544269b776dcf9ab0f5e1ca9d7be48116b5f7d",
+        "samples.jsonl": "b4f7010b773bd72d6722913c4e94bd2926692c16405107a1d1a53029599daf8c",
+        "events.json": "ace34280d552e29bbe11746ef10a9d3c8cd5c991e7ec5e8ba6440e70c592a4bf",
+        "resources.jsonl": "148314b13995f50b435802077931c330b39e609b86dbd6512b83173534f69b34",
+        "result.json": "b340d2fb226923cdcb25c9500b0d8697afe41a9c69bf5a381b5293dd1bf6e880",
+        "ready.json": "2c53454750adf17bf50c7db2505931dc314b79287fb39feb895203e7b770373b",
+        "target-states.jsonl": "099a86298dd0c8a799820c2f3e3861eebe4e56331308e7974a7a6ac6b69db55c"
+      },
+      "parameters": {
+        "purpose": "pilot",
+        "modes": [
+          "normal"
+        ],
+        "workers": 2,
+        "seconds": 90,
+        "targetAtSeconds": 20,
+        "targetDurationMs": 10000,
+        "repeats": 1,
+        "rate": 2.4,
+        "durationMs": 1000,
+        "limit": 30,
+        "intervalMs": 1000,
+        "maxInflight": 4,
+        "drainSeconds": 300
+      },
+      "phases": [
+        {
+          "name": "preTarget",
+          "startMs": 0,
+          "endMs": 24807.453220000003,
+          "seconds": 24.807453220000003,
+          "regularSent": 60,
+          "regularAccepted": 60,
+          "regularRejected": 0,
+          "logObservedSucceeded": 48,
+          "logObservedRegularSucceeded": 48,
+          "dbCompletion": {
+            "firstReadMs": 5.931273000001966,
+            "firstQueryMs": 9.354097999996156,
+            "lastReadMs": 24117.07331,
+            "lastQueryMs": 7.266930999998294,
+            "seconds": 24.10905487,
+            "succeededDelta": 46,
+            "observedCompletionsPerSecond": 1.90799681895618
+          },
+          "queued": {
+            "count": 25,
+            "min": 0,
+            "mean": 5.64,
+            "p50": 5,
+            "p95": 11,
+            "max": 11
+          },
+          "processing": {
+            "count": 25,
+            "min": 0,
+            "mean": 1.92,
+            "p50": 2,
+            "p95": 2,
+            "max": 2
+          },
+          "outstanding": {
+            "count": 25,
+            "min": 0,
+            "mean": 7.56,
+            "p50": 7,
+            "p95": 13,
+            "max": 13
+          },
+          "connections": {
+            "count": 25,
+            "min": 3,
+            "mean": 4.2,
+            "p50": 4,
+            "p95": 5,
+            "max": 6
+          },
+          "activeConnections": {
+            "count": 25,
+            "min": 1,
+            "mean": 1.0,
+            "p50": 1,
+            "p95": 1,
+            "max": 1
+          },
+          "resources": {
+            "api": {
+              "processSamples": 12,
+              "cpuPercentSumPerSnapshot": {
+                "count": 12,
+                "min": 0.97,
+                "mean": 1.3608333333333331,
+                "p50": 1.25,
+                "p95": 2.08,
+                "max": 2.08
+              },
+              "memoryMiBSumPerSnapshot": {
+                "count": 12,
+                "min": 62.86,
+                "mean": 64.75666666666667,
+                "p50": 64.15,
+                "p95": 67.45,
+                "max": 67.45
+              },
+              "collectionMs": {
+                "count": 12,
+                "min": 1516.130471999997,
+                "mean": 1572.3382800833333,
+                "p50": 1520.2052729999996,
+                "p95": 2120.4578949999996,
+                "max": 2120.4578949999996
+              }
+            },
+            "worker": {
+              "processSamples": 24,
+              "cpuPercentSumPerSnapshot": {
+                "count": 12,
+                "min": 1.33,
+                "mean": 1.6158333333333335,
+                "p50": 1.52,
+                "p95": 2.34,
+                "max": 2.34
+              },
+              "memoryMiBSumPerSnapshot": {
+                "count": 12,
+                "min": 114.55,
+                "mean": 115.5525,
+                "p50": 115.57,
+                "p95": 116.3,
+                "max": 116.3
+              },
+              "collectionMs": {
+                "count": 24,
+                "min": 1517.559239999995,
+                "mean": 1574.1183747500002,
+                "p50": 1522.4936489999964,
+                "p95": 2121.9615580000027,
+                "max": 2122.458765000003
+              }
+            },
+            "postgres": {
+              "processSamples": 12,
+              "cpuPercentSumPerSnapshot": {
+                "count": 12,
+                "min": 4.03,
+                "mean": 5.860833333333333,
+                "p50": 4.43,
+                "p95": 19.11,
+                "max": 19.11
+              },
+              "memoryMiBSumPerSnapshot": {
+                "count": 12,
+                "min": 34.14,
+                "mean": 35.1725,
+                "p50": 34.54,
+                "p95": 39.05,
+                "max": 39.05
+              },
+              "collectionMs": {
+                "count": 12,
+                "min": 1516.6581519999963,
+                "mean": 1572.9313912500002,
+                "p50": 1520.9802670000063,
+                "p95": 2121.0964220000023,
+                "max": 2121.0964220000023
+              }
+            }
+          }
+        },
+        {
+          "name": "targetFirst10s",
+          "startMs": 24807.453220000003,
+          "endMs": 34807.45322,
+          "seconds": 10.0,
+          "regularSent": 24,
+          "regularAccepted": 24,
+          "regularRejected": 0,
+          "logObservedSucceeded": 10,
+          "logObservedRegularSucceeded": 10,
+          "dbCompletion": {
+            "firstReadMs": 25125.458607,
+            "firstQueryMs": 2.6312479999978677,
+            "lastReadMs": 34155.128056999994,
+            "lastQueryMs": 1.9540450000058627,
+            "seconds": 9.028992247000001,
+            "succeededDelta": 9,
+            "observedCompletionsPerSecond": 0.9967889830662293
+          },
+          "queued": {
+            "count": 10,
+            "min": 12,
+            "mean": 18.1,
+            "p50": 17,
+            "p95": 24,
+            "max": 24
+          },
+          "processing": {
+            "count": 10,
+            "min": 2,
+            "mean": 2.0,
+            "p50": 2,
+            "p95": 2,
+            "max": 2
+          },
+          "outstanding": {
+            "count": 10,
+            "min": 14,
+            "mean": 20.1,
+            "p50": 19,
+            "p95": 26,
+            "max": 26
+          },
+          "connections": {
+            "count": 10,
+            "min": 4,
+            "mean": 5.4,
+            "p50": 5,
+            "p95": 6,
+            "max": 6
+          },
+          "activeConnections": {
+            "count": 10,
+            "min": 1,
+            "mean": 1.0,
+            "p50": 1,
+            "p95": 1,
+            "max": 1
+          },
+          "resources": {
+            "api": {
+              "processSamples": 5,
+              "cpuPercentSumPerSnapshot": {
+                "count": 5,
+                "min": 0.9,
+                "mean": 2.166,
+                "p50": 1.35,
+                "p95": 6.01,
+                "max": 6.01
+              },
+              "memoryMiBSumPerSnapshot": {
+                "count": 5,
+                "min": 69.71,
+                "mean": 70.11800000000001,
+                "p50": 70.04,
+                "p95": 70.55,
+                "max": 70.55
+              },
+              "collectionMs": {
+                "count": 5,
+                "min": 1517.0576459999866,
+                "mean": 1521.3701305999944,
+                "p50": 1521.072531999991,
+                "p95": 1525.5767569999953,
+                "max": 1525.5767569999953
+              }
+            },
+            "worker": {
+              "processSamples": 10,
+              "cpuPercentSumPerSnapshot": {
+                "count": 5,
+                "min": 1.04,
+                "mean": 1.21,
+                "p50": 1.23,
+                "p95": 1.33,
+                "max": 1.33
+              },
+              "memoryMiBSumPerSnapshot": {
+                "count": 5,
+                "min": 115.07,
+                "mean": 115.362,
+                "p50": 115.22,
+                "p95": 115.80000000000001,
+                "max": 115.80000000000001
+              },
+              "collectionMs": {
+                "count": 10,
+                "min": 1518.1129289999953,
+                "mean": 1522.9274909999979,
+                "p50": 1522.3469709999918,
+                "p95": 1527.5932969999994,
+                "max": 1527.5932969999994
+              }
+            },
+            "postgres": {
+              "processSamples": 5,
+              "cpuPercentSumPerSnapshot": {
+                "count": 5,
+                "min": 3.95,
+                "mean": 5.474,
+                "p50": 4.72,
+                "p95": 8.25,
+                "max": 8.25
+              },
+              "memoryMiBSumPerSnapshot": {
+                "count": 5,
+                "min": 35.82,
+                "mean": 38.054,
+                "p50": 37.59,
+                "p95": 40.08,
+                "max": 40.08
+              },
+              "collectionMs": {
+                "count": 5,
+                "min": 1517.4433829999907,
+                "mean": 1521.8718379999948,
+                "p50": 1521.5666209999908,
+                "p95": 1526.1620750000002,
+                "max": 1526.1620750000002
+              }
+            }
+          }
+        },
+        {
+          "name": "sustainedIngress",
+          "startMs": 34807.45322,
+          "endMs": 90001.078878,
+          "seconds": 55.193625657999995,
+          "regularSent": 132,
+          "regularAccepted": 112,
+          "regularRejected": 20,
+          "logObservedSucceeded": 109,
+          "logObservedRegularSucceeded": 108,
+          "dbCompletion": {
+            "firstReadMs": 35158.291121999995,
+            "firstQueryMs": 3.1259310000023106,
+            "lastReadMs": 89351.376249,
+            "lastQueryMs": 3.435464000009233,
+            "seconds": 54.19339466,
+            "succeededDelta": 108,
+            "observedCompletionsPerSecond": 1.9928627958734333
+          },
+          "queued": {
+            "count": 55,
+            "min": 25,
+            "mean": 26.654545454545456,
+            "p50": 27,
+            "p95": 27,
+            "max": 27
+          },
+          "processing": {
+            "count": 55,
+            "min": 2,
+            "mean": 2.0,
+            "p50": 2,
+            "p95": 2,
+            "max": 2
+          },
+          "outstanding": {
+            "count": 55,
+            "min": 27,
+            "mean": 28.654545454545456,
+            "p50": 29,
+            "p95": 29,
+            "max": 29
+          },
+          "connections": {
+            "count": 55,
+            "min": 4,
+            "mean": 4.327272727272727,
+            "p50": 4,
+            "p95": 5,
+            "max": 5
+          },
+          "activeConnections": {
+            "count": 55,
+            "min": 1,
+            "mean": 1.0,
+            "p50": 1,
+            "p95": 1,
+            "max": 1
+          },
+          "resources": {
+            "api": {
+              "processSamples": 27,
+              "cpuPercentSumPerSnapshot": {
+                "count": 27,
+                "min": 0.76,
+                "mean": 1.2114814814814816,
+                "p50": 1.17,
+                "p95": 1.84,
+                "max": 2.43
+              },
+              "memoryMiBSumPerSnapshot": {
+                "count": 27,
+                "min": 69.75,
+                "mean": 70.44888888888889,
+                "p50": 70.4,
+                "p95": 70.88,
+                "max": 71.05
+              },
+              "collectionMs": {
+                "count": 27,
+                "min": 1517.469213000004,
+                "mean": 1520.5580438888903,
+                "p50": 1520.3583519999956,
+                "p95": 1522.9300550000044,
+                "max": 1522.9825169999967
+              }
+            },
+            "worker": {
+              "processSamples": 54,
+              "cpuPercentSumPerSnapshot": {
+                "count": 27,
+                "min": 1.25,
+                "mean": 1.652962962962963,
+                "p50": 1.5,
+                "p95": 1.8900000000000001,
+                "max": 5.39
+              },
+              "memoryMiBSumPerSnapshot": {
+                "count": 27,
+                "min": 115.55000000000001,
+                "mean": 117.51111111111112,
+                "p50": 117.8,
+                "p95": 118.61,
+                "max": 118.82
+              },
+              "collectionMs": {
+                "count": 54,
+                "min": 1518.552137999999,
+                "mean": 1522.2580920555565,
+                "p50": 1522.1145289999986,
+                "p95": 1524.8696370000107,
+                "max": 1525.7971880000114
+              }
+            },
+            "postgres": {
+              "processSamples": 27,
+              "cpuPercentSumPerSnapshot": {
+                "count": 27,
+                "min": 2.53,
+                "mean": 4.663333333333333,
+                "p50": 4.64,
+                "p95": 5.2,
+                "max": 6.07
+              },
+              "memoryMiBSumPerSnapshot": {
+                "count": 27,
+                "min": 34.96,
+                "mean": 36.57074074074074,
+                "p50": 35.77,
+                "p95": 39.14,
+                "max": 40.08
+              },
+              "collectionMs": {
+                "count": 27,
+                "min": 1517.8746399999945,
+                "mean": 1521.1690082592588,
+                "p50": 1521.0251410000055,
+                "p95": 1523.3710439999995,
+                "max": 1523.7317849999963
+              }
+            }
+          }
+        },
+        {
+          "name": "settlement",
+          "startMs": 90001.078878,
+          "endMs": 104241.980329,
+          "seconds": 14.240901450999997,
+          "regularSent": 0,
+          "regularAccepted": 0,
+          "regularRejected": 0,
+          "logObservedSucceeded": 30,
+          "logObservedRegularSucceeded": 30,
+          "dbCompletion": {
+            "firstReadMs": 90001.496132,
+            "firstQueryMs": 3.2621409999992466,
+            "lastReadMs": 103424.852688,
+            "lastQueryMs": 2.306417000014335,
+            "seconds": 13.422400832000013,
+            "succeededDelta": 28,
+            "observedCompletionsPerSecond": 2.0860649559239723
+          },
+          "queued": {
+            "count": 15,
+            "min": 0,
+            "mean": 14.0,
+            "p50": 14,
+            "p95": 28,
+            "max": 28
+          },
+          "processing": {
+            "count": 15,
+            "min": 2,
+            "mean": 2.0,
+            "p50": 2,
+            "p95": 2,
+            "max": 2
+          },
+          "outstanding": {
+            "count": 15,
+            "min": 2,
+            "mean": 16.0,
+            "p50": 16,
+            "p95": 30,
+            "max": 30
+          },
+          "connections": {
+            "count": 15,
+            "min": 4,
+            "mean": 4.866666666666666,
+            "p50": 5,
+            "p95": 5,
+            "max": 5
+          },
+          "activeConnections": {
+            "count": 15,
+            "min": 1,
+            "mean": 1.0666666666666667,
+            "p50": 1,
+            "p95": 2,
+            "max": 2
+          },
+          "resources": {
+            "api": {
+              "processSamples": 6,
+              "cpuPercentSumPerSnapshot": {
+                "count": 6,
+                "min": 0.39,
+                "mean": 0.465,
+                "p50": 0.41,
+                "p95": 0.6,
+                "max": 0.6
+              },
+              "memoryMiBSumPerSnapshot": {
+                "count": 6,
+                "min": 69.7,
+                "mean": 69.90166666666667,
+                "p50": 69.7,
+                "p95": 70.43,
+                "max": 70.43
+              },
+              "collectionMs": {
+                "count": 6,
+                "min": 1519.4859540000034,
+                "mean": 1521.775383500004,
+                "p50": 1521.964552000005,
+                "p95": 1523.5052910000086,
+                "max": 1523.5052910000086
+              }
+            },
+            "worker": {
+              "processSamples": 12,
+              "cpuPercentSumPerSnapshot": {
+                "count": 6,
+                "min": 1.33,
+                "mean": 1.6616666666666668,
+                "p50": 1.5499999999999998,
+                "p95": 2.43,
+                "max": 2.43
+              },
+              "memoryMiBSumPerSnapshot": {
+                "count": 6,
+                "min": 103.34,
+                "mean": 106.72166666666668,
+                "p50": 104.16,
+                "p95": 118.80000000000001,
+                "max": 118.80000000000001
+              },
+              "collectionMs": {
+                "count": 12,
+                "min": 1520.3778490000113,
+                "mean": 1523.2714099166685,
+                "p50": 1523.329395000008,
+                "p95": 1525.523882999987,
+                "max": 1525.523882999987
+              }
+            },
+            "postgres": {
+              "processSamples": 6,
+              "cpuPercentSumPerSnapshot": {
+                "count": 6,
+                "min": 7.23,
+                "mean": 7.813333333333333,
+                "p50": 7.42,
+                "p95": 8.54,
+                "max": 8.54
+              },
+              "memoryMiBSumPerSnapshot": {
+                "count": 6,
+                "min": 35.64,
+                "mean": 37.303333333333335,
+                "p50": 37.48,
+                "p95": 37.88,
+                "max": 37.88
+              },
+              "collectionMs": {
+                "count": 6,
+                "min": 1519.8191490000172,
+                "mean": 1522.2621890000057,
+                "p50": 1522.4893350000057,
+                "p95": 1524.0981890000112,
+                "max": 1524.0981890000112
+              }
+            }
+          }
+        }
+      ],
+      "recovery": null
+    }
+  ],
+  "runs": [
+    {
+      "source": "/home/lhw/projects/async-job-processor/artifacts/failure-load/2026-11-01-measurement/main/r1-normal",
+      "name": "r1-normal",
+      "mode": "normal",
+      "scenario": {
+        "valid": true,
+        "reasons": [],
+        "suitability": {
+          "purpose": "main",
+          "criterion": "normal-three-stable",
+          "status": "suitable",
+          "requiresUserDecision": false
+        }
+      },
+      "functional": {
+        "status": "passed",
+        "failures": [],
+        "missing": []
+      },
+      "measurement": {
+        "valid": true,
+        "reasons": [],
+        "timing": {
+          "valid": true,
+          "reasons": []
+        },
+        "wallAlignment": {
+          "valid": true,
+          "reasons": []
+        }
+      },
+      "cleanup": {
+        "succeeded": true,
+        "errors": []
+      },
+      "http": {
+        "regular": {
+          "planned": 288,
+          "sent": 288,
+          "unsent": 0,
+          "accepted": 288,
+          "rejected": 0,
+          "otherHttp": 0,
+          "networkOrBodyErrors": 0,
+          "acceptanceFraction": 1,
+          "dispatchRate": 2.400829452418783,
+          "rttMs": {
+            "count": 288,
+            "min": 3.440300999995088,
+            "p50": 4.891500999998243,
+            "p95": 7.515870000002906,
+            "p99": 19.7049890000053,
+            "max": 44.31957700000203,
+            "mean": 5.377717350695371
+          },
+          "rttMsByOutcome": {
+            "accepted201": {
+              "count": 288,
+              "min": 3.440300999995088,
+              "p50": 4.891500999998243,
+              "p95": 7.515870000002906,
+              "p99": 19.7049890000053,
+              "max": 44.31957700000203,
+              "mean": 5.377717350695371
+            },
+            "policyRejected503": {
+              "count": 0,
+              "min": null,
+              "p50": null,
+              "p95": null,
+              "p99": null,
+              "max": null,
+              "mean": null
+            },
+            "otherHttp": {
+              "count": 0,
+              "min": null,
+              "p50": null,
+              "p95": null,
+              "p99": null,
+              "max": null,
+              "mean": null
+            },
+            "networkOrBodyErrors": {
+              "count": 0,
+              "min": null,
+              "p50": null,
+              "p95": null,
+              "p99": null,
+              "max": null,
+              "mean": null
+            }
+          },
+          "scheduleLagMs": {
+            "count": 288,
+            "min": 0.007466333321644925,
+            "p50": 0.6184739999880549,
+            "p95": 1.2900216666603228,
+            "p99": 1.5470749999949476,
+            "max": 41.449744999998074,
+            "mean": 0.7787097152710682
+          }
+        },
+        "target": {
+          "planned": 1,
+          "sent": 1,
+          "unsent": 0,
+          "accepted": 1,
+          "rejected": 0,
+          "otherHttp": 0,
+          "networkOrBodyErrors": 0,
+          "acceptanceFraction": 1,
+          "dispatchRate": null,
+          "rttMs": {
+            "count": 1,
+            "min": 7.407965999998851,
+            "p50": 7.407965999998851,
+            "p95": 7.407965999998851,
+            "p99": 7.407965999998851,
+            "max": 7.407965999998851,
+            "mean": 7.407965999998851
+          },
+          "rttMsByOutcome": {
+            "accepted201": {
+              "count": 1,
+              "min": 7.407965999998851,
+              "p50": 7.407965999998851,
+              "p95": 7.407965999998851,
+              "p99": 7.407965999998851,
+              "max": 7.407965999998851,
+              "mean": 7.407965999998851
+            },
+            "policyRejected503": {
+              "count": 0,
+              "min": null,
+              "p50": null,
+              "p95": null,
+              "p99": null,
+              "max": null,
+              "mean": null
+            },
+            "otherHttp": {
+              "count": 0,
+              "min": null,
+              "p50": null,
+              "p95": null,
+              "p99": null,
+              "max": null,
+              "mean": null
+            },
+            "networkOrBodyErrors": {
+              "count": 0,
+              "min": null,
+              "p50": null,
+              "p95": null,
+              "p99": null,
+              "max": null,
+              "mean": null
+            }
+          },
+          "scheduleLagMs": {
+            "count": 1,
+            "min": 1.2459779999990133,
+            "p50": 1.2459779999990133,
+            "p95": 1.2459779999990133,
+            "p99": 1.2459779999990133,
+            "max": 1.2459779999990133,
+            "mean": 1.2459779999990133
+          }
+        }
+      },
+      "stability": {
+        "status": "suitable",
+        "reasons": [],
+        "windowMs": 10000,
+        "targetEndMs": 30336.158674,
+        "loadEndMs": 120000,
+        "windows": [
+          {
+            "startMs": 30336.158674,
+            "endMs": 40336.158674,
+            "samples": 10,
+            "meanOutstanding": 4.7,
+            "sent": 24,
+            "rejected": 0
+          },
+          {
+            "startMs": 40336.158674,
+            "endMs": 50336.158674,
+            "samples": 10,
+            "meanOutstanding": 3,
+            "sent": 24,
+            "rejected": 0
+          },
+          {
+            "startMs": 50336.158674,
+            "endMs": 60336.158674,
+            "samples": 10,
+            "meanOutstanding": 2.8,
+            "sent": 24,
+            "rejected": 0
+          },
+          {
+            "startMs": 60336.158674,
+            "endMs": 70336.158674,
+            "samples": 10,
+            "meanOutstanding": 2.8,
+            "sent": 24,
+            "rejected": 0
+          },
+          {
+            "startMs": 70336.158674,
+            "endMs": 80336.158674,
+            "samples": 10,
+            "meanOutstanding": 2.7,
+            "sent": 24,
+            "rejected": 0
+          },
+          {
+            "startMs": 80336.158674,
+            "endMs": 90336.158674,
+            "samples": 9,
+            "meanOutstanding": 2.7777777777777777,
+            "sent": 24,
+            "rejected": 0
+          },
+          {
+            "startMs": 90336.158674,
+            "endMs": 100336.158674,
+            "samples": 10,
+            "meanOutstanding": 2.8,
+            "sent": 24,
+            "rejected": 0
+          },
+          {
+            "startMs": 100336.158674,
+            "endMs": 110336.158674,
+            "samples": 10,
+            "meanOutstanding": 2.6,
+            "sent": 24,
+            "rejected": 0
+          }
+        ],
+        "saturation": [],
+        "growth": [],
+        "unassessedTailMs": 9663.841325999994,
+        "criterion": "normal-three-stable",
+        "applied": true
+      },
+      "sampling": {
+        "count": 123,
+        "observedMaxOutstanding": 8,
+        "observedMaxQueued": 5,
+        "queryMs": {
+          "count": 123,
+          "min": 2.2383610000251792,
+          "p50": 2.6614879999979166,
+          "p95": 4.152663000000757,
+          "p99": 8.02283799998986,
+          "max": 17.389383000001544,
+          "mean": 3.003857569104724
+        },
+        "actualIntervalMs": {
+          "count": 122,
+          "min": 459.5306409999903,
+          "p50": 1003.3839260000095,
+          "p95": 1005.0849670000025,
+          "p99": 1009.7469359999959,
+          "max": 1028.7984209999995,
+          "mean": 993.7686426721308
+        },
+        "maxAbsClockDifferenceMs": 169.00719600002049
+      },
+      "completion": {
+        "basis": "log-observed",
+        "dbSucceededDelta": 289,
+        "logObservedSucceeded": 289,
+        "matches": true
+      },
+      "reconciliation": {
+        "newRows": 289,
+        "unknownResponseRows": [],
+        "absentIds": []
+      },
+      "timeline": {
+        "target-accepted": {
+          "elapsedMs": 20009.109859999997,
+          "confirmedMs": 20009.115619999997,
+          "firstClaimAgeMsAtConfirmation": null
+        },
+        "handler-started": {
+          "elapsedMs": 20320.849206,
+          "confirmedMs": 20676.711613,
+          "firstClaimAgeMsAtConfirmation": null
+        },
+        "target-succeeded": {
+          "elapsedMs": 30336.158674,
+          "confirmedMs": 30527.913846999996,
+          "firstClaimAgeMsAtConfirmation": 10233.529
+        },
+        "load-end": {
+          "elapsedMs": 120001.020965,
+          "confirmedMs": 120001.029538,
+          "firstClaimAgeMsAtConfirmation": null
+        },
+        "drain-end": {
+          "elapsedMs": 120965.90822099999,
+          "confirmedMs": 120965.91391599999,
+          "firstClaimAgeMsAtConfirmation": null
+        }
+      },
+      "final": {
+        "newRows": 289,
+        "states": {
+          "succeeded": 289
+        },
+        "attempts": {
+          "1": 289
+        },
+        "target": {
+          "id": "cba8fbb5-8d98-49f4-ba10-ccfc462e75bd",
+          "type": "slow",
+          "result": {
+            "durationMs": 10000
+          },
+          "status": "succeeded",
+          "attempt": 1,
+          "payload": {
+            "durationMs": 10000
+          },
+          "worker_id": "d5dc0838-b327-46ca-8744-69c2fa8b7479",
+          "created_at": "2026-11-01T12:11:21.35783+00:00",
+          "last_error": null,
+          "updated_at": "2026-11-01T12:11:31.708128+00:00",
+          "available_at": "2026-11-01T12:11:21.35783+00:00",
+          "max_attempts": 3,
+          "processing_started_at": "2026-11-01T12:11:21.672263+00:00"
+        },
+        "workerSucceeded": {
+          "d5dc0838-b327-46ca-8744-69c2fa8b7479": 111,
+          "19293555-60a6-48b0-9d29-d960c13d7991": 115,
+          "705ae4ee-b3b8-43a4-819b-20e415f29af6": 63
+        },
+        "baselineRows": 803,
+        "baselineUnchanged": true,
+        "outstanding": 0,
+        "retries": 0,
+        "recoveries": 0
+      },
+      "rawSha256": {
+        "evidence.json": "8ab6e763fcbab35886c22e07532233e5658aee057eb6a5d06e84e59fa6a1b603",
+        "requests.json": "caf896b29cb8aa9cf633f9adf624809928d7dad6c2c406a09428f1c679d01a99",
+        "jobs.json": "c5cb14064177fec143003c6093a1f377e63efbee6df9b06fa33701ed9f23c0d6",
+        "samples.jsonl": "def277f7a15a0ac18e845d36ecc0e33484215a8693766cfc92e6788010d54a4c",
+        "events.json": "0df5fed838c875c42d94bfa2ec9cd779a88150aa9d7dc63e30fb462e74042c6c",
+        "resources.jsonl": "ff244481bfc66b3552e2d32b2c20e4545443165880eee968da7cebb3c49dd770",
+        "result.json": "3d1f4d636c09a7cab99eb1f4f3579bc67f375ab33ed04663bf9cbd0208b48bf9",
+        "ready.json": "ea4fc308735d42b6d5c13b59a4e99a9c89cba75e945b2f7ce44022a527726d4a",
+        "target-states.jsonl": "d75916003591cef5889406d5ef9c89dfee56461f46377806b7847699de31c9ae"
+      },
+      "parameters": {
+        "purpose": "main",
+        "modes": [
+          "normal",
+          "failure"
+        ],
+        "workers": 3,
+        "seconds": 120,
+        "targetAtSeconds": 20,
+        "targetDurationMs": 10000,
+        "repeats": 2,
+        "rate": 2.4,
+        "durationMs": 1000,
+        "limit": 30,
+        "intervalMs": 1000,
+        "maxInflight": 4,
+        "drainSeconds": 300
+      },
+      "phases": [
+        {
+          "name": "preTarget",
+          "startMs": 0,
+          "endMs": 20320.849206,
+          "seconds": 20.320849206,
+          "regularSent": 49,
+          "regularAccepted": 49,
+          "regularRejected": 0,
+          "logObservedSucceeded": 47,
+          "logObservedRegularSucceeded": 47,
+          "dbCompletion": {
+            "firstReadMs": 10.682190999999875,
+            "firstQueryMs": 17.389383000001544,
+            "lastReadMs": 20108.156063999995,
+            "lastQueryMs": 2.6169240000017453,
+            "seconds": 20.082701413999995,
+            "succeededDelta": 46,
+            "observedCompletionsPerSecond": 2.2905285027009668
+          },
+          "queued": {
+            "count": 21,
+            "min": 0,
+            "mean": 0.6190476190476191,
+            "p50": 1,
+            "p95": 1,
+            "max": 2
+          },
+          "processing": {
+            "count": 21,
+            "min": 0,
+            "mean": 2.2857142857142856,
+            "p50": 2,
+            "p95": 3,
+            "max": 3
+          },
+          "outstanding": {
+            "count": 21,
+            "min": 0,
+            "mean": 2.9047619047619047,
+            "p50": 3,
+            "p95": 3,
+            "max": 4
+          },
+          "connections": {
+            "count": 21,
+            "min": 5,
+            "mean": 5.0476190476190474,
+            "p50": 5,
+            "p95": 5,
+            "max": 6
+          },
+          "activeConnections": {
+            "count": 21,
+            "min": 1,
+            "mean": 1.0,
+            "p50": 1,
+            "p95": 1,
+            "max": 1
+          },
+          "resources": {
+            "api": {
+              "processSamples": 9,
+              "cpuPercentSumPerSnapshot": {
+                "count": 9,
+                "min": 0.97,
+                "mean": 1.267777777777778,
+                "p50": 1.28,
+                "p95": 1.72,
+                "max": 1.72
+              },
+              "memoryMiBSumPerSnapshot": {
+                "count": 9,
+                "min": 63.15,
+                "mean": 63.99444444444445,
+                "p50": 63.67,
+                "p95": 65.61,
+                "max": 65.61
+              },
+              "collectionMs": {
+                "count": 9,
+                "min": 1520.6632089999985,
+                "mean": 1588.7738311111107,
+                "p50": 1525.2814089999956,
+                "p95": 2101.5401070000007,
+                "max": 2101.5401070000007
+              }
+            },
+            "worker": {
+              "processSamples": 27,
+              "cpuPercentSumPerSnapshot": {
+                "count": 9,
+                "min": 1.93,
+                "mean": 2.5955555555555554,
+                "p50": 2.16,
+                "p95": 6.109999999999999,
+                "max": 6.109999999999999
+              },
+              "memoryMiBSumPerSnapshot": {
+                "count": 9,
+                "min": 171.74,
+                "mean": 173.14,
+                "p50": 173.33,
+                "p95": 175.0,
+                "max": 175.0
+              },
+              "collectionMs": {
+                "count": 27,
+                "min": 1522.3334509999986,
+                "mean": 1590.6182057407395,
+                "p50": 1527.0553539999964,
+                "p95": 2103.3288489999977,
+                "max": 2103.7227280000006
+              }
+            },
+            "postgres": {
+              "processSamples": 9,
+              "cpuPercentSumPerSnapshot": {
+                "count": 9,
+                "min": 0.82,
+                "mean": 1.828888888888889,
+                "p50": 0.95,
+                "p95": 7.55,
+                "max": 7.55
+              },
+              "memoryMiBSumPerSnapshot": {
+                "count": 9,
+                "min": 36.19,
+                "mean": 36.57222222222222,
+                "p50": 36.62,
+                "p95": 36.96,
+                "max": 36.96
+              },
+              "collectionMs": {
+                "count": 9,
+                "min": 1521.253589,
+                "mean": 1589.314624888887,
+                "p50": 1525.741446,
+                "p95": 2102.2027420000013,
+                "max": 2102.2027420000013
+              }
+            }
+          }
+        },
+        {
+          "name": "targetFirst10s",
+          "startMs": 20320.849206,
+          "endMs": 30320.849206,
+          "seconds": 10.0,
+          "regularSent": 24,
+          "regularAccepted": 24,
+          "regularRejected": 0,
+          "logObservedSucceeded": 19,
+          "logObservedRegularSucceeded": 19,
+          "dbCompletion": {
+            "firstReadMs": 21111.029499999997,
+            "firstQueryMs": 2.4161890000032145,
+            "lastReadMs": 30143.627631000003,
+            "lastQueryMs": 2.3780919999990147,
+            "seconds": 9.032560034000001,
+            "succeededDelta": 18,
+            "observedCompletionsPerSecond": 1.992790519215496
+          },
+          "queued": {
+            "count": 10,
+            "min": 1,
+            "mean": 3.0,
+            "p50": 3,
+            "p95": 5,
+            "max": 5
+          },
+          "processing": {
+            "count": 10,
+            "min": 3,
+            "mean": 3.0,
+            "p50": 3,
+            "p95": 3,
+            "max": 3
+          },
+          "outstanding": {
+            "count": 10,
+            "min": 4,
+            "mean": 6.0,
+            "p50": 6,
+            "p95": 8,
+            "max": 8
+          },
+          "connections": {
+            "count": 10,
+            "min": 5,
+            "mean": 5.9,
+            "p50": 6,
+            "p95": 6,
+            "max": 6
+          },
+          "activeConnections": {
+            "count": 10,
+            "min": 1,
+            "mean": 1.0,
+            "p50": 1,
+            "p95": 1,
+            "max": 1
+          },
+          "resources": {
+            "api": {
+              "processSamples": 4,
+              "cpuPercentSumPerSnapshot": {
+                "count": 4,
+                "min": 1.04,
+                "mean": 1.1775,
+                "p50": 1.05,
+                "p95": 1.48,
+                "max": 1.48
+              },
+              "memoryMiBSumPerSnapshot": {
+                "count": 4,
+                "min": 66.94,
+                "mean": 68.27,
+                "p50": 67.68,
+                "p95": 70.16,
+                "max": 70.16
+              },
+              "collectionMs": {
+                "count": 4,
+                "min": 1522.4017160000003,
+                "mean": 1524.0047359999971,
+                "p50": 1523.0029149999973,
+                "p95": 1525.7862379999933,
+                "max": 1525.7862379999933
+              }
+            },
+            "worker": {
+              "processSamples": 12,
+              "cpuPercentSumPerSnapshot": {
+                "count": 4,
+                "min": 1.63,
+                "mean": 1.91,
+                "p50": 1.75,
+                "p95": 2.25,
+                "max": 2.25
+              },
+              "memoryMiBSumPerSnapshot": {
+                "count": 4,
+                "min": 173.89,
+                "mean": 174.6125,
+                "p50": 174.75,
+                "p95": 175.01,
+                "max": 175.01
+              },
+              "collectionMs": {
+                "count": 12,
+                "min": 1523.5190900000016,
+                "mean": 1525.5652253333337,
+                "p50": 1525.0238129999998,
+                "p95": 1527.8298419999992,
+                "max": 1527.8298419999992
+              }
+            },
+            "postgres": {
+              "processSamples": 4,
+              "cpuPercentSumPerSnapshot": {
+                "count": 4,
+                "min": 0.92,
+                "mean": 1.4024999999999999,
+                "p50": 0.93,
+                "p95": 2.63,
+                "max": 2.63
+              },
+              "memoryMiBSumPerSnapshot": {
+                "count": 4,
+                "min": 38.65,
+                "mean": 39.230000000000004,
+                "p50": 39.21,
+                "p95": 39.79,
+                "max": 39.79
+              },
+              "collectionMs": {
+                "count": 4,
+                "min": 1522.8189950000015,
+                "mean": 1524.4774762499965,
+                "p50": 1523.546838999995,
+                "p95": 1526.2819089999903,
+                "max": 1526.2819089999903
+              }
+            }
+          }
+        },
+        {
+          "name": "sustainedIngress",
+          "startMs": 30320.849206,
+          "endMs": 120001.020965,
+          "seconds": 89.680171759,
+          "regularSent": 215,
+          "regularAccepted": 215,
+          "regularRejected": 0,
+          "logObservedSucceeded": 221,
+          "logObservedRegularSucceeded": 220,
+          "dbCompletion": {
+            "firstReadMs": 31146.541621999997,
+            "firstQueryMs": 2.8883029999997234,
+            "lastReadMs": 119457.35587199999,
+            "lastQueryMs": 3.1937570000009146,
+            "seconds": 88.31111970399999,
+            "succeededDelta": 217,
+            "observedCompletionsPerSecond": 2.457221703533345
+          },
+          "queued": {
+            "count": 89,
+            "min": 0,
+            "mean": 0.5280898876404494,
+            "p50": 0,
+            "p95": 2,
+            "max": 4
+          },
+          "processing": {
+            "count": 89,
+            "min": 2,
+            "mean": 2.460674157303371,
+            "p50": 2,
+            "p95": 3,
+            "max": 3
+          },
+          "outstanding": {
+            "count": 89,
+            "min": 2,
+            "mean": 2.9887640449438204,
+            "p50": 3,
+            "p95": 5,
+            "max": 7
+          },
+          "connections": {
+            "count": 89,
+            "min": 5,
+            "mean": 5.303370786516854,
+            "p50": 5,
+            "p95": 6,
+            "max": 6
+          },
+          "activeConnections": {
+            "count": 89,
+            "min": 1,
+            "mean": 1.0112359550561798,
+            "p50": 1,
+            "p95": 1,
+            "max": 2
+          },
+          "resources": {
+            "api": {
+              "processSamples": 44,
+              "cpuPercentSumPerSnapshot": {
+                "count": 44,
+                "min": 0.74,
+                "mean": 1.1820454545454544,
+                "p50": 1.08,
+                "p95": 1.63,
+                "max": 3.78
+              },
+              "memoryMiBSumPerSnapshot": {
+                "count": 44,
+                "min": 69.92,
+                "mean": 71.03886363636364,
+                "p50": 71.01,
+                "p95": 71.73,
+                "max": 72.06
+              },
+              "collectionMs": {
+                "count": 44,
+                "min": 1521.5565020000067,
+                "mean": 1524.753730590909,
+                "p50": 1524.8449780000083,
+                "p95": 1527.8394419999968,
+                "max": 1529.465349999984
+              }
+            },
+            "worker": {
+              "processSamples": 132,
+              "cpuPercentSumPerSnapshot": {
+                "count": 44,
+                "min": 1.8,
+                "mean": 2.3554545454545455,
+                "p50": 2.13,
+                "p95": 3.4,
+                "max": 5.970000000000001
+              },
+              "memoryMiBSumPerSnapshot": {
+                "count": 44,
+                "min": 176.67,
+                "mean": 181.68477272727273,
+                "p50": 181.85,
+                "p95": 183.53,
+                "max": 184.74
+              },
+              "collectionMs": {
+                "count": 132,
+                "min": 1522.7743279999995,
+                "mean": 1526.4816413484848,
+                "p50": 1526.5738760000095,
+                "p95": 1529.8147009999957,
+                "max": 1531.524069999985
+              }
+            },
+            "postgres": {
+              "processSamples": 44,
+              "cpuPercentSumPerSnapshot": {
+                "count": 44,
+                "min": 1.0,
+                "mean": 2.3188636363636363,
+                "p50": 1.27,
+                "p95": 5.14,
+                "max": 5.61
+              },
+              "memoryMiBSumPerSnapshot": {
+                "count": 44,
+                "min": 37.06,
+                "mean": 38.377272727272725,
+                "p50": 37.75,
+                "p95": 40.21,
+                "max": 40.55
+              },
+              "collectionMs": {
+                "count": 44,
+                "min": 1522.110394999996,
+                "mean": 1525.2681947045442,
+                "p50": 1525.358956000011,
+                "p95": 1528.4247739999846,
+                "max": 1529.9718649999995
+              }
+            }
+          }
+        },
+        {
+          "name": "settlement",
+          "startMs": 120001.020965,
+          "endMs": 120965.90822099999,
+          "seconds": 0.9648872559999873,
+          "regularSent": 0,
+          "regularAccepted": 0,
+          "regularRejected": 0,
+          "logObservedSucceeded": 2,
+          "logObservedRegularSucceeded": 2,
+          "dbCompletion": {
+            "firstReadMs": 120001.46216299999,
+            "firstQueryMs": 2.740775999991456,
+            "lastReadMs": 120460.99280399998,
+            "lastQueryMs": 2.3528520000108983,
+            "seconds": 0.45914271700000975,
+            "succeededDelta": 1,
+            "observedCompletionsPerSecond": 2.1779720400094655
+          },
+          "queued": {
+            "count": 2,
+            "min": 0,
+            "mean": 0.0,
+            "p50": 0,
+            "p95": 0,
+            "max": 0
+          },
+          "processing": {
+            "count": 2,
+            "min": 1,
+            "mean": 1.5,
+            "p50": 1,
+            "p95": 2,
+            "max": 2
+          },
+          "outstanding": {
+            "count": 2,
+            "min": 1,
+            "mean": 1.5,
+            "p50": 1,
+            "p95": 2,
+            "max": 2
+          },
+          "connections": {
+            "count": 2,
+            "min": 5,
+            "mean": 5.5,
+            "p50": 5,
+            "p95": 6,
+            "max": 6
+          },
+          "activeConnections": {
+            "count": 2,
+            "min": 1,
+            "mean": 1.0,
+            "p50": 1,
+            "p95": 1,
+            "max": 1
+          },
+          "resources": {
+            "api": {
+              "processSamples": 0,
+              "cpuPercentSumPerSnapshot": {
+                "count": 0,
+                "min": null,
+                "mean": null,
+                "p50": null,
+                "p95": null,
+                "max": null
+              },
+              "memoryMiBSumPerSnapshot": {
+                "count": 0,
+                "min": null,
+                "mean": null,
+                "p50": null,
+                "p95": null,
+                "max": null
+              },
+              "collectionMs": {
+                "count": 0,
+                "min": null,
+                "mean": null,
+                "p50": null,
+                "p95": null,
+                "max": null
+              }
+            },
+            "worker": {
+              "processSamples": 0,
+              "cpuPercentSumPerSnapshot": {
+                "count": 0,
+                "min": null,
+                "mean": null,
+                "p50": null,
+                "p95": null,
+                "max": null
+              },
+              "memoryMiBSumPerSnapshot": {
+                "count": 0,
+                "min": null,
+                "mean": null,
+                "p50": null,
+                "p95": null,
+                "max": null
+              },
+              "collectionMs": {
+                "count": 0,
+                "min": null,
+                "mean": null,
+                "p50": null,
+                "p95": null,
+                "max": null
+              }
+            },
+            "postgres": {
+              "processSamples": 0,
+              "cpuPercentSumPerSnapshot": {
+                "count": 0,
+                "min": null,
+                "mean": null,
+                "p50": null,
+                "p95": null,
+                "max": null
+              },
+              "memoryMiBSumPerSnapshot": {
+                "count": 0,
+                "min": null,
+                "mean": null,
+                "p50": null,
+                "p95": null,
+                "max": null
+              },
+              "collectionMs": {
+                "count": 0,
+                "min": null,
+                "mean": null,
+                "p50": null,
+                "p95": null,
+                "max": null
+              }
+            }
+          }
+        }
+      ],
+      "recovery": null
+    },
+    {
+      "source": "/home/lhw/projects/async-job-processor/artifacts/failure-load/2026-11-01-measurement/main/r1-failure",
+      "name": "r1-failure",
+      "mode": "failure",
+      "scenario": {
+        "valid": true,
+        "reasons": [],
+        "suitability": {
+          "purpose": "main",
+          "criterion": "tool-or-failure-path",
+          "status": "observation-only",
+          "requiresUserDecision": false
+        }
+      },
+      "functional": {
+        "status": "passed",
+        "failures": [],
+        "missing": []
+      },
+      "measurement": {
+        "valid": true,
+        "reasons": [],
+        "timing": {
+          "valid": true,
+          "reasons": []
+        },
+        "wallAlignment": {
+          "valid": true,
+          "reasons": []
+        }
+      },
+      "cleanup": {
+        "succeeded": true,
+        "errors": []
+      },
+      "http": {
+        "regular": {
+          "planned": 288,
+          "sent": 288,
+          "unsent": 0,
+          "accepted": 264,
+          "rejected": 24,
+          "otherHttp": 0,
+          "networkOrBodyErrors": 0,
+          "acceptanceFraction": 0.9166666666666666,
+          "dispatchRate": 2.400432998829527,
+          "rttMs": {
+            "count": 288,
+            "min": 2.882473999983631,
+            "p50": 4.840955000021495,
+            "p95": 7.073480999999447,
+            "p99": 18.437973000021884,
+            "max": 40.675920999987284,
+            "mean": 5.341619100694111
+          },
+          "rttMsByOutcome": {
+            "accepted201": {
+              "count": 264,
+              "min": 3.6781999999657273,
+              "p50": 4.911764999997104,
+              "p95": 7.1950960000103805,
+              "p99": 18.437973000021884,
+              "max": 40.675920999987284,
+              "mean": 5.476893329544757
+            },
+            "policyRejected503": {
+              "count": 24,
+              "min": 2.882473999983631,
+              "p50": 3.6155159999907482,
+              "p95": 5.147114000050351,
+              "p99": 6.22893100004876,
+              "max": 6.22893100004876,
+              "mean": 3.8536025833370027
+            },
+            "otherHttp": {
+              "count": 0,
+              "min": null,
+              "p50": null,
+              "p95": null,
+              "p99": null,
+              "max": null,
+              "mean": null
+            },
+            "networkOrBodyErrors": {
+              "count": 0,
+              "min": null,
+              "p50": null,
+              "p95": null,
+              "p99": null,
+              "max": null,
+              "mean": null
+            }
+          },
+          "scheduleLagMs": {
+            "count": 288,
+            "min": 0.008777666662354022,
+            "p50": 0.6745746666565537,
+            "p95": 1.2726893333456246,
+            "p99": 1.5666130000026897,
+            "max": 22.12218400000711,
+            "mean": 0.7265270173616903
+          }
+        },
+        "target": {
+          "planned": 1,
+          "sent": 1,
+          "unsent": 0,
+          "accepted": 1,
+          "rejected": 0,
+          "otherHttp": 0,
+          "networkOrBodyErrors": 0,
+          "acceptanceFraction": 1,
+          "dispatchRate": null,
+          "rttMs": {
+            "count": 1,
+            "min": 6.8267439999908675,
+            "p50": 6.8267439999908675,
+            "p95": 6.8267439999908675,
+            "p99": 6.8267439999908675,
+            "max": 6.8267439999908675,
+            "mean": 6.8267439999908675
+          },
+          "rttMsByOutcome": {
+            "accepted201": {
+              "count": 1,
+              "min": 6.8267439999908675,
+              "p50": 6.8267439999908675,
+              "p95": 6.8267439999908675,
+              "p99": 6.8267439999908675,
+              "max": 6.8267439999908675,
+              "mean": 6.8267439999908675
+            },
+            "policyRejected503": {
+              "count": 0,
+              "min": null,
+              "p50": null,
+              "p95": null,
+              "p99": null,
+              "max": null,
+              "mean": null
+            },
+            "otherHttp": {
+              "count": 0,
+              "min": null,
+              "p50": null,
+              "p95": null,
+              "p99": null,
+              "max": null,
+              "mean": null
+            },
+            "networkOrBodyErrors": {
+              "count": 0,
+              "min": null,
+              "p50": null,
+              "p95": null,
+              "p99": null,
+              "max": null,
+              "mean": null
+            }
+          },
+          "scheduleLagMs": {
+            "count": 1,
+            "min": 0.09226699999999255,
+            "p50": 0.09226699999999255,
+            "p95": 0.09226699999999255,
+            "p99": 0.09226699999999255,
+            "max": 0.09226699999999255,
+            "mean": 0.09226699999999255
+          }
+        }
+      },
+      "stability": {
+        "status": "unsuitable",
+        "reasons": [
+          "대상 완료 후 10초 구간 2개 연속 정책상 503 발생"
+        ],
+        "windowMs": 10000,
+        "targetEndMs": 75972.340344,
+        "loadEndMs": 120000,
+        "windows": [
+          {
+            "startMs": 75972.340344,
+            "endMs": 85972.340344,
+            "samples": 10,
+            "meanOutstanding": 29.2,
+            "sent": 24,
+            "rejected": 4
+          },
+          {
+            "startMs": 85972.340344,
+            "endMs": 95972.340344,
+            "samples": 10,
+            "meanOutstanding": 29.2,
+            "sent": 24,
+            "rejected": 5
+          },
+          {
+            "startMs": 95972.340344,
+            "endMs": 105972.340344,
+            "samples": 10,
+            "meanOutstanding": 29.2,
+            "sent": 24,
+            "rejected": 4
+          },
+          {
+            "startMs": 105972.340344,
+            "endMs": 115972.340344,
+            "samples": 10,
+            "meanOutstanding": 29.2,
+            "sent": 24,
+            "rejected": 4
+          }
+        ],
+        "saturation": [
+          {
+            "startMs": 75972.340344,
+            "endMs": 95972.340344
+          },
+          {
+            "startMs": 85972.340344,
+            "endMs": 105972.340344
+          },
+          {
+            "startMs": 95972.340344,
+            "endMs": 115972.340344
+          }
+        ],
+        "growth": [],
+        "unassessedTailMs": 4027.6596560000035,
+        "criterion": "normal-three-stable",
+        "applied": false
+      },
+      "sampling": {
+        "count": 137,
+        "observedMaxOutstanding": 30,
+        "observedMaxQueued": 28,
+        "queryMs": {
+          "count": 137,
+          "min": 2.202017000003252,
+          "p50": 2.7038140000076964,
+          "p95": 4.3294260000111535,
+          "p99": 15.81559000001289,
+          "max": 17.956941999989795,
+          "mean": 3.067487715327531
+        },
+        "actualIntervalMs": {
+          "count": 136,
+          "min": 146.12905300001148,
+          "p50": 1003.4302160000079,
+          "p95": 1005.2124990000157,
+          "p99": 1016.4308360000141,
+          "max": 1019.3189330000023,
+          "mean": 990.0577380661763
+        },
+        "maxAbsClockDifferenceMs": 359.9919299999892
+      },
+      "completion": {
+        "basis": "log-observed",
+        "dbSucceededDelta": 265,
+        "logObservedSucceeded": 265,
+        "matches": true
+      },
+      "reconciliation": {
+        "newRows": 265,
+        "unknownResponseRows": [],
+        "absentIds": []
+      },
+      "timeline": {
+        "target-accepted": {
+          "elapsedMs": 20007.381043,
+          "confirmedMs": 20007.404796000017,
+          "firstClaimAgeMsAtConfirmation": null
+        },
+        "handler-started": {
+          "elapsedMs": 20034.358485000004,
+          "confirmedMs": 20393.978570000007,
+          "firstClaimAgeMsAtConfirmation": null
+        },
+        "kill-requested": {
+          "elapsedMs": 20395.514939000015,
+          "confirmedMs": 20395.528651,
+          "firstClaimAgeMsAtConfirmation": null
+        },
+        "kill-confirmed": {
+          "elapsedMs": 20910.055978999997,
+          "confirmedMs": 20910.078700000013,
+          "firstClaimAgeMsAtConfirmation": null
+        },
+        "retained-after-kill": {
+          "elapsedMs": 20912.012224000006,
+          "confirmedMs": 20912.022032000008,
+          "firstClaimAgeMsAtConfirmation": null
+        },
+        "survivor-before-recovery": {
+          "elapsedMs": 22871.713823,
+          "confirmedMs": 22871.71831699999,
+          "firstClaimAgeMsAtConfirmation": null
+        },
+        "recovered": {
+          "elapsedMs": 57907.07069700002,
+          "confirmedMs": 58098.303705,
+          "firstClaimAgeMsAtConfirmation": 38147.069
+        },
+        "second-claim": {
+          "elapsedMs": 65952.03064400001,
+          "confirmedMs": 65966.03923600001,
+          "firstClaimAgeMsAtConfirmation": 46014.871
+        },
+        "second-handler": {
+          "elapsedMs": 65952.05079100002,
+          "confirmedMs": 65966.833415,
+          "firstClaimAgeMsAtConfirmation": 46015.629
+        },
+        "second-processing": {
+          "elapsedMs": 65967.199142,
+          "confirmedMs": 65967.20678500002,
+          "firstClaimAgeMsAtConfirmation": null
+        },
+        "target-succeeded": {
+          "elapsedMs": 75972.340344,
+          "confirmedMs": 76105.62725399999,
+          "firstClaimAgeMsAtConfirmation": 56247.166
+        },
+        "load-end": {
+          "elapsedMs": 120000.58328599998,
+          "confirmedMs": 120000.597393,
+          "firstClaimAgeMsAtConfirmation": null
+        },
+        "drain-end": {
+          "elapsedMs": 134362.981789,
+          "confirmedMs": 134362.996051,
+          "firstClaimAgeMsAtConfirmation": null
+        }
+      },
+      "final": {
+        "newRows": 265,
+        "states": {
+          "succeeded": 265
+        },
+        "attempts": {
+          "1": 264,
+          "2": 1
+        },
+        "target": {
+          "id": "d7104eae-cf80-487f-abba-5d33c96c8746",
+          "type": "slow",
+          "result": {
+            "durationMs": 10000
+          },
+          "status": "succeeded",
+          "attempt": 2,
+          "payload": {
+            "durationMs": 10000
+          },
+          "worker_id": "1b998b80-3529-4a68-a736-011b5e3ef7ea",
+          "created_at": "2026-11-01T12:13:38.676864+00:00",
+          "last_error": null,
+          "updated_at": "2026-11-01T12:14:34.81229+00:00",
+          "available_at": "2026-11-01T12:14:16.659119+00:00",
+          "max_attempts": 3,
+          "processing_started_at": "2026-11-01T12:14:24.703997+00:00"
+        },
+        "workerSucceeded": {
+          "b6277e83-113a-4786-823b-cb89d8351c30": 133,
+          "1b998b80-3529-4a68-a736-011b5e3ef7ea": 117,
+          "d8d8bbc1-f651-4421-9838-71f9fca3b304": 15
+        },
+        "baselineRows": 1092,
+        "baselineUnchanged": true,
+        "outstanding": 0,
+        "retries": 0,
+        "recoveries": 1
+      },
+      "rawSha256": {
+        "evidence.json": "39ba4d9ab88cc9ff886aec0ea170c35cf67b77c23eefc6695d5e03cd6a2c9a4d",
+        "requests.json": "c8d4a4e415f2f35258e5f44776eb07bc67a8a581f650043da9a73a59f3602075",
+        "jobs.json": "0d4523217f6aedf72c37c2c8adfb428ac239f9c5731c77c1a1a565486390e3ec",
+        "samples.jsonl": "b1e543512b8a1ddab4eb83de7f96f906d39b5eee572a69dc73f8e4c7a23c3a78",
+        "events.json": "814627889f1d31116d2739c5fc61b87f9e9b2505d911431f0717269a815585b0",
+        "resources.jsonl": "50090183553cbb8501e87f615b192ad46c112abfddc79231bfde4a2ebc86701c",
+        "result.json": "49d2a65ed12de05c3c7564303f5ab61b0735f76602dd08c423dfe90818730681",
+        "ready.json": "002cf36380402d35c96ee33bbcefffcef3c2097f9c57d0c803eb4a404ecc38ab",
+        "target-states.jsonl": "141c7288369a4c824bfd32a87dc8021449ff4d026d94531dc1cee0aaf23ed761"
+      },
+      "parameters": {
+        "purpose": "main",
+        "modes": [
+          "normal",
+          "failure"
+        ],
+        "workers": 3,
+        "seconds": 120,
+        "targetAtSeconds": 20,
+        "targetDurationMs": 10000,
+        "repeats": 2,
+        "rate": 2.4,
+        "durationMs": 1000,
+        "limit": 30,
+        "intervalMs": 1000,
+        "maxInflight": 4,
+        "drainSeconds": 300
+      },
+      "phases": [
+        {
+          "name": "preTarget",
+          "startMs": 0,
+          "endMs": 20034.358485000004,
+          "seconds": 20.034358485000006,
+          "regularSent": 49,
+          "regularAccepted": 49,
+          "regularRejected": 0,
+          "logObservedSucceeded": 46,
+          "logObservedRegularSucceeded": 46,
+          "dbCompletion": {
+            "firstReadMs": 9.989663000014843,
+            "firstQueryMs": 4.472214999987045,
+            "lastReadMs": 19080.366685000015,
+            "lastQueryMs": 2.7271590000018477,
+            "seconds": 19.068631966000016,
+            "succeededDelta": 44,
+            "observedCompletionsPerSecond": 2.30745446650045
+          },
+          "queued": {
+            "count": 20,
+            "min": 0,
+            "mean": 0.15,
+            "p50": 0,
+            "p95": 1,
+            "max": 1
+          },
+          "processing": {
+            "count": 20,
+            "min": 0,
+            "mean": 2.3,
+            "p50": 2,
+            "p95": 3,
+            "max": 3
+          },
+          "outstanding": {
+            "count": 20,
+            "min": 0,
+            "mean": 2.45,
+            "p50": 3,
+            "p95": 3,
+            "max": 3
+          },
+          "connections": {
+            "count": 20,
+            "min": 5,
+            "mean": 5.0,
+            "p50": 5,
+            "p95": 5,
+            "max": 5
+          },
+          "activeConnections": {
+            "count": 20,
+            "min": 1,
+            "mean": 1.0,
+            "p50": 1,
+            "p95": 1,
+            "max": 1
+          },
+          "resources": {
+            "api": {
+              "processSamples": 9,
+              "cpuPercentSumPerSnapshot": {
+                "count": 9,
+                "min": 0.88,
+                "mean": 1.25,
+                "p50": 1.22,
+                "p95": 1.63,
+                "max": 1.63
+              },
+              "memoryMiBSumPerSnapshot": {
+                "count": 9,
+                "min": 63.02,
+                "mean": 66.12333333333333,
+                "p50": 67.27,
+                "p95": 67.83,
+                "max": 67.83
+              },
+              "collectionMs": {
+                "count": 9,
+                "min": 1522.969855000003,
+                "mean": 1589.0929541111109,
+                "p50": 1525.049377999996,
+                "p95": 2103.980041999981,
+                "max": 2103.980041999981
+              }
+            },
+            "worker": {
+              "processSamples": 27,
+              "cpuPercentSumPerSnapshot": {
+                "count": 9,
+                "min": 1.9,
+                "mean": 2.261111111111111,
+                "p50": 2.17,
+                "p95": 2.77,
+                "max": 2.77
+              },
+              "memoryMiBSumPerSnapshot": {
+                "count": 9,
+                "min": 171.06,
+                "mean": 172.31333333333333,
+                "p50": 172.03,
+                "p95": 173.92,
+                "max": 173.92
+              },
+              "collectionMs": {
+                "count": 27,
+                "min": 1524.1445379999932,
+                "mean": 1590.8496112962957,
+                "p50": 1526.8730109999888,
+                "p95": 2105.7508279999893,
+                "max": 2106.1446559999895
+              }
+            },
+            "postgres": {
+              "processSamples": 9,
+              "cpuPercentSumPerSnapshot": {
+                "count": 9,
+                "min": 0.79,
+                "mean": 1.3144444444444445,
+                "p50": 0.95,
+                "p95": 4.36,
+                "max": 4.36
+              },
+              "memoryMiBSumPerSnapshot": {
+                "count": 9,
+                "min": 37.28,
+                "mean": 37.87222222222223,
+                "p50": 37.91,
+                "p95": 38.42,
+                "max": 38.42
+              },
+              "collectionMs": {
+                "count": 9,
+                "min": 1523.4329900000012,
+                "mean": 1589.6343048888893,
+                "p50": 1525.7778180000023,
+                "p95": 2104.518738999992,
+                "max": 2104.518738999992
+              }
+            }
+          }
+        },
+        {
+          "name": "targetFirst10s",
+          "startMs": 20034.358485000004,
+          "endMs": 30034.358485000004,
+          "seconds": 10.0,
+          "regularSent": 24,
+          "regularAccepted": 24,
+          "regularRejected": 0,
+          "logObservedSucceeded": 20,
+          "logObservedRegularSucceeded": 20,
+          "dbCompletion": {
+            "firstReadMs": 20082.89326499999,
+            "firstQueryMs": 3.3027750000183005,
+            "lastReadMs": 29112.823027000006,
+            "lastQueryMs": 2.4686799999908544,
+            "seconds": 9.029095666999988,
+            "succeededDelta": 18,
+            "observedCompletionsPerSecond": 1.9935551315274402
+          },
+          "queued": {
+            "count": 10,
+            "min": 1,
+            "mean": 2.6,
+            "p50": 2,
+            "p95": 4,
+            "max": 4
+          },
+          "processing": {
+            "count": 10,
+            "min": 3,
+            "mean": 3.0,
+            "p50": 3,
+            "p95": 3,
+            "max": 3
+          },
+          "outstanding": {
+            "count": 10,
+            "min": 4,
+            "mean": 5.6,
+            "p50": 5,
+            "p95": 7,
+            "max": 7
+          },
+          "connections": {
+            "count": 10,
+            "min": 5,
+            "mean": 5.1,
+            "p50": 5,
+            "p95": 6,
+            "max": 6
+          },
+          "activeConnections": {
+            "count": 10,
+            "min": 1,
+            "mean": 1.0,
+            "p50": 1,
+            "p95": 1,
+            "max": 1
+          },
+          "resources": {
+            "api": {
+              "processSamples": 4,
+              "cpuPercentSumPerSnapshot": {
+                "count": 4,
+                "min": 0.91,
+                "mean": 1.145,
+                "p50": 1.02,
+                "p95": 1.33,
+                "max": 1.33
+              },
+              "memoryMiBSumPerSnapshot": {
+                "count": 4,
+                "min": 67.96,
+                "mean": 68.14,
+                "p50": 67.98,
+                "p95": 68.64,
+                "max": 68.64
+              },
+              "collectionMs": {
+                "count": 4,
+                "min": 1517.4809039999964,
+                "mean": 1518.9333444999938,
+                "p50": 1518.7430319999985,
+                "p95": 1519.8375799999922,
+                "max": 1519.8375799999922
+              }
+            },
+            "worker": {
+              "processSamples": 12,
+              "cpuPercentSumPerSnapshot": {
+                "count": 4,
+                "min": 1.3199999999999998,
+                "mean": 1.4525,
+                "p50": 1.3399999999999999,
+                "p95": 1.59,
+                "max": 1.59
+              },
+              "memoryMiBSumPerSnapshot": {
+                "count": 4,
+                "min": 115.81,
+                "mean": 116.0375,
+                "p50": 115.83,
+                "p95": 116.36,
+                "max": 116.36
+              },
+              "collectionMs": {
+                "count": 12,
+                "min": 1519.438924999995,
+                "mean": 1520.584009416656,
+                "p50": 1520.4126589999942,
+                "p95": 1521.632351999986,
+                "max": 1521.632351999986
+              }
+            },
+            "postgres": {
+              "processSamples": 4,
+              "cpuPercentSumPerSnapshot": {
+                "count": 4,
+                "min": 0.9,
+                "mean": 1.1300000000000001,
+                "p50": 1.0,
+                "p95": 1.52,
+                "max": 1.52
+              },
+              "memoryMiBSumPerSnapshot": {
+                "count": 4,
+                "min": 37.7,
+                "mean": 37.862500000000004,
+                "p50": 37.78,
+                "p95": 38.13,
+                "max": 38.13
+              },
+              "collectionMs": {
+                "count": 4,
+                "min": 1518.0022179999796,
+                "mean": 1519.3953964999819,
+                "p50": 1519.1753389999794,
+                "p95": 1520.2174189999932,
+                "max": 1520.2174189999932
+              }
+            }
+          }
+        },
+        {
+          "name": "sustainedIngress",
+          "startMs": 30034.358485000004,
+          "endMs": 120000.58328599998,
+          "seconds": 89.96622480099998,
+          "regularSent": 215,
+          "regularAccepted": 191,
+          "regularRejected": 24,
+          "logObservedSucceeded": 169,
+          "logObservedRegularSucceeded": 168,
+          "dbCompletion": {
+            "firstReadMs": 30116.253243000014,
+            "firstQueryMs": 3.317041000002064,
+            "lastReadMs": 119453.79107300003,
+            "lastQueryMs": 2.6205239999690093,
+            "seconds": 89.33684131299998,
+            "succeededDelta": 169,
+            "observedCompletionsPerSecond": 1.8917167600306428
+          },
+          "queued": {
+            "count": 90,
+            "min": 5,
+            "mean": 20.988888888888887,
+            "p50": 27,
+            "p95": 28,
+            "max": 28
+          },
+          "processing": {
+            "count": 90,
+            "min": 2,
+            "mean": 2.311111111111111,
+            "p50": 2,
+            "p95": 3,
+            "max": 3
+          },
+          "outstanding": {
+            "count": 90,
+            "min": 8,
+            "mean": 23.3,
+            "p50": 29,
+            "p95": 30,
+            "max": 30
+          },
+          "connections": {
+            "count": 90,
+            "min": 4,
+            "mean": 4.333333333333333,
+            "p50": 4,
+            "p95": 5,
+            "max": 5
+          },
+          "activeConnections": {
+            "count": 90,
+            "min": 1,
+            "mean": 1.0333333333333334,
+            "p50": 1,
+            "p95": 1,
+            "max": 2
+          },
+          "resources": {
+            "api": {
+              "processSamples": 44,
+              "cpuPercentSumPerSnapshot": {
+                "count": 44,
+                "min": 0.76,
+                "mean": 1.1506818181818181,
+                "p50": 1.03,
+                "p95": 1.78,
+                "max": 1.86
+              },
+              "memoryMiBSumPerSnapshot": {
+                "count": 44,
+                "min": 47.73,
+                "mean": 66.20977272727272,
+                "p50": 68.45,
+                "p95": 69.18,
+                "max": 69.62
+              },
+              "collectionMs": {
+                "count": 44,
+                "min": 1518.7446430000127,
+                "mean": 1521.5252094090915,
+                "p50": 1520.6813240000047,
+                "p95": 1523.4725830000243,
+                "max": 1544.351330000005
+              }
+            },
+            "worker": {
+              "processSamples": 132,
+              "cpuPercentSumPerSnapshot": {
+                "count": 44,
+                "min": 1.17,
+                "mean": 1.6468181818181817,
+                "p50": 1.48,
+                "p95": 2.05,
+                "max": 6.9
+              },
+              "memoryMiBSumPerSnapshot": {
+                "count": 44,
+                "min": 116.47,
+                "mean": 124.39931818181817,
+                "p50": 125.52000000000001,
+                "p95": 129.43,
+                "max": 129.74
+              },
+              "collectionMs": {
+                "count": 132,
+                "min": 1519.8585200000089,
+                "mean": 1523.2155354242414,
+                "p50": 1522.217147999967,
+                "p95": 1526.4113910000306,
+                "max": 1546.231850000011
+              }
+            },
+            "postgres": {
+              "processSamples": 44,
+              "cpuPercentSumPerSnapshot": {
+                "count": 44,
+                "min": 0.89,
+                "mean": 2.6865909090909095,
+                "p50": 1.28,
+                "p95": 5.12,
+                "max": 7.21
+              },
+              "memoryMiBSumPerSnapshot": {
+                "count": 44,
+                "min": 35.08,
+                "mean": 36.64636363636364,
+                "p50": 36.08,
+                "p95": 38.54,
+                "max": 38.7
+              },
+              "collectionMs": {
+                "count": 44,
+                "min": 1519.1466280000168,
+                "mean": 1522.0192372727279,
+                "p50": 1521.1012099999934,
+                "p95": 1524.7479300000123,
+                "max": 1544.8505940000177
+              }
+            }
+          }
+        },
+        {
+          "name": "settlement",
+          "startMs": 120000.58328599998,
+          "endMs": 134362.981789,
+          "seconds": 14.362398503000033,
+          "regularSent": 0,
+          "regularAccepted": 0,
+          "regularRejected": 0,
+          "logObservedSucceeded": 30,
+          "logObservedRegularSucceeded": 30,
+          "dbCompletion": {
+            "firstReadMs": 120001.133856,
+            "firstQueryMs": 2.38756000000285,
+            "lastReadMs": 133508.468486,
+            "lastQueryMs": 2.457799000025261,
+            "seconds": 13.50740486900002,
+            "succeededDelta": 28,
+            "observedCompletionsPerSecond": 2.072937049829683
+          },
+          "queued": {
+            "count": 15,
+            "min": 0,
+            "mean": 14.0,
+            "p50": 14,
+            "p95": 28,
+            "max": 28
+          },
+          "processing": {
+            "count": 15,
+            "min": 2,
+            "mean": 2.0,
+            "p50": 2,
+            "p95": 2,
+            "max": 2
+          },
+          "outstanding": {
+            "count": 15,
+            "min": 2,
+            "mean": 16.0,
+            "p50": 16,
+            "p95": 30,
+            "max": 30
+          },
+          "connections": {
+            "count": 15,
+            "min": 4,
+            "mean": 4.866666666666666,
+            "p50": 5,
+            "p95": 5,
+            "max": 5
+          },
+          "activeConnections": {
+            "count": 15,
+            "min": 1,
+            "mean": 1.2,
+            "p50": 1,
+            "p95": 2,
+            "max": 2
+          },
+          "resources": {
+            "api": {
+              "processSamples": 7,
+              "cpuPercentSumPerSnapshot": {
+                "count": 7,
+                "min": 0.38,
+                "mean": 0.5057142857142857,
+                "p50": 0.42,
+                "p95": 1.06,
+                "max": 1.06
+              },
+              "memoryMiBSumPerSnapshot": {
+                "count": 7,
+                "min": 47.99,
+                "mean": 48.14857142857143,
+                "p50": 48.0,
+                "p95": 48.77,
+                "max": 48.77
+              },
+              "collectionMs": {
+                "count": 7,
+                "min": 1513.0871000000043,
+                "mean": 1521.0565141428544,
+                "p50": 1521.5364880000125,
+                "p95": 1527.5268809999689,
+                "max": 1527.5268809999689
+              }
+            },
+            "worker": {
+              "processSamples": 21,
+              "cpuPercentSumPerSnapshot": {
+                "count": 7,
+                "min": 1.35,
+                "mean": 1.5714285714285714,
+                "p50": 1.63,
+                "p95": 1.81,
+                "max": 1.81
+              },
+              "memoryMiBSumPerSnapshot": {
+                "count": 7,
+                "min": 129.03,
+                "mean": 129.6042857142857,
+                "p50": 129.66,
+                "p95": 130.01,
+                "max": 130.01
+              },
+              "collectionMs": {
+                "count": 21,
+                "min": 1514.619085000013,
+                "mean": 1522.7120697619005,
+                "p50": 1523.1001150000375,
+                "p95": 1529.3532959999866,
+                "max": 1529.7370169999776
+              }
+            },
+            "postgres": {
+              "processSamples": 7,
+              "cpuPercentSumPerSnapshot": {
+                "count": 7,
+                "min": 15.07,
+                "mean": 15.404285714285715,
+                "p50": 15.38,
+                "p95": 16.12,
+                "max": 16.12
+              },
+              "memoryMiBSumPerSnapshot": {
+                "count": 7,
+                "min": 36.25,
+                "mean": 38.042857142857144,
+                "p50": 38.36,
+                "p95": 38.57,
+                "max": 38.57
+              },
+              "collectionMs": {
+                "count": 7,
+                "min": 1513.6622750000097,
+                "mean": 1521.5641261428577,
+                "p50": 1522.008886000025,
+                "p95": 1528.0077460000175,
+                "max": 1528.0077460000175
+              }
+            }
+          }
+        }
+      ],
+      "recovery": {
+        "killToRecoveryObservedMs": 36997.01471800002,
+        "recoveryToSecondClaimObservedMs": 8044.959946999996,
+        "secondClaimToSuccessObservedMs": 10020.309699999983,
+        "killToSuccessObservedMs": 55062.284365,
+        "victim": {
+          "id": "d4692c979af1c8abdd3c7fdce0ca240716505f1f488ac7370a6a4e47614260f4",
+          "exitCode": 137,
+          "oomKilled": false,
+          "restartCount": 0,
+          "running": false
+        },
+        "survivorContainerIds": [
+          "4a47ca41e03a97fe0d7adba86a2501d2bf13a2628921be7fa9b6ccbf205b5a10",
+          "104b4cf05573dc749aa1a689fc16b6167a2ca95bd84356b3d8ef8f387e17acb4"
+        ],
+        "firstWorkerId": "d8d8bbc1-f651-4421-9838-71f9fca3b304",
+        "secondWorkerId": "1b998b80-3529-4a68-a736-011b5e3ef7ea",
+        "survivorProof": {
+          "requestId": "0f3cba41-1197-4999-95c9-cda5123c9064",
+          "sentMs": 21250.449858000007,
+          "acceptedMs": 21255.99009800001,
+          "successObservedMs": 22718.659520999994,
+          "proofConfirmedMs": 22871.71831699999,
+          "workerId": "1b998b80-3529-4a68-a736-011b5e3ef7ea",
+          "containerId": "104b4cf05573dc749aa1a689fc16b6167a2ca95bd84356b3d8ef8f387e17acb4",
+          "completedStatus": "succeeded",
+          "retainedTargetStatus": "processing",
+          "retainedTargetAttempt": 1
+        }
+      }
+    },
+    {
+      "source": "/home/lhw/projects/async-job-processor/artifacts/failure-load/2026-11-01-measurement/main/r2-failure",
+      "name": "r2-failure",
+      "mode": "failure",
+      "scenario": {
+        "valid": true,
+        "reasons": [],
+        "suitability": {
+          "purpose": "main",
+          "criterion": "tool-or-failure-path",
+          "status": "observation-only",
+          "requiresUserDecision": false
+        }
+      },
+      "functional": {
+        "status": "passed",
+        "failures": [],
+        "missing": []
+      },
+      "measurement": {
+        "valid": true,
+        "reasons": [],
+        "timing": {
+          "valid": true,
+          "reasons": []
+        },
+        "wallAlignment": {
+          "valid": true,
+          "reasons": []
+        }
+      },
+      "cleanup": {
+        "succeeded": true,
+        "errors": []
+      },
+      "http": {
+        "regular": {
+          "planned": 288,
+          "sent": 288,
+          "unsent": 0,
+          "accepted": 263,
+          "rejected": 25,
+          "otherHttp": 0,
+          "networkOrBodyErrors": 0,
+          "acceptanceFraction": 0.9131944444444444,
+          "dispatchRate": 2.4004977605778803,
+          "rttMs": {
+            "count": 288,
+            "min": 2.8769460000330582,
+            "p50": 4.7985390000394545,
+            "p95": 7.289078999951016,
+            "p99": 11.864814000029583,
+            "max": 37.718070000002626,
+            "mean": 5.120654003472737
+          },
+          "rttMsByOutcome": {
+            "accepted201": {
+              "count": 263,
+              "min": 3.5551630000118166,
+              "p50": 4.838967000017874,
+              "p95": 7.423563999996986,
+              "p99": 11.864814000029583,
+              "max": 37.718070000002626,
+              "mean": 5.245387866920012
+            },
+            "policyRejected503": {
+              "count": 25,
+              "min": 2.8769460000330582,
+              "p50": 3.6841850000200793,
+              "p95": 5.167186000035144,
+              "p99": 5.324495000008028,
+              "max": 5.324495000008028,
+              "mean": 3.808453760007396
+            },
+            "otherHttp": {
+              "count": 0,
+              "min": null,
+              "p50": null,
+              "p95": null,
+              "p99": null,
+              "max": null,
+              "mean": null
+            },
+            "networkOrBodyErrors": {
+              "count": 0,
+              "min": null,
+              "p50": null,
+              "p95": null,
+              "p99": null,
+              "max": null,
+              "mean": null
+            }
+          },
+          "scheduleLagMs": {
+            "count": 288,
+            "min": 0.010925000009592623,
+            "p50": 0.6737206666439306,
+            "p95": 1.278726666678267,
+            "p99": 1.5560073333472246,
+            "max": 26.194232999987435,
+            "mean": 0.7584305416740234
+          }
+        },
+        "target": {
+          "planned": 1,
+          "sent": 1,
+          "unsent": 0,
+          "accepted": 1,
+          "rejected": 0,
+          "otherHttp": 0,
+          "networkOrBodyErrors": 0,
+          "acceptanceFraction": 1,
+          "dispatchRate": null,
+          "rttMs": {
+            "count": 1,
+            "min": 19.36066300002858,
+            "p50": 19.36066300002858,
+            "p95": 19.36066300002858,
+            "p99": 19.36066300002858,
+            "max": 19.36066300002858,
+            "mean": 19.36066300002858
+          },
+          "rttMsByOutcome": {
+            "accepted201": {
+              "count": 1,
+              "min": 19.36066300002858,
+              "p50": 19.36066300002858,
+              "p95": 19.36066300002858,
+              "p99": 19.36066300002858,
+              "max": 19.36066300002858,
+              "mean": 19.36066300002858
+            },
+            "policyRejected503": {
+              "count": 0,
+              "min": null,
+              "p50": null,
+              "p95": null,
+              "p99": null,
+              "max": null,
+              "mean": null
+            },
+            "otherHttp": {
+              "count": 0,
+              "min": null,
+              "p50": null,
+              "p95": null,
+              "p99": null,
+              "max": null,
+              "mean": null
+            },
+            "networkOrBodyErrors": {
+              "count": 0,
+              "min": null,
+              "p50": null,
+              "p95": null,
+              "p99": null,
+              "max": null,
+              "mean": null
+            }
+          },
+          "scheduleLagMs": {
+            "count": 1,
+            "min": 0.6045750000048429,
+            "p50": 0.6045750000048429,
+            "p95": 0.6045750000048429,
+            "p99": 0.6045750000048429,
+            "max": 0.6045750000048429,
+            "mean": 0.6045750000048429
+          }
+        }
+      },
+      "stability": {
+        "status": "unsuitable",
+        "reasons": [
+          "대상 완료 후 10초 구간 2개 연속 정책상 503 발생"
+        ],
+        "windowMs": 10000,
+        "targetEndMs": 78417.15586,
+        "loadEndMs": 120000,
+        "windows": [
+          {
+            "startMs": 78417.15586,
+            "endMs": 88417.15586,
+            "samples": 10,
+            "meanOutstanding": 30,
+            "sent": 24,
+            "rejected": 4
+          },
+          {
+            "startMs": 88417.15586,
+            "endMs": 98417.15586,
+            "samples": 10,
+            "meanOutstanding": 30,
+            "sent": 24,
+            "rejected": 4
+          },
+          {
+            "startMs": 98417.15586,
+            "endMs": 108417.15586,
+            "samples": 9,
+            "meanOutstanding": 30,
+            "sent": 24,
+            "rejected": 4
+          },
+          {
+            "startMs": 108417.15586,
+            "endMs": 118417.15586,
+            "samples": 10,
+            "meanOutstanding": 29.9,
+            "sent": 24,
+            "rejected": 4
+          }
+        ],
+        "saturation": [
+          {
+            "startMs": 78417.15586,
+            "endMs": 98417.15586
+          },
+          {
+            "startMs": 88417.15586,
+            "endMs": 108417.15586
+          },
+          {
+            "startMs": 98417.15586,
+            "endMs": 118417.15586
+          }
+        ],
+        "growth": [],
+        "unassessedTailMs": 1582.844140000001,
+        "criterion": "normal-three-stable",
+        "applied": false
+      },
+      "sampling": {
+        "count": 136,
+        "observedMaxOutstanding": 30,
+        "observedMaxQueued": 28,
+        "queryMs": {
+          "count": 136,
+          "min": 2.2615489999880083,
+          "p50": 2.703918999992311,
+          "p95": 4.416895000031218,
+          "p99": 21.534289000032004,
+          "max": 22.964914999960456,
+          "mean": 3.1970376691174085
+        },
+        "actualIntervalMs": {
+          "count": 135,
+          "min": 494.0107990000397,
+          "p50": 1003.33814300003,
+          "p95": 1006.8287700000219,
+          "p99": 1023.2911770000355,
+          "max": 1023.558125999989,
+          "mean": 994.3847397185185
+        },
+        "maxAbsClockDifferenceMs": 437.97239399998216
+      },
+      "completion": {
+        "basis": "log-observed",
+        "dbSucceededDelta": 264,
+        "logObservedSucceeded": 264,
+        "matches": true
+      },
+      "reconciliation": {
+        "newRows": 264,
+        "unknownResponseRows": [],
+        "absentIds": []
+      },
+      "timeline": {
+        "target-accepted": {
+          "elapsedMs": 20020.342891000037,
+          "confirmedMs": 20020.350795000035,
+          "firstClaimAgeMsAtConfirmation": null
+        },
+        "handler-started": {
+          "elapsedMs": 20506.568396000017,
+          "confirmedMs": 20816.000220999995,
+          "firstClaimAgeMsAtConfirmation": null
+        },
+        "kill-requested": {
+          "elapsedMs": 20817.230952000013,
+          "confirmedMs": 20817.245638000022,
+          "firstClaimAgeMsAtConfirmation": null
+        },
+        "kill-confirmed": {
+          "elapsedMs": 21324.345306000032,
+          "confirmedMs": 21324.352798999986,
+          "firstClaimAgeMsAtConfirmation": null
+        },
+        "retained-after-kill": {
+          "elapsedMs": 21325.596416999993,
+          "confirmedMs": 21325.61050400004,
+          "firstClaimAgeMsAtConfirmation": null
+        },
+        "survivor-before-recovery": {
+          "elapsedMs": 23274.550847999984,
+          "confirmedMs": 23274.564305000007,
+          "firstClaimAgeMsAtConfirmation": null
+        },
+        "recovered": {
+          "elapsedMs": 59342.66465500003,
+          "confirmedMs": 59516.79595400003,
+          "firstClaimAgeMsAtConfirmation": 39110.74
+        },
+        "second-claim": {
+          "elapsedMs": 68400.14779900003,
+          "confirmedMs": 68594.85944800003,
+          "firstClaimAgeMsAtConfirmation": 48188.868
+        },
+        "second-handler": {
+          "elapsedMs": 68400.16355400003,
+          "confirmedMs": 68595.58014600002,
+          "firstClaimAgeMsAtConfirmation": 48189.585
+        },
+        "second-processing": {
+          "elapsedMs": 68595.826688,
+          "confirmedMs": 68595.83372300002,
+          "firstClaimAgeMsAtConfirmation": null
+        },
+        "target-succeeded": {
+          "elapsedMs": 78417.15586,
+          "confirmedMs": 78524.02600499999,
+          "firstClaimAgeMsAtConfirmation": 58205.928
+        },
+        "load-end": {
+          "elapsedMs": 120000.22240000003,
+          "confirmedMs": 120000.236102,
+          "firstClaimAgeMsAtConfirmation": null
+        },
+        "drain-end": {
+          "elapsedMs": 133941.889837,
+          "confirmedMs": 133941.90748,
+          "firstClaimAgeMsAtConfirmation": null
+        }
+      },
+      "final": {
+        "newRows": 264,
+        "states": {
+          "succeeded": 264
+        },
+        "attempts": {
+          "1": 263,
+          "2": 1
+        },
+        "target": {
+          "id": "36179b08-ba08-467b-9947-a14bf408a586",
+          "type": "slow",
+          "result": {
+            "durationMs": 10000
+          },
+          "status": "succeeded",
+          "attempt": 2,
+          "payload": {
+            "durationMs": 10000
+          },
+          "worker_id": "3363f395-3500-46c5-b7dd-990ffff0459e",
+          "created_at": "2026-11-01T12:16:08.542748+00:00",
+          "last_error": null,
+          "updated_at": "2026-11-01T12:17:07.125718+00:00",
+          "available_at": "2026-11-01T12:16:47.963457+00:00",
+          "max_attempts": 3,
+          "processing_started_at": "2026-11-01T12:16:57.024575+00:00"
+        },
+        "workerSucceeded": {
+          "609cf23d-8b9d-473b-95e1-367a5d17e6d7": 128,
+          "3363f395-3500-46c5-b7dd-990ffff0459e": 123,
+          "902e24a8-bb9b-4872-a7a3-28e2e6c6907a": 13
+        },
+        "baselineRows": 1357,
+        "baselineUnchanged": true,
+        "outstanding": 0,
+        "retries": 0,
+        "recoveries": 1
+      },
+      "rawSha256": {
+        "evidence.json": "865961d3fd41c2ec37969e5904340370466de2fa048526459f3ac639db4cb921",
+        "requests.json": "0f586504d34a652dadf42a6e8ec049cdf632738434a496780eddba5c10b7bf40",
+        "jobs.json": "995156f8f1e97e25f3c511a1488f9e7815e8c812e477cd2464f60733952cfb9a",
+        "samples.jsonl": "8389bbbb3f77ea95372422330d4bd18963a11a5df48af9194a62cc344ec381fb",
+        "events.json": "656ad4bf6657691ab3d1a7640fb9fd80d9b32b3a95fb3d7b0e61141866f5bdd8",
+        "resources.jsonl": "ed28b59e28277a34d317c17d7d3635acc8221c25bb3e992f63bc5bfefbaa2f4f",
+        "result.json": "84c7fd6d67788c7c95394919bd0fffc4fcdddc312df04f3d4f02e40a65ea242f",
+        "ready.json": "a1e173b47faeb041c3e39b93c77af58966aa057602727eae6625c04291e2a516",
+        "target-states.jsonl": "e98b434a44b8791e6ffd9b16561b2b26e3a4d27a43bb4383943ae46cdd88e056"
+      },
+      "parameters": {
+        "purpose": "main",
+        "modes": [
+          "normal",
+          "failure"
+        ],
+        "workers": 3,
+        "seconds": 120,
+        "targetAtSeconds": 20,
+        "targetDurationMs": 10000,
+        "repeats": 2,
+        "rate": 2.4,
+        "durationMs": 1000,
+        "limit": 30,
+        "intervalMs": 1000,
+        "maxInflight": 4,
+        "drainSeconds": 300
+      },
+      "phases": [
+        {
+          "name": "preTarget",
+          "startMs": 0,
+          "endMs": 20506.568396000017,
+          "seconds": 20.506568396000016,
+          "regularSent": 50,
+          "regularAccepted": 50,
+          "regularRejected": 0,
+          "logObservedSucceeded": 47,
+          "logObservedRegularSucceeded": 47,
+          "dbCompletion": {
+            "firstReadMs": 15.087744000018574,
+            "firstQueryMs": 4.137856999994256,
+            "lastReadMs": 20085.546272000007,
+            "lastQueryMs": 2.4647010000189766,
+            "seconds": 20.06878537200001,
+            "succeededDelta": 45,
+            "observedCompletionsPerSecond": 2.2422881687092056
+          },
+          "queued": {
+            "count": 21,
+            "min": 0,
+            "mean": 1.1428571428571428,
+            "p50": 1,
+            "p95": 2,
+            "max": 3
+          },
+          "processing": {
+            "count": 21,
+            "min": 0,
+            "mean": 2.238095238095238,
+            "p50": 2,
+            "p95": 3,
+            "max": 3
+          },
+          "outstanding": {
+            "count": 21,
+            "min": 0,
+            "mean": 3.380952380952381,
+            "p50": 4,
+            "p95": 4,
+            "max": 5
+          },
+          "connections": {
+            "count": 21,
+            "min": 5,
+            "mean": 5.0476190476190474,
+            "p50": 5,
+            "p95": 5,
+            "max": 6
+          },
+          "activeConnections": {
+            "count": 21,
+            "min": 1,
+            "mean": 1.0952380952380953,
+            "p50": 1,
+            "p95": 2,
+            "max": 2
+          },
+          "resources": {
+            "api": {
+              "processSamples": 10,
+              "cpuPercentSumPerSnapshot": {
+                "count": 10,
+                "min": 0.78,
+                "mean": 1.366,
+                "p50": 1.34,
+                "p95": 2.01,
+                "max": 2.01
+              },
+              "memoryMiBSumPerSnapshot": {
+                "count": 10,
+                "min": 63.55,
+                "mean": 66.697,
+                "p50": 67.76,
+                "p95": 68.35,
+                "max": 68.35
+              },
+              "collectionMs": {
+                "count": 10,
+                "min": 1522.367379000003,
+                "mean": 1582.6510993999896,
+                "p50": 1525.6695259999833,
+                "p95": 2099.757962999982,
+                "max": 2099.757962999982
+              }
+            },
+            "worker": {
+              "processSamples": 30,
+              "cpuPercentSumPerSnapshot": {
+                "count": 10,
+                "min": 1.87,
+                "mean": 2.238,
+                "p50": 2.22,
+                "p95": 2.62,
+                "max": 2.62
+              },
+              "memoryMiBSumPerSnapshot": {
+                "count": 10,
+                "min": 169.45,
+                "mean": 171.608,
+                "p50": 171.68,
+                "p95": 173.04,
+                "max": 173.04
+              },
+              "collectionMs": {
+                "count": 30,
+                "min": 1523.968462000019,
+                "mean": 1584.5012432999908,
+                "p50": 1527.5522629999905,
+                "p95": 2101.9950359999784,
+                "max": 2102.3538239999907
+              }
+            },
+            "postgres": {
+              "processSamples": 10,
+              "cpuPercentSumPerSnapshot": {
+                "count": 10,
+                "min": 0.81,
+                "mean": 1.064,
+                "p50": 1.0,
+                "p95": 1.86,
+                "max": 1.86
+              },
+              "memoryMiBSumPerSnapshot": {
+                "count": 10,
+                "min": 37.71,
+                "mean": 38.337,
+                "p50": 38.19,
+                "p95": 40.16,
+                "max": 40.16
+              },
+              "collectionMs": {
+                "count": 10,
+                "min": 1522.8313780000317,
+                "mean": 1583.2083625999978,
+                "p50": 1526.1309940000065,
+                "p95": 2100.586247999978,
+                "max": 2100.586247999978
+              }
+            }
+          }
+        },
+        {
+          "name": "targetFirst10s",
+          "startMs": 20506.568396000017,
+          "endMs": 30506.568396000017,
+          "seconds": 10.0,
+          "regularSent": 24,
+          "regularAccepted": 24,
+          "regularRejected": 0,
+          "logObservedSucceeded": 20,
+          "logObservedRegularSucceeded": 20,
+          "dbCompletion": {
+            "firstReadMs": 21087.98093900003,
+            "firstQueryMs": 3.196062999952119,
+            "lastReadMs": 30116.66031200002,
+            "lastQueryMs": 3.564089999999851,
+            "seconds": 9.029047400000039,
+            "succeededDelta": 18,
+            "observedCompletionsPerSecond": 1.9935657885681188
+          },
+          "queued": {
+            "count": 10,
+            "min": 2,
+            "mean": 4.0,
+            "p50": 4,
+            "p95": 6,
+            "max": 6
+          },
+          "processing": {
+            "count": 10,
+            "min": 3,
+            "mean": 3.0,
+            "p50": 3,
+            "p95": 3,
+            "max": 3
+          },
+          "outstanding": {
+            "count": 10,
+            "min": 5,
+            "mean": 7.0,
+            "p50": 7,
+            "p95": 9,
+            "max": 9
+          },
+          "connections": {
+            "count": 10,
+            "min": 4,
+            "mean": 4.9,
+            "p50": 5,
+            "p95": 5,
+            "max": 5
+          },
+          "activeConnections": {
+            "count": 10,
+            "min": 1,
+            "mean": 1.0,
+            "p50": 1,
+            "p95": 1,
+            "max": 1
+          },
+          "resources": {
+            "api": {
+              "processSamples": 5,
+              "cpuPercentSumPerSnapshot": {
+                "count": 5,
+                "min": 0.97,
+                "mean": 1.244,
+                "p50": 1.27,
+                "p95": 1.46,
+                "max": 1.46
+              },
+              "memoryMiBSumPerSnapshot": {
+                "count": 5,
+                "min": 67.77,
+                "mean": 68.068,
+                "p50": 67.99,
+                "p95": 68.39,
+                "max": 68.39
+              },
+              "collectionMs": {
+                "count": 5,
+                "min": 1515.2120359999826,
+                "mean": 1520.3486640000133,
+                "p50": 1520.4141350000282,
+                "p95": 1527.0156110000098,
+                "max": 1527.0156110000098
+              }
+            },
+            "worker": {
+              "processSamples": 15,
+              "cpuPercentSumPerSnapshot": {
+                "count": 5,
+                "min": 1.3399999999999999,
+                "mean": 1.458,
+                "p50": 1.43,
+                "p95": 1.7400000000000002,
+                "max": 1.7400000000000002
+              },
+              "memoryMiBSumPerSnapshot": {
+                "count": 5,
+                "min": 114.84,
+                "mean": 115.22999999999999,
+                "p50": 115.0,
+                "p95": 116.00999999999999,
+                "max": 116.00999999999999
+              },
+              "collectionMs": {
+                "count": 15,
+                "min": 1516.499284999969,
+                "mean": 1521.8879113333417,
+                "p50": 1521.9856290000025,
+                "p95": 1528.903277000005,
+                "max": 1528.903277000005
+              }
+            },
+            "postgres": {
+              "processSamples": 5,
+              "cpuPercentSumPerSnapshot": {
+                "count": 5,
+                "min": 0.9,
+                "mean": 1.038,
+                "p50": 1.0,
+                "p95": 1.34,
+                "max": 1.34
+              },
+              "memoryMiBSumPerSnapshot": {
+                "count": 5,
+                "min": 35.91,
+                "mean": 37.632,
+                "p50": 37.84,
+                "p95": 38.32,
+                "max": 38.32
+              },
+              "collectionMs": {
+                "count": 5,
+                "min": 1515.8007050000015,
+                "mean": 1520.822392800008,
+                "p50": 1520.8409429999883,
+                "p95": 1527.4476720000384,
+                "max": 1527.4476720000384
+              }
+            }
+          }
+        },
+        {
+          "name": "sustainedIngress",
+          "startMs": 30506.568396000017,
+          "endMs": 120000.22240000003,
+          "seconds": 89.493654004,
+          "regularSent": 214,
+          "regularAccepted": 189,
+          "regularRejected": 25,
+          "logObservedSucceeded": 169,
+          "logObservedRegularSucceeded": 168,
+          "dbCompletion": {
+            "firstReadMs": 31120.718584000017,
+            "firstQueryMs": 2.595290999975987,
+            "lastReadMs": 119492.15589500003,
+            "lastQueryMs": 2.544213999994099,
+            "seconds": 88.37138623400003,
+            "succeededDelta": 167,
+            "observedCompletionsPerSecond": 1.8897519561116536
+          },
+          "queued": {
+            "count": 89,
+            "min": 6,
+            "mean": 21.876404494382022,
+            "p50": 28,
+            "p95": 28,
+            "max": 28
+          },
+          "processing": {
+            "count": 89,
+            "min": 2,
+            "mean": 2.3258426966292136,
+            "p50": 2,
+            "p95": 3,
+            "max": 3
+          },
+          "outstanding": {
+            "count": 89,
+            "min": 9,
+            "mean": 24.202247191011235,
+            "p50": 30,
+            "p95": 30,
+            "max": 30
+          },
+          "connections": {
+            "count": 89,
+            "min": 4,
+            "mean": 4.157303370786517,
+            "p50": 4,
+            "p95": 5,
+            "max": 5
+          },
+          "activeConnections": {
+            "count": 89,
+            "min": 1,
+            "mean": 1.0,
+            "p50": 1,
+            "p95": 1,
+            "max": 1
+          },
+          "resources": {
+            "api": {
+              "processSamples": 44,
+              "cpuPercentSumPerSnapshot": {
+                "count": 44,
+                "min": 0.82,
+                "mean": 1.336818181818182,
+                "p50": 1.08,
+                "p95": 1.97,
+                "max": 6.15
+              },
+              "memoryMiBSumPerSnapshot": {
+                "count": 44,
+                "min": 48.59,
+                "mean": 66.68681818181818,
+                "p50": 68.93,
+                "p95": 69.57,
+                "max": 69.98
+              },
+              "collectionMs": {
+                "count": 44,
+                "min": 1517.5078469999717,
+                "mean": 1520.6330285000056,
+                "p50": 1520.4692360000336,
+                "p95": 1523.1650190000073,
+                "max": 1526.6656139999977
+              }
+            },
+            "worker": {
+              "processSamples": 132,
+              "cpuPercentSumPerSnapshot": {
+                "count": 44,
+                "min": 1.12,
+                "mean": 1.611590909090909,
+                "p50": 1.51,
+                "p95": 2.18,
+                "max": 5.36
+              },
+              "memoryMiBSumPerSnapshot": {
+                "count": 44,
+                "min": 115.22,
+                "mean": 117.74227272727272,
+                "p50": 117.91,
+                "p95": 119.07,
+                "max": 119.46000000000001
+              },
+              "collectionMs": {
+                "count": 132,
+                "min": 1518.5511410000036,
+                "mean": 1522.295713674244,
+                "p50": 1521.9568609999842,
+                "p95": 1526.0710069999914,
+                "max": 1529.3876480000326
+              }
+            },
+            "postgres": {
+              "processSamples": 44,
+              "cpuPercentSumPerSnapshot": {
+                "count": 44,
+                "min": 0.85,
+                "mean": 2.0568181818181817,
+                "p50": 1.24,
+                "p95": 5.26,
+                "max": 5.33
+              },
+              "memoryMiBSumPerSnapshot": {
+                "count": 44,
+                "min": 35.54,
+                "mean": 36.51795454545454,
+                "p50": 36.21,
+                "p95": 38.68,
+                "max": 38.71
+              },
+              "collectionMs": {
+                "count": 44,
+                "min": 1517.9575750000076,
+                "mean": 1521.1293262727306,
+                "p50": 1520.9019919999992,
+                "p95": 1523.9787520000245,
+                "max": 1527.1072730000014
+              }
+            }
+          }
+        },
+        {
+          "name": "settlement",
+          "startMs": 120000.22240000003,
+          "endMs": 133941.889837,
+          "seconds": 13.941667436999968,
+          "regularSent": 0,
+          "regularAccepted": 0,
+          "regularRejected": 0,
+          "logObservedSucceeded": 28,
+          "logObservedRegularSucceeded": 28,
+          "dbCompletion": {
+            "firstReadMs": 120000.74049599998,
+            "firstQueryMs": 3.027957000012975,
+            "lastReadMs": 133540.62561699998,
+            "lastQueryMs": 2.4634810000425205,
+            "seconds": 13.539320645000029,
+            "succeededDelta": 26,
+            "observedCompletionsPerSecond": 1.9203326874160123
+          },
+          "queued": {
+            "count": 15,
+            "min": 0,
+            "mean": 13.866666666666667,
+            "p50": 14,
+            "p95": 26,
+            "max": 26
+          },
+          "processing": {
+            "count": 15,
+            "min": 2,
+            "mean": 2.0,
+            "p50": 2,
+            "p95": 2,
+            "max": 2
+          },
+          "outstanding": {
+            "count": 15,
+            "min": 2,
+            "mean": 15.866666666666667,
+            "p50": 16,
+            "p95": 28,
+            "max": 28
+          },
+          "connections": {
+            "count": 15,
+            "min": 4,
+            "mean": 4.933333333333334,
+            "p50": 5,
+            "p95": 5,
+            "max": 5
+          },
+          "activeConnections": {
+            "count": 15,
+            "min": 1,
+            "mean": 1.1333333333333333,
+            "p50": 1,
+            "p95": 2,
+            "max": 2
+          },
+          "resources": {
+            "api": {
+              "processSamples": 7,
+              "cpuPercentSumPerSnapshot": {
+                "count": 7,
+                "min": 0.41,
+                "mean": 0.6142857142857142,
+                "p50": 0.47,
+                "p95": 1.14,
+                "max": 1.14
+              },
+              "memoryMiBSumPerSnapshot": {
+                "count": 7,
+                "min": 48.62,
+                "mean": 48.80142857142857,
+                "p50": 48.65,
+                "p95": 49.36,
+                "max": 49.36
+              },
+              "collectionMs": {
+                "count": 7,
+                "min": 1518.386102999968,
+                "mean": 1520.6521934285495,
+                "p50": 1520.7111469999654,
+                "p95": 1522.6604109999607,
+                "max": 1522.6604109999607
+              }
+            },
+            "worker": {
+              "processSamples": 21,
+              "cpuPercentSumPerSnapshot": {
+                "count": 7,
+                "min": 1.39,
+                "mean": 1.7671428571428573,
+                "p50": 1.83,
+                "p95": 2.25,
+                "max": 2.25
+              },
+              "memoryMiBSumPerSnapshot": {
+                "count": 7,
+                "min": 118.75999999999999,
+                "mean": 119.30285714285715,
+                "p50": 119.35,
+                "p95": 119.88,
+                "max": 119.88
+              },
+              "collectionMs": {
+                "count": 21,
+                "min": 1519.6893449999625,
+                "mean": 1522.3182108095054,
+                "p50": 1522.1748779999907,
+                "p95": 1524.6251679999987,
+                "max": 1524.7190359999659
+              }
+            },
+            "postgres": {
+              "processSamples": 7,
+              "cpuPercentSumPerSnapshot": {
+                "count": 7,
+                "min": 16.18,
+                "mean": 18.59,
+                "p50": 18.14,
+                "p95": 23.89,
+                "max": 23.89
+              },
+              "memoryMiBSumPerSnapshot": {
+                "count": 7,
+                "min": 36.88,
+                "mean": 38.35,
+                "p50": 38.39,
+                "p95": 39.46,
+                "max": 39.46
+              },
+              "collectionMs": {
+                "count": 7,
+                "min": 1518.8381509999745,
+                "mean": 1521.1449225714064,
+                "p50": 1521.1387269999832,
+                "p95": 1523.091696999967,
+                "max": 1523.091696999967
+              }
+            }
+          }
+        }
+      ],
+      "recovery": {
+        "killToRecoveryObservedMs": 38018.319349,
+        "recoveryToSecondClaimObservedMs": 9057.483143999998,
+        "secondClaimToSuccessObservedMs": 10017.008060999971,
+        "killToSuccessObservedMs": 57092.81055399997,
+        "victim": {
+          "id": "11457a9f047e5e0813a283f8a0fc5e3a40bbc1a714918528d833481f62119710",
+          "exitCode": 137,
+          "oomKilled": false,
+          "restartCount": 0,
+          "running": false
+        },
+        "survivorContainerIds": [
+          "28f889d001a5334c9585683e42ce6b035dc65818ddfea68e08da80d3fde3dd03",
+          "a4914fb6634561a70910d734ea0136a198ebc5a7e46b610b94fd9d79d31e7b40"
+        ],
+        "firstWorkerId": "902e24a8-bb9b-4872-a7a3-28e2e6c6907a",
+        "secondWorkerId": "3363f395-3500-46c5-b7dd-990ffff0459e",
+        "survivorProof": {
+          "requestId": "c890400d-c366-46a5-be5e-5b4943d4a487",
+          "sentMs": 21666.984418000036,
+          "acceptedMs": 21671.956975000037,
+          "successObservedMs": 23244.181440000015,
+          "proofConfirmedMs": 23274.564305000007,
+          "workerId": "609cf23d-8b9d-473b-95e1-367a5d17e6d7",
+          "containerId": "a4914fb6634561a70910d734ea0136a198ebc5a7e46b610b94fd9d79d31e7b40",
+          "completedStatus": "succeeded",
+          "retainedTargetStatus": "processing",
+          "retainedTargetAttempt": 1
+        }
+      }
+    },
+    {
+      "source": "/home/lhw/projects/async-job-processor/artifacts/failure-load/2026-11-01-measurement/main/r2-normal",
+      "name": "r2-normal",
+      "mode": "normal",
+      "scenario": {
+        "valid": true,
+        "reasons": [],
+        "suitability": {
+          "purpose": "main",
+          "criterion": "normal-three-stable",
+          "status": "suitable",
+          "requiresUserDecision": false
+        }
+      },
+      "functional": {
+        "status": "passed",
+        "failures": [],
+        "missing": []
+      },
+      "measurement": {
+        "valid": true,
+        "reasons": [],
+        "timing": {
+          "valid": true,
+          "reasons": []
+        },
+        "wallAlignment": {
+          "valid": true,
+          "reasons": []
+        }
+      },
+      "cleanup": {
+        "succeeded": true,
+        "errors": []
+      },
+      "http": {
+        "regular": {
+          "planned": 288,
+          "sent": 288,
+          "unsent": 0,
+          "accepted": 288,
+          "rejected": 0,
+          "otherHttp": 0,
+          "networkOrBodyErrors": 0,
+          "acceptanceFraction": 1,
+          "dispatchRate": 2.4005085234244934,
+          "rttMs": {
+            "count": 288,
+            "min": 3.7431649999925867,
+            "p50": 4.799797999905422,
+            "p95": 7.176924000028521,
+            "p99": 18.454236999968998,
+            "max": 58.901107000012416,
+            "mean": 5.403336236109074
+          },
+          "rttMsByOutcome": {
+            "accepted201": {
+              "count": 288,
+              "min": 3.7431649999925867,
+              "p50": 4.799797999905422,
+              "p95": 7.176924000028521,
+              "p99": 18.454236999968998,
+              "max": 58.901107000012416,
+              "mean": 5.403336236109074
+            },
+            "policyRejected503": {
+              "count": 0,
+              "min": null,
+              "p50": null,
+              "p95": null,
+              "p99": null,
+              "max": null,
+              "mean": null
+            },
+            "otherHttp": {
+              "count": 0,
+              "min": null,
+              "p50": null,
+              "p95": null,
+              "p99": null,
+              "max": null,
+              "mean": null
+            },
+            "networkOrBodyErrors": {
+              "count": 0,
+              "min": null,
+              "p50": null,
+              "p95": null,
+              "p99": null,
+              "max": null,
+              "mean": null
+            }
+          },
+          "scheduleLagMs": {
+            "count": 288,
+            "min": 0.007459999993443489,
+            "p50": 0.613592666661134,
+            "p95": 1.2507849999819882,
+            "p99": 1.6076219999813475,
+            "max": 25.362598999985494,
+            "mean": 0.7239768784571373
+          }
+        },
+        "target": {
+          "planned": 1,
+          "sent": 1,
+          "unsent": 0,
+          "accepted": 1,
+          "rejected": 0,
+          "otherHttp": 0,
+          "networkOrBodyErrors": 0,
+          "acceptanceFraction": 1,
+          "dispatchRate": null,
+          "rttMs": {
+            "count": 1,
+            "min": 8.961585999990348,
+            "p50": 8.961585999990348,
+            "p95": 8.961585999990348,
+            "p99": 8.961585999990348,
+            "max": 8.961585999990348,
+            "mean": 8.961585999990348
+          },
+          "rttMsByOutcome": {
+            "accepted201": {
+              "count": 1,
+              "min": 8.961585999990348,
+              "p50": 8.961585999990348,
+              "p95": 8.961585999990348,
+              "p99": 8.961585999990348,
+              "max": 8.961585999990348,
+              "mean": 8.961585999990348
+            },
+            "policyRejected503": {
+              "count": 0,
+              "min": null,
+              "p50": null,
+              "p95": null,
+              "p99": null,
+              "max": null,
+              "mean": null
+            },
+            "otherHttp": {
+              "count": 0,
+              "min": null,
+              "p50": null,
+              "p95": null,
+              "p99": null,
+              "max": null,
+              "mean": null
+            },
+            "networkOrBodyErrors": {
+              "count": 0,
+              "min": null,
+              "p50": null,
+              "p95": null,
+              "p99": null,
+              "max": null,
+              "mean": null
+            }
+          },
+          "scheduleLagMs": {
+            "count": 1,
+            "min": 0.025495000008959323,
+            "p50": 0.025495000008959323,
+            "p95": 0.025495000008959323,
+            "p99": 0.025495000008959323,
+            "max": 0.025495000008959323,
+            "mean": 0.025495000008959323
+          }
+        }
+      },
+      "stability": {
+        "status": "suitable",
+        "reasons": [],
+        "windowMs": 10000,
+        "targetEndMs": 30116.18282399996,
+        "loadEndMs": 120000,
+        "windows": [
+          {
+            "startMs": 30116.18282399996,
+            "endMs": 40116.18282399996,
+            "samples": 10,
+            "meanOutstanding": 4.8,
+            "sent": 24,
+            "rejected": 0
+          },
+          {
+            "startMs": 40116.18282399996,
+            "endMs": 50116.18282399996,
+            "samples": 10,
+            "meanOutstanding": 2.8,
+            "sent": 24,
+            "rejected": 0
+          },
+          {
+            "startMs": 50116.18282399996,
+            "endMs": 60116.18282399996,
+            "samples": 10,
+            "meanOutstanding": 2.9,
+            "sent": 24,
+            "rejected": 0
+          },
+          {
+            "startMs": 60116.18282399996,
+            "endMs": 70116.18282399996,
+            "samples": 10,
+            "meanOutstanding": 3.7,
+            "sent": 24,
+            "rejected": 0
+          },
+          {
+            "startMs": 70116.18282399996,
+            "endMs": 80116.18282399996,
+            "samples": 10,
+            "meanOutstanding": 3.7,
+            "sent": 24,
+            "rejected": 0
+          },
+          {
+            "startMs": 80116.18282399996,
+            "endMs": 90116.18282399996,
+            "samples": 10,
+            "meanOutstanding": 3.8,
+            "sent": 24,
+            "rejected": 0
+          },
+          {
+            "startMs": 90116.18282399996,
+            "endMs": 100116.18282399996,
+            "samples": 10,
+            "meanOutstanding": 3.7,
+            "sent": 24,
+            "rejected": 0
+          },
+          {
+            "startMs": 100116.18282399996,
+            "endMs": 110116.18282399996,
+            "samples": 10,
+            "meanOutstanding": 3.5,
+            "sent": 24,
+            "rejected": 0
+          }
+        ],
+        "saturation": [],
+        "growth": [],
+        "unassessedTailMs": 9883.81717600004,
+        "criterion": "normal-three-stable",
+        "applied": true
+      },
+      "sampling": {
+        "count": 124,
+        "observedMaxOutstanding": 7,
+        "observedMaxQueued": 4,
+        "queryMs": {
+          "count": 124,
+          "min": 2.262618999928236,
+          "p50": 2.815277999965474,
+          "p95": 4.073912000050768,
+          "p99": 7.699071999988519,
+          "max": 15.549131999956444,
+          "mean": 3.15146581451371
+        },
+        "actualIntervalMs": {
+          "count": 123,
+          "min": 323.99339099996723,
+          "p50": 1003.5007869999972,
+          "p95": 1005.076950000017,
+          "p99": 1011.341333999997,
+          "max": 1016.4457620000467,
+          "mean": 990.1061081626018
+        },
+        "maxAbsClockDifferenceMs": 441.60245700000087
+      },
+      "completion": {
+        "basis": "log-observed",
+        "dbSucceededDelta": 289,
+        "logObservedSucceeded": 289,
+        "matches": true
+      },
+      "reconciliation": {
+        "newRows": 289,
+        "unknownResponseRows": [],
+        "absentIds": []
+      },
+      "timeline": {
+        "target-accepted": {
+          "elapsedMs": 20009.571958000015,
+          "confirmedMs": 20009.58635399997,
+          "firstClaimAgeMsAtConfirmation": null
+        },
+        "handler-started": {
+          "elapsedMs": 20101.176954999974,
+          "confirmedMs": 20415.378526999964,
+          "firstClaimAgeMsAtConfirmation": null
+        },
+        "target-succeeded": {
+          "elapsedMs": 30116.18282399996,
+          "confirmedMs": 30301.582472999988,
+          "firstClaimAgeMsAtConfirmation": 10204.267
+        },
+        "load-end": {
+          "elapsedMs": 120001.25882699998,
+          "confirmedMs": 120001.27071499993,
+          "firstClaimAgeMsAtConfirmation": null
+        },
+        "drain-end": {
+          "elapsedMs": 121483.751979,
+          "confirmedMs": 121483.76218200003,
+          "firstClaimAgeMsAtConfirmation": null
+        }
+      },
+      "final": {
+        "newRows": 289,
+        "states": {
+          "succeeded": 289
+        },
+        "attempts": {
+          "1": 289
+        },
+        "target": {
+          "id": "17d017a4-73f6-453d-8993-1fdedb180279",
+          "type": "slow",
+          "result": {
+            "durationMs": 10000
+          },
+          "status": "succeeded",
+          "attempt": 1,
+          "payload": {
+            "durationMs": 10000
+          },
+          "worker_id": "58c75cb9-f77e-4421-86d5-74487d2d4eb6",
+          "created_at": "2026-11-01T12:18:49.12353+00:00",
+          "last_error": null,
+          "updated_at": "2026-11-01T12:18:59.231298+00:00",
+          "available_at": "2026-11-01T12:18:49.12353+00:00",
+          "max_attempts": 3,
+          "processing_started_at": "2026-11-01T12:18:49.218473+00:00"
+        },
+        "workerSucceeded": {
+          "cb540e89-53d4-4c2f-859a-ea48a548cb4a": 120,
+          "52868595-1a80-44c2-9e94-de2b5e08f345": 108,
+          "58c75cb9-f77e-4421-86d5-74487d2d4eb6": 61
+        },
+        "baselineRows": 1621,
+        "baselineUnchanged": true,
+        "outstanding": 0,
+        "retries": 0,
+        "recoveries": 0
+      },
+      "rawSha256": {
+        "evidence.json": "638db49eb1aa9099c92c300e0ce9bda2db799600a4d5f344d2329ce28fdc96d8",
+        "requests.json": "5aa09bd18a397ed38c0417d09338c5404ad8e132787dbc5d2f74eebe0454f1c6",
+        "jobs.json": "ca36f645e9f452048afc1a2d7a819d123efc2981f0bc728782b0785163a706b6",
+        "samples.jsonl": "ec981dd1aceec82545f0b0538de8a1ebb453bfb1232aa0531d36dbcb3f794414",
+        "events.json": "7e71e39b9b45b65aaf192e3063f2a027f3ba4222d7ca03cbcada0fd567474df1",
+        "resources.jsonl": "57191195ea9d4528151ff7503d5e4a5b73e6fb147ed8bad3c82910da0ba72566",
+        "result.json": "70addc118f4fac5316fb490349aeab9644bc29cd93ee1e96e759ead977996fe7",
+        "ready.json": "dca8e64f401e060884f669f94239ffa3a62ea5476577b5bb1bcf6cff976ae678",
+        "target-states.jsonl": "8a9296b11239f3118f1ad0ff15721277408592fedbe519360671bf1d3f722599"
+      },
+      "parameters": {
+        "purpose": "main",
+        "modes": [
+          "normal",
+          "failure"
+        ],
+        "workers": 3,
+        "seconds": 120,
+        "targetAtSeconds": 20,
+        "targetDurationMs": 10000,
+        "repeats": 2,
+        "rate": 2.4,
+        "durationMs": 1000,
+        "limit": 30,
+        "intervalMs": 1000,
+        "maxInflight": 4,
+        "drainSeconds": 300
+      },
+      "phases": [
+        {
+          "name": "preTarget",
+          "startMs": 0,
+          "endMs": 20101.176954999974,
+          "seconds": 20.101176954999975,
+          "regularSent": 49,
+          "regularAccepted": 49,
+          "regularRejected": 0,
+          "logObservedSucceeded": 46,
+          "logObservedRegularSucceeded": 46,
+          "dbCompletion": {
+            "firstReadMs": 13.346238999976777,
+            "firstQueryMs": 4.431641999981366,
+            "lastReadMs": 20085.97086199996,
+            "lastQueryMs": 2.380609000043478,
+            "seconds": 20.070573590000045,
+            "succeededDelta": 46,
+            "observedCompletionsPerSecond": 2.291912575080516
+          },
+          "queued": {
+            "count": 21,
+            "min": 0,
+            "mean": 0.42857142857142855,
+            "p50": 0,
+            "p95": 1,
+            "max": 2
+          },
+          "processing": {
+            "count": 21,
+            "min": 0,
+            "mean": 2.3333333333333335,
+            "p50": 2,
+            "p95": 3,
+            "max": 3
+          },
+          "outstanding": {
+            "count": 21,
+            "min": 0,
+            "mean": 2.761904761904762,
+            "p50": 3,
+            "p95": 3,
+            "max": 4
+          },
+          "connections": {
+            "count": 21,
+            "min": 4,
+            "mean": 5.0,
+            "p50": 5,
+            "p95": 5,
+            "max": 6
+          },
+          "activeConnections": {
+            "count": 21,
+            "min": 1,
+            "mean": 1.0,
+            "p50": 1,
+            "p95": 1,
+            "max": 1
+          },
+          "resources": {
+            "api": {
+              "processSamples": 9,
+              "cpuPercentSumPerSnapshot": {
+                "count": 9,
+                "min": 0.93,
+                "mean": 1.3,
+                "p50": 1.18,
+                "p95": 2.08,
+                "max": 2.08
+              },
+              "memoryMiBSumPerSnapshot": {
+                "count": 9,
+                "min": 63.95,
+                "mean": 66.61666666666666,
+                "p50": 67.73,
+                "p95": 68.26,
+                "max": 68.26
+              },
+              "collectionMs": {
+                "count": 9,
+                "min": 1521.484460000007,
+                "mean": 1589.4116942222333,
+                "p50": 1525.5779670000193,
+                "p95": 2100.0015830000048,
+                "max": 2100.0015830000048
+              }
+            },
+            "worker": {
+              "processSamples": 27,
+              "cpuPercentSumPerSnapshot": {
+                "count": 9,
+                "min": 1.78,
+                "mean": 2.1500000000000004,
+                "p50": 2.09,
+                "p95": 2.65,
+                "max": 2.65
+              },
+              "memoryMiBSumPerSnapshot": {
+                "count": 9,
+                "min": 172.63,
+                "mean": 175.39999999999998,
+                "p50": 175.5,
+                "p95": 176.48,
+                "max": 176.48
+              },
+              "collectionMs": {
+                "count": 27,
+                "min": 1522.5497050000122,
+                "mean": 1591.1489012962988,
+                "p50": 1528.1356110000052,
+                "p95": 2101.7474589999765,
+                "max": 2102.123641000013
+              }
+            },
+            "postgres": {
+              "processSamples": 9,
+              "cpuPercentSumPerSnapshot": {
+                "count": 9,
+                "min": 4.32,
+                "mean": 4.546666666666667,
+                "p50": 4.5,
+                "p95": 4.95,
+                "max": 4.95
+              },
+              "memoryMiBSumPerSnapshot": {
+                "count": 9,
+                "min": 37.75,
+                "mean": 38.25222222222222,
+                "p50": 38.28,
+                "p95": 38.58,
+                "max": 38.58
+              },
+              "collectionMs": {
+                "count": 9,
+                "min": 1521.8258890000288,
+                "mean": 1589.9624177777894,
+                "p50": 1526.6130710000289,
+                "p95": 2100.559420000005,
+                "max": 2100.559420000005
+              }
+            }
+          }
+        },
+        {
+          "name": "targetFirst10s",
+          "startMs": 20101.176954999974,
+          "endMs": 30101.176954999974,
+          "seconds": 10.0,
+          "regularSent": 24,
+          "regularAccepted": 24,
+          "regularRejected": 0,
+          "logObservedSucceeded": 20,
+          "logObservedRegularSucceeded": 20,
+          "dbCompletion": {
+            "firstReadMs": 21088.953210000007,
+            "firstQueryMs": 4.0389069999800995,
+            "lastReadMs": 29119.048796999967,
+            "lastQueryMs": 3.0612069999915548,
+            "seconds": 8.029117886999972,
+            "succeededDelta": 16,
+            "observedCompletionsPerSecond": 1.9927469275181233
+          },
+          "queued": {
+            "count": 9,
+            "min": 1,
+            "mean": 2.7777777777777777,
+            "p50": 3,
+            "p95": 4,
+            "max": 4
+          },
+          "processing": {
+            "count": 9,
+            "min": 3,
+            "mean": 3.0,
+            "p50": 3,
+            "p95": 3,
+            "max": 3
+          },
+          "outstanding": {
+            "count": 9,
+            "min": 4,
+            "mean": 5.777777777777778,
+            "p50": 6,
+            "p95": 7,
+            "max": 7
+          },
+          "connections": {
+            "count": 9,
+            "min": 6,
+            "mean": 6.0,
+            "p50": 6,
+            "p95": 6,
+            "max": 6
+          },
+          "activeConnections": {
+            "count": 9,
+            "min": 1,
+            "mean": 1.0,
+            "p50": 1,
+            "p95": 1,
+            "max": 1
+          },
+          "resources": {
+            "api": {
+              "processSamples": 4,
+              "cpuPercentSumPerSnapshot": {
+                "count": 4,
+                "min": 0.94,
+                "mean": 1.1324999999999998,
+                "p50": 0.95,
+                "p95": 1.51,
+                "max": 1.51
+              },
+              "memoryMiBSumPerSnapshot": {
+                "count": 4,
+                "min": 67.74,
+                "mean": 68.1925,
+                "p50": 68.03,
+                "p95": 68.52,
+                "max": 68.52
+              },
+              "collectionMs": {
+                "count": 4,
+                "min": 1521.2549010000075,
+                "mean": 1523.0721529999864,
+                "p50": 1522.8788559999666,
+                "p95": 1524.100306999986,
+                "max": 1524.100306999986
+              }
+            },
+            "worker": {
+              "processSamples": 12,
+              "cpuPercentSumPerSnapshot": {
+                "count": 4,
+                "min": 1.79,
+                "mean": 2.0175,
+                "p50": 1.88,
+                "p95": 2.37,
+                "max": 2.37
+              },
+              "memoryMiBSumPerSnapshot": {
+                "count": 4,
+                "min": 175.76999999999998,
+                "mean": 177.1475,
+                "p50": 176.27,
+                "p95": 178.9,
+                "max": 178.9
+              },
+              "collectionMs": {
+                "count": 12,
+                "min": 1522.6962679999997,
+                "mean": 1524.7917306666593,
+                "p50": 1524.9140170000028,
+                "p95": 1526.6353039999958,
+                "max": 1526.6353039999958
+              }
+            },
+            "postgres": {
+              "processSamples": 4,
+              "cpuPercentSumPerSnapshot": {
+                "count": 4,
+                "min": 4.57,
+                "mean": 4.7625,
+                "p50": 4.62,
+                "p95": 5.13,
+                "max": 5.13
+              },
+              "memoryMiBSumPerSnapshot": {
+                "count": 4,
+                "min": 40.15,
+                "mean": 40.2975,
+                "p50": 40.2,
+                "p95": 40.46,
+                "max": 40.46
+              },
+              "collectionMs": {
+                "count": 4,
+                "min": 1521.7406750000082,
+                "mean": 1523.6026222499931,
+                "p50": 1523.4551859999774,
+                "p95": 1524.6488649999956,
+                "max": 1524.6488649999956
+              }
+            }
+          }
+        },
+        {
+          "name": "sustainedIngress",
+          "startMs": 30101.176954999974,
+          "endMs": 120001.25882699998,
+          "seconds": 89.90008187200002,
+          "regularSent": 215,
+          "regularAccepted": 215,
+          "regularRejected": 0,
+          "logObservedSucceeded": 220,
+          "logObservedRegularSucceeded": 219,
+          "dbCompletion": {
+            "firstReadMs": 30122.69657899998,
+            "firstQueryMs": 2.6554550000000745,
+            "lastReadMs": 119465.07272300002,
+            "lastQueryMs": 3.5359329999191687,
+            "seconds": 89.34325662199996,
+            "succeededDelta": 218,
+            "observedCompletionsPerSecond": 2.4400274653332876
+          },
+          "queued": {
+            "count": 90,
+            "min": 0,
+            "mean": 1.1888888888888889,
+            "p50": 1,
+            "p95": 2,
+            "max": 4
+          },
+          "processing": {
+            "count": 90,
+            "min": 1,
+            "mean": 2.422222222222222,
+            "p50": 2,
+            "p95": 3,
+            "max": 3
+          },
+          "outstanding": {
+            "count": 90,
+            "min": 2,
+            "mean": 3.611111111111111,
+            "p50": 4,
+            "p95": 5,
+            "max": 7
+          },
+          "connections": {
+            "count": 90,
+            "min": 5,
+            "mean": 5.188888888888889,
+            "p50": 5,
+            "p95": 6,
+            "max": 6
+          },
+          "activeConnections": {
+            "count": 90,
+            "min": 1,
+            "mean": 1.0555555555555556,
+            "p50": 1,
+            "p95": 2,
+            "max": 2
+          },
+          "resources": {
+            "api": {
+              "processSamples": 44,
+              "cpuPercentSumPerSnapshot": {
+                "count": 44,
+                "min": 0.75,
+                "mean": 1.175909090909091,
+                "p50": 1.13,
+                "p95": 1.75,
+                "max": 2.29
+              },
+              "memoryMiBSumPerSnapshot": {
+                "count": 44,
+                "min": 48.79,
+                "mean": 67.88113636363636,
+                "p50": 68.82,
+                "p95": 69.55,
+                "max": 69.59
+              },
+              "collectionMs": {
+                "count": 44,
+                "min": 1519.7812820000108,
+                "mean": 1525.4366527499885,
+                "p50": 1524.6912419999717,
+                "p95": 1530.0766160000348,
+                "max": 1546.2294039999833
+              }
+            },
+            "worker": {
+              "processSamples": 132,
+              "cpuPercentSumPerSnapshot": {
+                "count": 44,
+                "min": 1.8900000000000001,
+                "mean": 2.285,
+                "p50": 2.17,
+                "p95": 2.96,
+                "max": 3.26
+              },
+              "memoryMiBSumPerSnapshot": {
+                "count": 44,
+                "min": 178.76,
+                "mean": 189.205,
+                "p50": 190.79,
+                "p95": 193.32,
+                "max": 194.51
+              },
+              "collectionMs": {
+                "count": 132,
+                "min": 1521.0744790000608,
+                "mean": 1527.223087272726,
+                "p50": 1526.5641919999616,
+                "p95": 1532.6991029999917,
+                "max": 1548.8205330000492
+              }
+            },
+            "postgres": {
+              "processSamples": 44,
+              "cpuPercentSumPerSnapshot": {
+                "count": 44,
+                "min": 1.13,
+                "mean": 3.4154545454545455,
+                "p50": 4.51,
+                "p95": 6.18,
+                "max": 7.36
+              },
+              "memoryMiBSumPerSnapshot": {
+                "count": 44,
+                "min": 37.91,
+                "mean": 39.0484090909091,
+                "p50": 38.41,
+                "p95": 40.86,
+                "max": 42.35
+              },
+              "collectionMs": {
+                "count": 44,
+                "min": 1520.1291000000201,
+                "mean": 1525.966631340912,
+                "p50": 1525.134497000021,
+                "p95": 1531.4910800000653,
+                "max": 1546.69891799998
+              }
+            }
+          }
+        },
+        {
+          "name": "settlement",
+          "startMs": 120001.25882699998,
+          "endMs": 121483.751979,
+          "seconds": 1.48249315200001,
+          "regularSent": 0,
+          "regularAccepted": 0,
+          "regularRejected": 0,
+          "logObservedSucceeded": 3,
+          "logObservedRegularSucceeded": 3,
+          "dbCompletion": {
+            "firstReadMs": 120001.60217799997,
+            "firstQueryMs": 2.929679000051692,
+            "lastReadMs": 121472.40415200003,
+            "lastQueryMs": 3.0573749999748543,
+            "seconds": 1.4709296699999832,
+            "succeededDelta": 3,
+            "observedCompletionsPerSecond": 2.0395264717177364
+          },
+          "queued": {
+            "count": 3,
+            "min": 0,
+            "mean": 0.3333333333333333,
+            "p50": 0,
+            "p95": 1,
+            "max": 1
+          },
+          "processing": {
+            "count": 3,
+            "min": 0,
+            "mean": 1.3333333333333333,
+            "p50": 2,
+            "p95": 2,
+            "max": 2
+          },
+          "outstanding": {
+            "count": 3,
+            "min": 0,
+            "mean": 1.6666666666666667,
+            "p50": 2,
+            "p95": 3,
+            "max": 3
+          },
+          "connections": {
+            "count": 3,
+            "min": 6,
+            "mean": 6.0,
+            "p50": 6,
+            "p95": 6,
+            "max": 6
+          },
+          "activeConnections": {
+            "count": 3,
+            "min": 1,
+            "mean": 1.3333333333333333,
+            "p50": 1,
+            "p95": 2,
+            "max": 2
+          },
+          "resources": {
+            "api": {
+              "processSamples": 0,
+              "cpuPercentSumPerSnapshot": {
+                "count": 0,
+                "min": null,
+                "mean": null,
+                "p50": null,
+                "p95": null,
+                "max": null
+              },
+              "memoryMiBSumPerSnapshot": {
+                "count": 0,
+                "min": null,
+                "mean": null,
+                "p50": null,
+                "p95": null,
+                "max": null
+              },
+              "collectionMs": {
+                "count": 0,
+                "min": null,
+                "mean": null,
+                "p50": null,
+                "p95": null,
+                "max": null
+              }
+            },
+            "worker": {
+              "processSamples": 0,
+              "cpuPercentSumPerSnapshot": {
+                "count": 0,
+                "min": null,
+                "mean": null,
+                "p50": null,
+                "p95": null,
+                "max": null
+              },
+              "memoryMiBSumPerSnapshot": {
+                "count": 0,
+                "min": null,
+                "mean": null,
+                "p50": null,
+                "p95": null,
+                "max": null
+              },
+              "collectionMs": {
+                "count": 0,
+                "min": null,
+                "mean": null,
+                "p50": null,
+                "p95": null,
+                "max": null
+              }
+            },
+            "postgres": {
+              "processSamples": 0,
+              "cpuPercentSumPerSnapshot": {
+                "count": 0,
+                "min": null,
+                "mean": null,
+                "p50": null,
+                "p95": null,
+                "max": null
+              },
+              "memoryMiBSumPerSnapshot": {
+                "count": 0,
+                "min": null,
+                "mean": null,
+                "p50": null,
+                "p95": null,
+                "max": null
+              },
+              "collectionMs": {
+                "count": 0,
+                "min": null,
+                "mean": null,
+                "p50": null,
+                "p95": null,
+                "max": null
+              }
+            }
+          }
+        }
+      ],
+      "recovery": null
+    }
+  ],
+  "globalReconciliation": {
+    "beforeRows": 389,
+    "beforeStates": {
+      "succeeded": 389
+    },
+    "finalRows": 1910,
+    "baselineUnchanged": true,
+    "addedRows": 1521,
+    "addedStates": {
+      "succeeded": 1521
+    },
+    "attempts": {
+      "1": 1519,
+      "2": 2
+    },
+    "sent": 1590,
+    "accepted": 1521,
+    "rejected": 69,
+    "outstanding": 0
+  },
+  "finalCleanup": {
+    "pilot-three": {
+      "succeeded": true,
+      "errors": []
+    },
+    "pilot-two": {
+      "succeeded": true,
+      "errors": []
+    },
+    "main": {
+      "succeeded": true,
+      "errors": []
+    }
   },
   "verification": {
     "typecheck": "passed",
-    "unitAndExperimentTests": 18,
-    "newToolTests": 12,
-    "composeTests": 3,
-    "existingRowsPreserved": true,
-    "existingContainerStatesUnchanged": true
-  },
-  "runs": [
-    {
-      "source": "artifacts/failure-load/smoke-1793459290363/paths/r1-normal",
-      "mode": "normal",
-      "purpose": "smoke",
-      "parameters": {
-        "workers": 3,
-        "rate": 6,
-        "seconds": 12,
-        "targetAtSeconds": 1,
-        "limit": 8
-      },
-      "scenario": {
-        "valid": true,
-        "reasons": [],
-        "suitability": {
-          "purpose": "smoke",
-          "criterion": "tool-or-failure-path",
-          "status": "observation-only",
-          "requiresUserDecision": false
-        }
-      },
-      "functional": "passed",
-      "measurement": true,
-      "cleanup": {
-        "succeeded": true,
-        "errors": []
-      },
-      "regular": {
-        "sent": 72,
-        "accepted": 30,
-        "rejected": 42,
-        "rttMsByOutcome": {
-          "accepted201": {
-            "count": 30,
-            "min": 4.433614999994461,
-            "p50": 5.803352999995695,
-            "p95": 9.584611999998742,
-            "p99": 50.40435399999842,
-            "max": 50.40435399999842,
-            "mean": 7.503026233332639
-          },
-          "policyRejected503": {
-            "count": 42,
-            "min": 2.9956590000001597,
-            "p50": 3.7064439999958267,
-            "p95": 5.98513400000229,
-            "p99": 6.764746000000741,
-            "max": 6.764746000000741,
-            "mean": 4.019828547619302
-          },
-          "otherHttp": {
-            "count": 0,
-            "min": null,
-            "p50": null,
-            "p95": null,
-            "p99": null,
-            "max": null,
-            "mean": null
-          },
-          "networkOrBodyErrors": {
-            "count": 0,
-            "min": null,
-            "p50": null,
-            "p95": null,
-            "p99": null,
-            "max": null,
-            "mean": null
-          }
-        }
-      },
-      "targetAccepted": 1,
-      "observedMaxOutstanding": 8,
-      "survivorProof": null,
-      "firstClaimAgeMsAtRecoveryConfirmation": null,
-      "completion": {
-        "basis": "log-observed",
-        "dbSucceededDelta": 31,
-        "logObservedSucceeded": 31,
-        "matches": true
-      },
-      "phaseDbCrossChecks": [
-        {
-          "from": "load-start",
-          "to": "handler-started",
-          "dbSucceededDelta": 4,
-          "logObservedSucceeded": 4,
-          "difference": 0
-        },
-        {
-          "from": "control-confirmed",
-          "to": "load-end",
-          "dbSucceededDelta": 17,
-          "logObservedSucceeded": 17,
-          "difference": 0
-        },
-        {
-          "from": "load-end",
-          "to": "target-succeeded",
-          "dbSucceededDelta": 1,
-          "logObservedSucceeded": 1,
-          "difference": 0
-        },
-        {
-          "from": "target-succeeded",
-          "to": "drain-end",
-          "dbSucceededDelta": 3,
-          "logObservedSucceeded": 3,
-          "difference": 0
-        }
-      ]
+    "experimentTests": 18,
+    "observabilityTests": 6,
+    "dbTests": 64,
+    "preservation": {
+      "rows": 1910,
+      "unchanged": true,
+      "remainingTestSchemas": []
     },
-    {
-      "source": "artifacts/failure-load/smoke-1793459290363/paths/r1-failure",
-      "mode": "failure",
-      "purpose": "smoke",
-      "parameters": {
-        "workers": 3,
-        "rate": 6,
-        "seconds": 12,
-        "targetAtSeconds": 1,
-        "limit": 8
-      },
-      "scenario": {
-        "valid": true,
-        "reasons": [],
-        "suitability": {
-          "purpose": "smoke",
-          "criterion": "tool-or-failure-path",
-          "status": "observation-only",
-          "requiresUserDecision": false
-        }
-      },
-      "functional": "passed",
-      "measurement": true,
-      "cleanup": {
-        "succeeded": true,
-        "errors": []
-      },
-      "regular": {
-        "sent": 72,
-        "accepted": 31,
-        "rejected": 41,
-        "rttMsByOutcome": {
-          "accepted201": {
-            "count": 31,
-            "min": 4.058726000002935,
-            "p50": 5.334963000001153,
-            "p95": 25.230177000004915,
-            "p99": 42.885948999988614,
-            "max": 42.885948999988614,
-            "mean": 7.389906903227036
-          },
-          "policyRejected503": {
-            "count": 41,
-            "min": 2.718888000003062,
-            "p50": 4.104760000001988,
-            "p95": 5.5207940000109375,
-            "p99": 6.991179999997257,
-            "max": 6.991179999997257,
-            "mean": 4.199209365852833
-          },
-          "otherHttp": {
-            "count": 0,
-            "min": null,
-            "p50": null,
-            "p95": null,
-            "p99": null,
-            "max": null,
-            "mean": null
-          },
-          "networkOrBodyErrors": {
-            "count": 0,
-            "min": null,
-            "p50": null,
-            "p95": null,
-            "p99": null,
-            "max": null,
-            "mean": null
-          }
-        }
-      },
-      "targetAccepted": 1,
-      "observedMaxOutstanding": 8,
-      "survivorProof": {
-        "requestId": "db9d371d-53fb-45a1-ad91-d488afd3f115",
-        "sentMs": 3500.241802000004,
-        "acceptedMs": 3505.516220999998,
-        "killConfirmedMs": 3268.0021280000074,
-        "successObservedMs": 6801.460823999994,
-        "proofConfirmedMs": 6862.953613999998,
-        "workerId": "621c160a-39c8-4a5e-8b74-356265d4a5ae",
-        "containerId": "1526882df02cb71a8212603114d7d253a2ce152919ee2791116f99411e547a17",
-        "completedStatus": "succeeded",
-        "targetStatus": "processing",
-        "targetAttempt": 1
-      },
-      "firstClaimAgeMsAtRecoveryConfirmation": 32357.213,
-      "completion": {
-        "basis": "log-observed",
-        "dbSucceededDelta": 32,
-        "logObservedSucceeded": 32,
-        "matches": true
-      },
-      "phaseDbCrossChecks": [
-        {
-          "from": "load-start",
-          "to": "handler-started",
-          "dbSucceededDelta": 3,
-          "logObservedSucceeded": 3,
-          "difference": 0
-        },
-        {
-          "from": "handler-started",
-          "to": "kill-confirmed",
-          "dbSucceededDelta": 1,
-          "logObservedSucceeded": 1,
-          "difference": 0
-        },
-        {
-          "from": "kill-confirmed",
-          "to": "load-end",
-          "dbSucceededDelta": 16,
-          "logObservedSucceeded": 16,
-          "difference": 0
-        },
-        {
-          "from": "load-end",
-          "to": "recovered",
-          "dbSucceededDelta": 7,
-          "logObservedSucceeded": 7,
-          "difference": 0
-        },
-        {
-          "from": "second-claim",
-          "to": "target-succeeded",
-          "dbSucceededDelta": 0,
-          "logObservedSucceeded": 0,
-          "difference": 0
-        }
-      ]
-    }
-  ],
-  "mainGate": {
-    "source": "artifacts/failure-load/smoke-1793459290363/main-gate",
-    "configuredModes": [
-      "normal",
-      "failure"
-    ],
-    "executedModes": [
-      "normal"
-    ],
-    "scenario": {
-      "valid": false,
-      "reasons": [
-        "대상 완료 후 요청·DB 표본이 있는 온전한 10초 구간 3개 부족"
-      ],
-      "suitability": {
-        "purpose": "main",
-        "criterion": "normal-three-stable",
-        "status": "inconclusive",
-        "requiresUserDecision": true
-      }
+    "otherProjectContainerStatesUnchanged": true,
+    "composeConfig": "passed",
+    "sourceAndImageEquality": "passed",
+    "composeSmokeRerun": false,
+    "productionOrToolCodeChanged": false,
+    "logs": "artifacts/failure-load/2026-11-01-measurement/verification",
+    "finalAudit": {
+      "reevaluatedRuns": 6,
+      "rawHashesChecked": 54,
+      "sourceHashesChecked": 30,
+      "unchanged": true
     },
-    "functional": "passed",
-    "measurement": true,
-    "cleanup": {
-      "succeeded": true,
-      "errors": []
-    },
-    "finalCleanup": {
-      "succeeded": true,
-      "errors": []
-    }
-  },
-  "faults": {
-    "saveFailure": {
-      "source": "artifacts/failure-load/smoke-1793459290363/save-failure",
-      "functional": "passed",
-      "measurement": true,
-      "cleanup": {
-        "succeeded": false,
-        "errors": [
-          "서비스 로그 저장: Error: EISDIR: illegal operation on a directory, open '/home/lhw/projects/async-job-processor/artifacts/failure-load/smoke-1793459290363/save-failure/r1-normal/services.log'",
-          "반복 결과 저장: Error: EISDIR: illegal operation on a directory, open '/home/lhw/projects/async-job-processor/artifacts/failure-load/smoke-1793459290363/save-failure/r1-normal/result.json'"
-        ]
-      },
-      "finalCleanup": {
-        "succeeded": true,
-        "errors": []
-      }
-    },
-    "interrupt": {
-      "source": "artifacts/failure-load/smoke-1793459290363/interrupt",
-      "functional": "incomplete",
-      "measurement": false,
-      "cleanup": {
-        "succeeded": true,
-        "errors": []
-      },
-      "finalCleanup": {
-        "succeeded": true,
-        "errors": []
-      }
-    }
+    "priorReviewOriginalsPreserved": true
   },
   "limitations": [
-    "정상 3개 장시간 안정성·Worker 2/3 실제 Pilot은 PR 2에서 확인",
-    "Recovery 확인 시점의 DB 경과는 Recovery 트랜잭션의 정확한 시각과 다름",
-    "로그 관측 완료율과 내부 DB 표본 구간의 비교는 정밀 서버 TPS 측정이 아님",
-    "초기 2026-10-31 검증 기록은 당시 판정 기준의 역사적 결과로 보존"
+    "한 환경·각 조건 두 번의 관측이며 통계적 유의성·보편적 성능 보장은 판단하지 않는다.",
+    "DB 표본 사이 순간 상한의 새 증명이 아니며 기존 Advisory Lock Integration Test를 별도 근거로 사용한다.",
+    "Recovery 시각은 로그 수신 관측; Flush·전송 지연 상한 미상, DB 최초 Claim 경과는 확인 시점의 값이다.",
+    "정밀 TPS·Speedup을 Wall Clock 또는 서로 다른 프로세스 performance.now 절댓값으로 계산하지 않았다.",
+    "Prometheus 15초 Scrape·DNS 갱신과 사망 Counter 누락, DB 관측·로그·자원 수집 비용이 남는다.",
+    "완료 행·Prometheus Volume·캐시를 유지했다. CPU·메모리·DB 연결만으로 병목·최적 Worker 수를 결정하지 않는다."
   ]
 }

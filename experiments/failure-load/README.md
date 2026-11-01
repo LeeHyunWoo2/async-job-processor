@@ -1,6 +1,6 @@
 # 통합 Failure / Load 실험 도구
 
-지속 유입 중 Worker 하나를 잃었을 때 Admission 상한, 생존 Worker의 처리, 대상 Job의 Recovery·재Claim·완료를 함께 관찰한다. 기존 API·Job·Admission·Recovery 정책을 그대로 실행한다. 이번 산출물은 도구와 작은 실제 Smoke의 검증이며 **120초 기본 4회 실측 결과가 아니다**. [초기 검증](results/2026-10-31/report.md)과 [리뷰 보완 검증](results/2026-11-01/report.md)을 구분해 보존한다.
+지속 유입 중 Worker 하나를 잃었을 때 Admission 상한, 생존 Worker의 처리, 대상 Job의 Recovery·재Claim·완료를 함께 관찰한다. 기존 API·Job·Admission·Recovery 정책을 그대로 실행한다. [초기 도구 검증](results/2026-10-31/report.md)과 [Worker 2/3 Pilot·120초 기본 4회 실측](results/2026-11-01/report.md)을 구분해 확인한다.
 
 ## 준비와 실행
 
@@ -13,14 +13,14 @@ node --test experiments/failure-load/experiment.test.ts
 node --env-file=.env --test experiments/failure-load/smoke.test.ts
 ```
 
-기본 실측 명령은 아래와 같다. PR 1 검증에서는 실행하지 않았다. PR 2에서 먼저 아래 Pilot 결과를 확인한다. Pilot 3개 조건이 부적합·판단 보류이면 사용자 판단을 받은 뒤 조건과 후속 실행을 결정한다. Pilot 명령이 자동으로 main을 시작하지는 않는다.
+기본 실측 명령은 아래와 같다. 2026-11-01에는 먼저 아래 Worker 3개·2개 Pilot을 각각 90초 실행해 후보 유입률을 확인한 뒤 기본 실측을 수행했다. 재실행 시에도 Pilot 3개 조건이 부적합·판단 보류이면 사용자 판단을 받은 뒤 조건과 후속 실행을 결정한다. Pilot 명령이 자동으로 main을 시작하지는 않는다.
 
 ```bash
 node --env-file=.env experiments/failure-load/run.ts \
   --purpose=main --out=artifacts/failure-load/main-run
 ```
 
-기본은 API 1개, Worker 3개, Backpressure ON, 미완료 상한 30, 일반 `slow(durationMs=1000)` 2.4 jobs/s × 120초다. 일반 Job 예약은 **288개**이며 20초에 별도 `slow(durationMs=10000)` **1개**를 추가한다. 정상→장애→장애→정상 순서이며 반복마다 API·Worker를 새로 만든다. 장애 조건의 사망 Worker는 해당 반복 중 재시작하지 않는다. 2.4 jobs/s는 Pilot 전의 초기 후보이며 PR 2에서 검토한다.
+기본은 API 1개, Worker 3개, Backpressure ON, 미완료 상한 30, 일반 `slow(durationMs=1000)` 2.4 jobs/s × 120초다. 일반 Job 예약은 **288개**이며 20초에 별도 `slow(durationMs=10000)` **1개**를 추가한다. 정상→장애→장애→정상 순서이며 반복마다 API·Worker를 새로 만든다. 장애 조건의 사망 Worker는 해당 반복 중 재시작하지 않는다. 2.4 jobs/s는 이번 Pilot에서 적합했으며 다른 환경의 처리 능력을 보장하지 않는다.
 
 작은 정상·장애 Smoke를 수동으로 실행할 수도 있다. 이는 Queue와 거부를 빨리 관찰하기 위한 별도 조건이며 기본 조건의 성능 결과로 사용하지 않는다.
 
@@ -31,13 +31,13 @@ node --env-file=.env experiments/failure-load/run.ts \
   --out=artifacts/failure-load/manual-smoke
 ```
 
-PR 2의 Worker 2·3개 처리 능력 Pilot은 `--purpose=pilot`과 `normal`로 각각 관찰한다. Worker 2개는 이 목적에서만 허용하고 과부하를 유효한 용량 관측으로 취급한다. 대상 10초 Job은 유지되므로 대상 Handler 실행 구간과 그 밖의 구간을 나눠 비교한다. 한 번의 전체 평균을 순수 일반 Job 처리 능력으로 해석하지 않는다.
+Worker 2·3개 처리 능력 Pilot은 `--purpose=pilot`과 `normal`로 각각 관찰한다. Worker 2개는 이 목적에서만 허용하고 과부하를 유효한 용량 관측으로 취급한다. 대상 10초 Job은 유지되므로 대상 Handler 실행 구간과 그 밖의 구간을 나눠 비교한다. 한 번의 전체 평균을 순수 일반 Job 처리 능력으로 해석하지 않는다. 다음은 실제 사용한 90초 조건이다. 재실행 시 새 자료 경로를 지정한다.
 
 ```bash
 node --env-file=.env experiments/failure-load/run.ts \
-  --purpose=pilot --modes=normal --repeats=1 --workers=2 --out=artifacts/failure-load/pilot-two
+  --purpose=pilot --modes=normal --repeats=1 --workers=3 --seconds=90 --out=artifacts/failure-load/pilot-three
 node --env-file=.env experiments/failure-load/run.ts \
-  --purpose=pilot --modes=normal --repeats=1 --workers=3 --out=artifacts/failure-load/pilot-three
+  --purpose=pilot --modes=normal --repeats=1 --workers=2 --seconds=90 --out=artifacts/failure-load/pilot-two
 ```
 
 | 옵션 | 기본값·범위 |
@@ -115,4 +115,4 @@ docker compose -p async-job-failure-load -f compose.yml -f experiments/failure-l
 rmdir artifacts/failure-load/.lock
 ```
 
-`down -v`·전역 DELETE는 사용하지 않는다. 보존된 미완료 행의 처리 방향은 근거를 확인한 뒤 결정한다. 날짜별 `results/YYYY-MM-DD/report.md`·`summary.json`만 Git 추적 예외로 허용하고 원자료는 계속 제외한다. PR 2에는 Pilot으로 2.4 후보·Worker 2/3 처리 구간을 확인하고 기본 4회 실측 및 결과 보고서를 작성하는 작업이 남아 있다.
+`down -v`·전역 DELETE는 사용하지 않는다. 보존된 미완료 행의 처리 방향은 근거를 확인한 뒤 결정한다. 날짜별 `results/YYYY-MM-DD/report.md`·`summary.json`만 Git 추적 예외로 허용하고 원자료는 계속 제외한다. Pilot·기본 4회 실측의 실제 결과와 원자료 위치는 [실측 보고서](results/2026-11-01/report.md)에 있다.
